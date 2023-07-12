@@ -3516,12 +3516,12 @@ class jmapgen_nested : public jmapgen_piece
         class neighbor_flag_check
         {
             private:
-                std::unordered_map<direction, cata::flat_set<oter_flags>> neighbors;
+                std::unordered_map<direction, cata::flat_set<std::string>> neighbors;
             public:
                 explicit neighbor_flag_check( const JsonObject &jsi ) {
                     for( direction dir : all_enum_values<direction>() ) {
-                        cata::flat_set<oter_flags> dir_neighbours =
-                            jsi.get_tags<oter_flags, cata::flat_set<oter_flags>>(
+                        cata::flat_set<std::string> dir_neighbours =
+                            jsi.get_tags<std::string, cata::flat_set<std::string>>(
                                 io::enum_to_string( dir ) );
                         if( !dir_neighbours.empty() ) {
                             neighbors[dir] = std::move( dir_neighbours );
@@ -3534,15 +3534,16 @@ class jmapgen_nested : public jmapgen_piece
                 }
 
                 bool test( const mapgendata &dat ) const {
-                    for( const std::pair<const direction, cata::flat_set<oter_flags>> &p :
+                    for( const std::pair<const direction, cata::flat_set<std::string>> &p :
                          neighbors ) {
                         const direction dir = p.first;
-                        const cata::flat_set<oter_flags> &allowed_flags = p.second;
+                        const cata::flat_set<std::string> &allowed_flags = p.second;
 
                         cata_assert( !allowed_flags.empty() );
 
                         bool this_direction_matches = false;
-                        for( const oter_flags &allowed_flag : allowed_flags ) {
+                        for( const std::string &allowed_flag : allowed_flags ) {
+                            //load flag
                             this_direction_matches |= dat.neighbor_at( dir ).id().obj().has_flag( allowed_flag );
                         }
                         if( !this_direction_matches ) {
