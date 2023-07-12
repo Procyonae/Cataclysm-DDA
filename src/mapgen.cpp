@@ -3516,13 +3516,13 @@ class jmapgen_nested : public jmapgen_piece
         class neighbor_flag_check
         {
             private:
-                std::unordered_map<direction, cata::flat_set<std::string>> neighbors;
+                std::unordered_map<direction, cata::flat_set<oter_flags>> neighbors;
             public:
                 explicit neighbor_flag_check( const JsonObject &jsi ) {
                     for( direction dir : all_enum_values<direction>() ) {
-                        cata::flat_set<std::string> dir_neighbours =
-                            jsi.get_tags<std::string, cata::flat_set<std::string>>(
-                                io::enum_to_string( dir ) );
+                        cata::flat_set<oter_flags> dir_neighbours;
+                        std::string location = io::enum_to_string( dir );
+                        optional( jsi, false, location, dir_neighbours );
                         if( !dir_neighbours.empty() ) {
                             neighbors[dir] = std::move( dir_neighbours );
                         }
@@ -3530,23 +3530,23 @@ class jmapgen_nested : public jmapgen_piece
                 }
 
                 void check( const std::string_view/*oter_name*/, const mapgen_parameters & ) const {
-                   
+
                 }
 
                 bool test( const mapgendata &dat ) const {
-                    for( const std::pair<const direction, cata::flat_set<std::string>> &p :
+                    for( const std::pair<const direction, cata::flat_set<oter_flags>> &p :
                          neighbors ) {
                         const direction dir = p.first;
-                        const cata::flat_set<std::string> &allowed_flags = p.second;
+                        const cata::flat_set<oter_flags> &allowed_neighbors = p.second;
 
-                        cata_assert( !allowed_flags.empty() );
+                        cata_assert( !allowed_neighbors.empty() );
 
-                        bool this_direction_matches = false;
-                        for( const std::string &allowed_flag : allowed_flags ) {
-                            //load flag
-                            this_direction_matches |= dat.neighbor_at( dir ).id().obj().has_flag( allowed_flag );
+                        bool has_flag = false;
+                        for( const oter_flags &allowed_neighbor : allowed_neighbors ) {
+                            has_flag |=
+                                dat.neighbor_at( dir )->has_flag( allowed_neighbor );
                         }
-                        if( !this_direction_matches ) {
+                        if( !has_flag ) {
                             return false;
                         }
                     }
