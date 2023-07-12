@@ -3512,15 +3512,57 @@ class jmapgen_nested : public jmapgen_piece
                     return true;
                 }
         };
+        
+                class neighbor_flag_check
+        {
+            private:
+                std::unordered_map<cube_direction, cata::flat_set<std::string>> neighbors;
+            public:
+                explicit neighbor_flag_check( const JsonObject &jsi ) {
+                    for( cube_direction dir : all_enum_values<cube_direction>() ) {
+                        cata::flat_set<std::string> dir_neighbours =
+                            jsi.get_tags<std::string, cata::flat_set<std::string>>(
+                                io::enum_to_string( dir ) );
+                        if( !dir_neighbours.empty() ) {
+                            neighbors[dir] = std::move( dir_neighbours );
+                        }
+                    }
+                }
+
+                void check( const std::string_view, const mapgen_parameters & ) const {
+                    // TODO: check flag ids are valid
+                }
+
+                bool test( const mapgendata &dat ) const {
+                    for( const std::pair<const cube_direction, cata::flat_set<std::string>> &p :
+                         neighbors ) {
+                        const cube_direction dir = p.first;
+                        const cata::flat_set<oter_flags> &allowed_flags = p.second;
+
+                        cata_assert( !allowed_flags.empty() );
+
+                        bool this_direction_matches = false;
+                        for( const oter_flags &allowed_flag : allowed_flags ) {
+                            this_direction_matches |= dat.t_nesw[dir].has_flag( allowed_flag );
+                        }
+                        if( !this_direction_matches ) {
+                            return false;
+                        }
+                    }
+                    return true;
+                }
+        };
 
     public:
         weighted_int_list<mapgen_value<nested_mapgen_id>> entries;
         weighted_int_list<mapgen_value<nested_mapgen_id>> else_entries;
         neighbor_oter_check neighbor_oters;
         neighbor_join_check neighbor_joins;
+        neighbor_flag_check neighbor_flags;
         jmapgen_nested( const JsonObject &jsi, const std::string_view/*context*/ )
             : neighbor_oters( jsi.get_object( "neighbors" ) )
-            , neighbor_joins( jsi.get_object( "joins" ) ) {
+            , neighbor_joins( jsi.get_object( "joins" ) )
+            , neighbor_flags( jsi.get_object( "flags" ) ) {
             if( jsi.has_member( "chunks" ) ) {
                 load_weighted_list( jsi.get_member( "chunks" ), entries, 100 );
             }
