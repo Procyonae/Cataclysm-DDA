@@ -3603,7 +3603,7 @@ class jmapgen_nested : public jmapgen_piece
         }
         const weighted_int_list<mapgen_value<nested_mapgen_id>> &get_entries(
         const mapgendata &dat ) const {
-            if( neighbor_oters.test( dat ) && neighbor_joins.test( dat ) ) {
+            if( neighbor_oters.test( dat ) && neighbor_joins.test( dat ) && neighbor_flags.test( dat ) ) {
                 return entries;
             } else {
                 return else_entries;
@@ -3647,6 +3647,7 @@ class jmapgen_nested : public jmapgen_piece
             }
             neighbor_oters.check( oter_name, parameters );
             neighbor_joins.check( oter_name, parameters );
+            neighbor_flags.check( oter_name, parameters );
 
             // Check whether any of the nests can attempt to place stuff out of
             // bounds
