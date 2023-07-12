@@ -3513,7 +3513,7 @@ class jmapgen_nested : public jmapgen_piece
                 }
         };
         
-         class neighbor_flag_check
+        class neighbor_flag_check
         {
             private:
                 std::unordered_map<direction, cata::flat_set<oter_flags>> neighbors;
