@@ -371,9 +371,9 @@ class mapgen_basic_container
                     }
                     const JsonArray ja = weight_function.get_array("arguments");
                     // Ideally need to check ja.size against jmfid->num_params taking into account optional params
-                    std::vector<double> arguments;
+                    std::vector<thingie> arguments;
                     for (JsonValue entry : ja) {
-                        const double argument = entry.get_float();
+                        const thingie argument = static_cast<thingie>(entry.get_float()); // What the heck is a thingie
                         arguments.emplace_back(argument);
                     }
                     current_weight = ptr->weight * func_jmath(arguments, jmfid);
