@@ -376,7 +376,8 @@ class mapgen_basic_container
                         const thingie argument = static_cast<thingie>(entry.get_float()); // What the heck is a thingie
                         arguments.emplace_back(argument);
                     }
-                    current_weight = ptr->weight * func_jmath(arguments, jmfid);
+                    dialogue d;
+                    current_weight = ptr->weight * static_cast<double>(func_jmath(std::move(arguments), jmfid).eval( d ) ); // Static casting when you have no idea what it's returning is fine right :^)
                 }
                 if(current_weight < 0 ) {
                     current_weight = 0;
