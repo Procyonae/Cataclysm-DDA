@@ -359,23 +359,22 @@ class mapgen_basic_container
                 const JsonObject weight = ptr->weight;
                 int current_weight;
                 if ( weight.has_string( "weight" ) ) {
-                    current_weight = weight.get_string( "weight" );
+                    current_weight = weight.read<int>( "weight" );
                 }
                 else {
-                    JsonObject jo = weight.get_object("weight");
-                    int initial_weight = jo.get_string("weight");
-                    jmath_func_id &jfi = io::string_to_enum<jmath_func_id>(jo.get_string("id"));
-                    JsonArray ja = jo.get_array("arguments");
-                    if (jfi->num_params != ja.size) {
-                        ja.throw_error();
+                    const JsonObject jo = weight.get_object("weight");
+                    const int initial_weight = jo.read<int>("weight");
+                    const jmath_func_id &jfi = jo.read<jmath_func_id>("id"));
+                    const JsonArray ja = jo.get_array("arguments");
+                    if (jfi->num_params != ja.size) { // Might be one off either way
+                        ja.throw_error("Whoops");
                     }
+                    std::vector<double> arguments;
                     for (JsonValue entry : ja) {
                         const double argument = io::string_to_enum<double>(entry);
-                        jfi->params.insert(argument);
+                        arguments.insert(argument);
                     }
-                    dialogue d = dialogue(get_talker_for(player_character), nullptr, {}, context);
-                    std::unordered_map<std::string, std::string> context;
-                    current_weight = initial_weight * jfi->eval(d, jfi->params);
+                    current_weight = initial_weight * func_jmath(arguments, jfi);
                 }
                 if(current_weight < 1 ) {
                     continue; // rejected!

@@ -760,11 +760,6 @@ math_exp::~math_exp() = default;
 math_exp::math_exp( math_exp &&/* other */ ) noexcept = default;
 math_exp &math_exp::operator=( math_exp &&/* other */ )  noexcept = default;
 
-double math_exp::eval() const
-{
-    return impl->eval();
-}
-
 double math_exp::eval( dialogue &d ) const
 {
     return impl->eval( d );
