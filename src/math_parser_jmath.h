@@ -16,6 +16,7 @@ struct jmath_func {
     bool was_loaded = false;
     int num_params{};
 
+    double eval() const;
     double eval( dialogue &d ) const;
     double eval( dialogue &d, std::vector<double> const &params ) const;
 

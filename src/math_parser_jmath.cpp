@@ -60,6 +60,11 @@ void jmath_func::finalize()
     }
 }
 
+double jmath_func::eval() const
+{
+    return _exp.eval();
+}
+
 double jmath_func::eval( dialogue &d ) const
 {
     return _exp.eval( d );

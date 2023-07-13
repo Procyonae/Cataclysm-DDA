@@ -55,6 +55,7 @@
 #include "mapgen_functions.h"
 #include "mapgendata.h"
 #include "mapgenformat.h"
+#include "math_parser_jmath.h"
 #include "memory_fast.h"
 #include "mission.h"
 #include "mongroup.h"
@@ -355,11 +356,29 @@ class mapgen_basic_container
          */
         void setup() {
             for( const std::shared_ptr<mapgen_function> &ptr : mapgens_ ) {
-                const int weight = ptr->weight;
-                if( weight < 1 ) {
+                const JsonObject weight = ptr->weight;
+                int current_weight;
+                if ( weight.has_string( "weight" ) ) {
+                    current_weight = weight.get_string( "weight" );
+                }
+                else {
+                    JsonObject jo = weight.get_object("weight");
+                    int initial_weight = jo.get_string("weight");
+                    jmath_func_id &jfi = io::string_to_enum<jmath_func_id>(jo.get_string("id"));
+                    JsonArray ja = jo.get_array("arguments");
+                    if (jfi->num_params != ja.size) {
+                        ja.throw_error();
+                    }
+                    for (JsonValue entry : ja) {
+                        const double argument = io::string_to_enum<double>(entry);
+                        jfi->params.insert(argument);
+                    }
+                    current_weight = jfi->eval(arguments);
+                }
+                if(current_weight < 1 ) {
                     continue; // rejected!
                 }
-                weights_.add( ptr, weight );
+                weights_.add( ptr, current_weight);
                 ptr->setup();
             }
             // Not needed anymore, pointers are now stored in weights_ (or not used at all)
@@ -612,8 +631,9 @@ std::shared_ptr<mapgen_function>
 load_mapgen_function( const JsonObject &jio, const std::string &id_base, const point &offset,
                       const point &total )
 {
+    JsonObject mgweight = jio.get_member( "weight" );
     int mgweight = jio.get_int( "weight", 1000 );
-    if( mgweight <= 0 || jio.get_bool( "disabled", false ) ) {
+    if( jio.get_bool( "disabled", false ) ) {
         jio.allow_omitted_members();
         return nullptr; // nothing
     }
