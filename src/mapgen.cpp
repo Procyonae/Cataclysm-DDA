@@ -356,17 +356,15 @@ class mapgen_basic_container
          */
         void setup() {
             for( const std::shared_ptr<mapgen_function> &ptr : mapgens_ ) {
-                const JsonObject weight = ptr->weight;
+                const JsonObject &weight_function = ptr->weight_function;
                 int current_weight;
-                if ( weight.has_string( "weight" ) ) {
-                    current_weight = weight.read<int>( "weight" );
+                if ( weight_function.size == 0 ) { // Probably not an ideal way to check this
+                    current_weight = ptr->weight;
                 }
                 else {
-                    const JsonObject jo = weight.get_object("weight");
-                    const int initial_weight = jo.read<int>("weight");
-                    const jmath_func_id &jfi = jo.read<jmath_func_id>("id"));
-                    const JsonArray ja = jo.get_array("arguments");
-                    if (jfi->num_params != ja.size) { // Might be one off either way
+                    const jmath_func_id &jfi = weight_function.read<jmath_func_id>("id"));
+                    const JsonArray ja = weight_function.get_array("arguments");
+                    if (jfi->num_params != ja.size) { // Check we have the right amount of arguments, might be one off either way, wait aren't some optional idr
                         ja.throw_error("Whoops");
                     }
                     std::vector<double> arguments;
@@ -374,10 +372,10 @@ class mapgen_basic_container
                         const double argument = io::string_to_enum<double>(entry);
                         arguments.insert(argument);
                     }
-                    current_weight = initial_weight * func_jmath(arguments, jfi);
+                    current_weight = ptr->weight * func_jmath(arguments, jfi);
                 }
-                if(current_weight < 1 ) {
-                    continue; // rejected!
+                if(current_weight < 0 ) {
+                    current_weight = 0;
                 }
                 weights_.add( ptr, current_weight);
                 ptr->setup();
@@ -632,8 +630,11 @@ std::shared_ptr<mapgen_function>
 load_mapgen_function( const JsonObject &jio, const std::string &id_base, const point &offset,
                       const point &total )
 {
-    JsonObject mgweight = jio.get_member( "weight" );
     int mgweight = jio.get_int( "weight", 1000 );
+    JsonObject weight_func;
+    if (jio.has_object("weight_function")) {
+        weight_func = jio.get_object("weight_function");
+    }
     if( jio.get_bool( "disabled", false ) ) {
         jio.allow_omitted_members();
         return nullptr; // nothing
@@ -652,7 +653,7 @@ load_mapgen_function( const JsonObject &jio, const std::string &id_base, const p
         JsonObject jo = jio.get_object( "object" );
         jo.allow_omitted_members();
         return std::make_shared<mapgen_function_json>(
-                   jo, mgweight, "mapgen " + id_base, offset, total );
+                   jo, mgweight, weight_func, "mapgen " + id_base, offset, total );
     } else {
         jio.throw_error_at( "method", R"(invalid value: must be "builtin" or "json")" );
     }
@@ -846,6 +847,22 @@ mapgen_function_json::mapgen_function_json( const JsonObject &jsobj, const int w
     total_size.x = grid_total.x * mapgensize.x;
     total_size.y = grid_total.y * mapgensize.y;
     objects = jmapgen_objects( m_offset, mapgensize, total_size );
+}
+
+mapgen_function_json::mapgen_function_json(const JsonObject& jsobj, const int w, const JsonObject weight_function,
+    const std::string& context, const point& grid_offset, const point& grid_total)
+    : mapgen_function(w)
+    , assign_weight_function(weight_function)
+    , mapgen_function_json_base(jsobj, context)
+    , fill_ter(t_null)
+    , rotation(0)
+    , fallback_predecessor_mapgen_(oter_str_id::NULL_ID())
+{
+    m_offset.x = grid_offset.x * mapgensize.x;
+    m_offset.y = grid_offset.y * mapgensize.y;
+    total_size.x = grid_total.x * mapgensize.x;
+    total_size.y = grid_total.y * mapgensize.y;
+    objects = jmapgen_objects(m_offset, mapgensize, total_size);
 }
 
 mapgen_function_json_nested::mapgen_function_json_nested(

@@ -38,8 +38,9 @@ class mapgen_function
 {
     public:
         int weight;
+        JsonObject weight_funtion;
     protected:
-        explicit mapgen_function( int w ) : weight( w ) { }
+        explicit mapgen_function( int w, JsonObject jo) : weight( w ), weight_funtion(jo) { }
     public:
         virtual ~mapgen_function() = default;
         virtual void setup() { } // throws
@@ -481,8 +482,10 @@ class mapgen_function_json : public mapgen_function_json_base, public virtual ma
         bool expects_predecessor() const override;
         void generate( mapgendata & ) override;
         mapgen_parameters get_mapgen_params( mapgen_parameter_scope ) const override;
-        mapgen_function_json( const JsonObject &jsobj, const JsonObject w, const std::string &context,
+        mapgen_function_json( const JsonObject &jsobj, const int w, const std::string &context,
                               const point &grid_offset, const point &grid_total );
+        mapgen_function_json(const JsonObject &jsobj, const int w, const JsonObject weight_function , const std::string &context,
+            const point& grid_offset, const point& grid_total);
         ~mapgen_function_json() override = default;
 
         ter_id fill_ter;
