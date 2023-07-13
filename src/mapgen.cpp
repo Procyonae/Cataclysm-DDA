@@ -851,8 +851,7 @@ mapgen_function_json::mapgen_function_json( const JsonObject &jsobj, const int w
 
 mapgen_function_json::mapgen_function_json(const JsonObject& jsobj, const int w, const JsonObject weight_function,
     const std::string& context, const point& grid_offset, const point& grid_total)
-    : mapgen_function(w)
-    , assign_weight_function(weight_function)
+    : mapgen_function(w, weight_function)
     , mapgen_function_json_base(jsobj, context)
     , fill_ter(t_null)
     , rotation(0)

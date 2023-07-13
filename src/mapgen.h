@@ -40,6 +40,7 @@ class mapgen_function
         int weight;
         JsonObject weight_funtion;
     protected:
+        explicit mapgen_function(int w) : weight(w) { }
         explicit mapgen_function( int w, JsonObject jo) : weight( w ), weight_funtion(jo) { }
     public:
         virtual ~mapgen_function() = default;
