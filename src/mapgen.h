@@ -38,10 +38,10 @@ class mapgen_function
 {
     public:
         int weight;
-        JsonObject weight_funtion;
+        JsonObject weight_function;
     protected:
         explicit mapgen_function(int w) : weight(w) { }
-        explicit mapgen_function( int w, JsonObject jo) : weight( w ), weight_funtion(jo) { }
+        explicit mapgen_function( int w, JsonObject jo) : weight( w ), weight_function(jo) { }
     public:
         virtual ~mapgen_function() = default;
         virtual void setup() { } // throws

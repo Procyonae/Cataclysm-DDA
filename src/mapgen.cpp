@@ -13,6 +13,7 @@
 #include <ostream>
 #include <set>
 #include <stdexcept>
+#include <string_view>
 #include <type_traits>
 #include <unordered_map>
 
@@ -55,6 +56,7 @@
 #include "mapgen_functions.h"
 #include "mapgendata.h"
 #include "mapgenformat.h"
+#include "math_parser_impl.h"
 #include "math_parser_jmath.h"
 #include "memory_fast.h"
 #include "mission.h"
@@ -358,21 +360,23 @@ class mapgen_basic_container
             for( const std::shared_ptr<mapgen_function> &ptr : mapgens_ ) {
                 const JsonObject &weight_function = ptr->weight_function;
                 int current_weight;
-                if ( weight_function.size == 0 ) { // Probably not an ideal way to check this
+                if ( weight_function.size() == 0) { // Probably not an ideal way to check this
                     current_weight = ptr->weight;
                 }
                 else {
-                    const jmath_func_id &jfi = weight_function.read<jmath_func_id>("id"));
-                    const JsonArray ja = weight_function.get_array("arguments");
-                    if (jfi->num_params != ja.size) { // Check we have the right amount of arguments, might be one off either way, wait aren't some optional idr
-                        ja.throw_error("Whoops");
+                    const std::string_view token = weight_function.get_string("id");
+                    jmath_func_id jmfid( token );
+                    if (!jmfid.is_valid()) {
+                        weight_function.throw_error("Invalid jmath_func_id");
                     }
+                    const JsonArray ja = weight_function.get_array("arguments");
+                    // Ideally need to check ja.size against jmfid->num_params taking into account optional params
                     std::vector<double> arguments;
                     for (JsonValue entry : ja) {
-                        const double argument = io::string_to_enum<double>(entry);
-                        arguments.insert(argument);
+                        const double argument = entry.get_float();
+                        arguments.emplace_back(argument);
                     }
-                    current_weight = ptr->weight * func_jmath(arguments, jfi);
+                    current_weight = ptr->weight * func_jmath(arguments, jmfid);
                 }
                 if(current_weight < 0 ) {
                     current_weight = 0;
