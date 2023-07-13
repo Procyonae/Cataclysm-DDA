@@ -175,16 +175,6 @@ bool is_assign_target( thingie const &thing )
            std::holds_alternative<func_diag_ass>( thing.data );
 }
 
-std::vector<double> _eval_params(std::vector<thingie> const& params)
-{
-    std::vector<double> elems(params.size());
-    std::transform(params.begin(), params.end(), elems.begin(),
-        [&d](thingie const& e) {
-            return e.eval(d);
-        });
-    return elems;
-}
-
 std::vector<double> _eval_params( std::vector<thingie> const &params, dialogue &d )
 {
     std::vector<double> elems( params.size() );
@@ -220,11 +210,6 @@ func::func( std::vector<thingie> &&params_, math_func::f_t f_ ) : params( params
 func_jmath::func_jmath( std::vector<thingie> &&params_,
                         jmath_func_id const &id_ ) : params( params_ ),
     id( id_ ) {}
-
-double func::eval() const
-{
-    return f(_eval_params(params));
-}
 
 double func::eval( dialogue &d ) const
 {
@@ -285,10 +270,6 @@ class math_exp::math_exp_impl
                 return false;
             }
             return true;
-        }
-
-        double eval() const {
-            return tree.eval();
         }
 
         double eval( dialogue &d ) const {

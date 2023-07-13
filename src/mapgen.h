@@ -37,9 +37,9 @@ using building_gen_pointer = void ( * )( mapgendata & );
 class mapgen_function
 {
     public:
-        JsonObject weight;
+        int weight;
     protected:
-        explicit mapgen_function( const JsonObject w ) : weight( w ) { }
+        explicit mapgen_function( int w ) : weight( w ) { }
     public:
         virtual ~mapgen_function() = default;
         virtual void setup() { } // throws

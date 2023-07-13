@@ -373,7 +373,9 @@ class mapgen_basic_container
                         const double argument = io::string_to_enum<double>(entry);
                         jfi->params.insert(argument);
                     }
-                    current_weight = jfi->eval(arguments);
+                    dialogue d = dialogue(get_talker_for(player_character), nullptr, {}, context);
+                    std::unordered_map<std::string, std::string> context;
+                    current_weight = initial_weight * jfi->eval(d, jfi->params);
                 }
                 if(current_weight < 1 ) {
                     continue; // rejected!
