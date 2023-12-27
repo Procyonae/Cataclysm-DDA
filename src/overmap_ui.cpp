@@ -531,7 +531,7 @@ static bool get_and_assign_los( int &los, avatar &player_character, const tripoi
 static void draw_ascii(
     const catacurses::window &w, const tripoint_abs_omt &center,
     const tripoint_abs_omt &orig, bool blink, bool show_explored, bool /* fast_scroll */,
-    input_context * /* inp_ctxt */, const draw_data_t &data )
+    input_context * /* inp_ctxt */, const draw_data_t &data, const std::unordered_map<point_abs_omt, int> most_recently_revealed_map )
 {
 
     const int om_map_width = OVERMAP_WINDOW_WIDTH;
@@ -554,6 +554,7 @@ static void draw_ascii(
                              100;
     // Whether showing hordes is currently enabled
     const bool showhordes = uistate.overmap_show_hordes;
+    const bool show_most_recently_revealed_map = uistate.overmap_show_most_recently_revealed_map;
 
     const oter_id forest = oter_forest.id();
 
@@ -774,6 +775,17 @@ static void draw_ascii(
                 if( player_path_z == omp.z() ) {
                     ter_sym = "!";
                 } else if( player_path_z > omp.z() ) {
+                    ter_sym = "^";
+                } else {
+                    ter_sym = "v";
+                }
+            } else if( blink && show_most_recently_revealed_map && most_recently_revealed_map.find( omp.xy() ) != most_recently_revealed_map.end() ) {
+                // player path
+                ter_color = c_yellow;
+                const int most_recently_revealed_map_z = most_recently_revealed_map[omp.xy()];
+                if( most_recently_revealed_map_z == omp.z() ) {
+                    ter_sym = "!";
+                } else if( most_recently_revealed_map_z > omp.z() ) {
                     ter_sym = "^";
                 } else {
                     ter_sym = "v";
@@ -1213,6 +1225,7 @@ static void draw_om_sidebar(
         print_hint( "TOGGLE_LAND_USE_CODES", uistate.overmap_show_land_use_codes ? c_pink : c_magenta );
         print_hint( "TOGGLE_CITY_LABELS", uistate.overmap_show_city_labels ? c_pink : c_magenta );
         print_hint( "TOGGLE_HORDES", uistate.overmap_show_hordes ? c_pink : c_magenta );
+        print_hint( "TOGGLE_MOST_RECENTLY_REVEALED_MAP", uistate.overmap_show_hordes ? c_pink : c_magenta );
         print_hint( "TOGGLE_EXPLORED", is_explored ? c_pink : c_magenta );
         print_hint( "TOGGLE_FAST_SCROLL", fast_scroll ? c_pink : c_magenta );
         print_hint( "TOGGLE_FOREST_TRAILS", uistate.overmap_show_forest_trails ? c_pink : c_magenta );
@@ -1816,6 +1829,7 @@ static tripoint_abs_omt display( const tripoint_abs_omt &orig,
     ictxt.register_action( "TOGGLE_BLINKING" );
     ictxt.register_action( "TOGGLE_OVERLAYS" );
     ictxt.register_action( "TOGGLE_HORDES" );
+    ictxt.register_action( "TOGGLE_MOST_RECENTLY_REVEALED_MAP" );
     ictxt.register_action( "TOGGLE_LAND_USE_CODES" );
     ictxt.register_action( "TOGGLE_CITY_LABELS" );
     ictxt.register_action( "TOGGLE_EXPLORED" );
@@ -1976,6 +1990,8 @@ static tripoint_abs_omt display( const tripoint_abs_omt &orig,
             uistate.overmap_show_map_notes = !uistate.overmap_show_map_notes;
         } else if( action == "TOGGLE_HORDES" ) {
             uistate.overmap_show_hordes = !uistate.overmap_show_hordes;
+        } else if( action == "TOGGLE_MOST_RECENTLY_REVEALED_MAP" ) {
+            uistate.overmap_show_most_recently_revealed_map = !uistate.overmap_show_most_recently_revealed_map;
         } else if( action == "TOGGLE_CITY_LABELS" ) {
             uistate.overmap_show_city_labels = !uistate.overmap_show_city_labels;
         } else if( action == "TOGGLE_EXPLORED" ) {
