@@ -647,7 +647,6 @@ void Character::load( const JsonObject &data )
     data.read( "per_bonus", per_bonus );
     data.read( "int_bonus", int_bonus );
     data.read( "omt_path", omt_path );
-    data.read( "most_recently_revealed_map", most_recently_revealed_map );
 
     data.read( "name", name );
     data.read( "play_name", play_name );
@@ -1340,7 +1339,6 @@ void Character::store( JsonOut &json ) const
     json.member( "daily_vitamins", daily_vitamins );
     json.member( "pkill", pkill );
     json.member( "omt_path", omt_path );
-    json.member( "most_recently_revealed_map", most_recently_revealed_map );
     json.member( "consumption_history", consumption_history );
 
     // crafting etc

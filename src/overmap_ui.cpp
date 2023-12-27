@@ -781,10 +781,10 @@ static void draw_ascii(
                     ter_sym = "v";
                 }
             } else if( blink && show_most_recently_revealed_map && most_recently_revealed_map.find( omp.xy() ) != most_recently_revealed_map.end() ) {
-                ter_color = c_yellow;
+                ter_color = c_blue;
                 const int most_recently_revealed_map_z = most_recently_revealed_map[omp.xy()];
                 if( most_recently_revealed_map_z == omp.z() ) {
-                    ter_sym = "□";
+                    ter_sym = "!";
                 } else if( most_recently_revealed_map_z > omp.z() ) {
                     ter_sym = "^";
                 } else {
@@ -1225,7 +1225,7 @@ static void draw_om_sidebar(
         print_hint( "TOGGLE_LAND_USE_CODES", uistate.overmap_show_land_use_codes ? c_pink : c_magenta );
         print_hint( "TOGGLE_CITY_LABELS", uistate.overmap_show_city_labels ? c_pink : c_magenta );
         print_hint( "TOGGLE_HORDES", uistate.overmap_show_hordes ? c_pink : c_magenta );
-        print_hint( "TOGGLE_MOST_RECENTLY_REVEALED_MAP", uistate.overmap_show_hordes ? c_pink : c_magenta );
+        print_hint( "TOGGLE_MOST_RECENTLY_REVEALED_MAP", uistate.overmap_show_most_recently_revealed_map ? c_pink : c_magenta );
         print_hint( "TOGGLE_EXPLORED", is_explored ? c_pink : c_magenta );
         print_hint( "TOGGLE_FAST_SCROLL", fast_scroll ? c_pink : c_magenta );
         print_hint( "TOGGLE_FOREST_TRAILS", uistate.overmap_show_forest_trails ? c_pink : c_magenta );

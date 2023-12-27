@@ -1188,15 +1188,15 @@ void reveal_map_actor::reveal_targets( const tripoint_abs_omt &center,
                                        const std::pair<std::string, ot_match_type> &target,
                                        int reveal_distance ) const
 {
-    Character &player_character = get_player_character();
     const auto places = overmap_buffer.find_all( center, target.first, radius, false,
                         target.second );
     std::unordered_map<point_abs_omt, int> revealed_map;
     for( const tripoint_abs_omt &place : places ) {
-        if( overmap_buffer.reveal( place, reveal_distance ) ) {
-            revealed_map[ place.xy() ] = place.z();
+        if( overmap_buffer.reveal( place, reveal_distance ) ) { // Does this return true when successfully revealed?
+            revealed_map[ place.xy() ] = place.z(); // Does this rely on there only being one set of z for every x and y?
         }
     }
+    Character &player_character = get_player_character();
     player_character.most_recently_revealed_map = revealed_map;
 }
 
