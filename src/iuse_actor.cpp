@@ -1188,11 +1188,15 @@ void reveal_map_actor::reveal_targets( const tripoint_abs_omt &center,
                                        const std::pair<std::string, ot_match_type> &target,
                                        int reveal_distance ) const
 {
-    const auto places = overmap_buffer.find_all( center, target.first, radius, false,
+    auto places = overmap_buffer.find_all( center, target.first, radius, false,
                         target.second );
+    std::unordered_map<point_abs_omt, int> revealed_map;
     for( const tripoint_abs_omt &place : places ) {
-        overmap_buffer.reveal( place, reveal_distance );
+        if( overmap_buffer.reveal( place, reveal_distance ) ) {
+            revealed_map[ place.xy() ] = place.z();
+        }
     }
+    player_character.most_recently_revealed_map = revealed_map;
 }
 
 std::optional<int> reveal_map_actor::use( Character *p, item &it, const tripoint & ) const

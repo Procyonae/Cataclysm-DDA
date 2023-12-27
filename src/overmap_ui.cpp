@@ -531,7 +531,7 @@ static bool get_and_assign_los( int &los, avatar &player_character, const tripoi
 static void draw_ascii(
     const catacurses::window &w, const tripoint_abs_omt &center,
     const tripoint_abs_omt &orig, bool blink, bool show_explored, bool /* fast_scroll */,
-    input_context * /* inp_ctxt */, const draw_data_t &data, const std::unordered_map<point_abs_omt, int> most_recently_revealed_map )
+    input_context * /* inp_ctxt */, const draw_data_t &data )
 {
 
     const int om_map_width = OVERMAP_WINDOW_WIDTH;
@@ -648,6 +648,7 @@ static void draw_ascii(
     std::unordered_set<tripoint_abs_omt> npc_path_route;
     std::unordered_map<point_abs_omt, int> player_path_route;
     std::unordered_map<tripoint_abs_omt, npc_coloring> npc_color;
+    std::unordered_map<point_abs_omt, int> most_recently_revealed_map = player_character.most_recently_revealed_map;
     auto npcs_near_player = overmap_buffer.get_npcs_near_player( sight_points );
     if( blink ) {
         // get seen NPCs
@@ -780,11 +781,10 @@ static void draw_ascii(
                     ter_sym = "v";
                 }
             } else if( blink && show_most_recently_revealed_map && most_recently_revealed_map.find( omp.xy() ) != most_recently_revealed_map.end() ) {
-                // player path
                 ter_color = c_yellow;
                 const int most_recently_revealed_map_z = most_recently_revealed_map[omp.xy()];
-                if( most_recently_revealed_map_z == omp.z() ) {
-                    ter_sym = "!";
+                if( most_recently_revealed_map == omp.z() ) {
+                    ter_sym = "□";
                 } else if( most_recently_revealed_map_z > omp.z() ) {
                     ter_sym = "^";
                 } else {
