@@ -1188,7 +1188,8 @@ void reveal_map_actor::reveal_targets( const tripoint_abs_omt &center,
                                        const std::pair<std::string, ot_match_type> &target,
                                        int reveal_distance ) const
 {
-    auto places = overmap_buffer.find_all( center, target.first, radius, false,
+    Character &player_character = get_player_character();
+    const auto places = overmap_buffer.find_all( center, target.first, radius, false,
                         target.second );
     std::unordered_map<point_abs_omt, int> revealed_map;
     for( const tripoint_abs_omt &place : places ) {

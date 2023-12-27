@@ -783,7 +783,7 @@ static void draw_ascii(
             } else if( blink && show_most_recently_revealed_map && most_recently_revealed_map.find( omp.xy() ) != most_recently_revealed_map.end() ) {
                 ter_color = c_yellow;
                 const int most_recently_revealed_map_z = most_recently_revealed_map[omp.xy()];
-                if( most_recently_revealed_map == omp.z() ) {
+                if( most_recently_revealed_map_z == omp.z() ) {
                     ter_sym = "□";
                 } else if( most_recently_revealed_map_z > omp.z() ) {
                     ter_sym = "^";

@@ -1727,6 +1727,7 @@ void npc::import_and_clean( const JsonObject &data )
     // space coordinates are irrelevant if importing into a different world
     set_location( defaults.get_location() );
     omt_path = defaults.omt_path;
+    most_recently_revealed_map = defaults.most_recently_revealed_map;
     known_traps.clear();
     camps = defaults.camps;
     last_player_seen_pos = defaults.last_player_seen_pos;
