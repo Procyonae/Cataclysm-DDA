@@ -40,6 +40,7 @@ void submap::clear_fields( const point &p )
 
 static const std::string COSMETICS_GRAFFITI( "GRAFFITI" );
 static const std::string COSMETICS_SIGNAGE( "SIGNAGE" );
+static const std::string COSMETICS_COLOR( "COLOR" );
 // Handle GCC warning: 'warning: returning reference to temporary'
 static const std::string STRING_EMPTY;
 
@@ -94,6 +95,41 @@ void submap::set_graffiti( const point &p, const std::string &new_graffiti )
 void submap::delete_graffiti( const point &p )
 {
     const cosmetic_find_result fresult = find_cosmetic( cosmetics, p, COSMETICS_GRAFFITI );
+    if( fresult.result ) {
+        ensure_nonuniform();
+        cosmetics[ fresult.ndx ] = cosmetics.back();
+        cosmetics.pop_back();
+    }
+}
+
+bool submap::has_color( const point &p ) const
+{
+    return find_cosmetic( cosmetics, p, COSMETICS_color ).result;
+}
+
+const std::string &submap::get_color( const point &p ) const
+{
+    const cosmetic_find_result fresult = find_cosmetic( cosmetics, p, COSMETICS_COLOR );
+    if( fresult.result ) {
+        return cosmetics[ fresult.ndx ].str;
+    }
+    return STRING_EMPTY;
+}
+
+void submap::set_color( const point &p, const std::string &new_color )
+{
+    ensure_nonuniform();
+    const cosmetic_find_result fresult = find_cosmetic( cosmetics, p, COSMETICS_COLOR );
+    if( fresult.result ) {
+        cosmetics[ fresult.ndx ].str = new_color;
+    } else {
+        insert_cosmetic( p, COSMETICS_color, new_color );
+    }
+}
+
+void submap::delete_color( const point &p )
+{
+    const cosmetic_find_result fresult = find_cosmetic( cosmetics, p, COSMETICS_color );
     if( fresult.result ) {
         ensure_nonuniform();
         cosmetics[ fresult.ndx ] = cosmetics.back();
