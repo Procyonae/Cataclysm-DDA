@@ -256,10 +256,10 @@ class submap
         void set_graffiti( const point &p, const std::string &new_graffiti );
         void delete_graffiti( const point &p );
 
-        void has_color( const point &p );
-        const std::string &get_color( const point &p ) const; //probably wants to reference an enum
-        void set_color( const point &p, const std::string &color ); //probably wants to reference an enum
-        void delete_color( const point &p );
+        bool has_tcolor( const point &p ) const;
+        const std::string &get_tcolor( const point &p ) const;
+        void set_tcolor( const point &p, const std::string &color );
+        void delete_tcolor( const point &p );
 
         // Signage is a pretend union between furniture on a square and stored
         // writing on the square. When both are present, we have signage.
@@ -404,7 +404,7 @@ class maptile_impl
         const std::string &get_graffiti() const {
             return sm->get_graffiti( pos() );
         }
-        
+
         bool has_color() const {
             return sm->has_color( pos() );
         }

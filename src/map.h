@@ -1701,6 +1701,11 @@ class map
         const std::string &graffiti_at( const tripoint &p ) const;
         void set_graffiti( const tripoint &p, const std::string &contents );
         void delete_graffiti( const tripoint &p );
+        // Terrain Colors
+        bool has_tcolor_at( const tripoint &p ) const;
+        const std::string &tcolor_at( const tripoint &p ) const;
+        void set_tcolor( const tripoint &p, const std::string &color );
+        void delete_tcolor( const tripoint &p );
 
         // Climbing
         /**

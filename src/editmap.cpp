@@ -832,6 +832,12 @@ void editmap::update_view_with_help( const std::string &txt, const std::string &
                    here.graffiti_at( target ) );
     }
 
+    if( here.has_tcolor_at( target ) ) {
+        mvwprintw( w_info, point( 1, off ),
+                   "Color: %s",
+                   here.tcolor_at( target ) );
+    }
+
     // updating help
     int line = getmaxy( w_info ) - 1;
     if( !title.empty() ) {

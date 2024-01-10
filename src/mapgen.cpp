@@ -1992,6 +1992,26 @@ class jmapgen_graffiti : public jmapgen_piece
         }
 };
 /**
+ * Color terrain.
+ * "color": the color to make the terrain.
+ */
+class jmapgen_tcolor : public jmapgen_piece
+{
+    public:
+        std::string color;
+        jmapgen_tcolor( const JsonObject &jsi, const std::string_view/*context*/ ) {
+            jsi.read( "color", color );
+            if( color.empty() ) {
+                jsi.throw_error( "jmapgen_tcolor: needs color" );
+            }
+        }
+        void apply( const mapgendata &dat, const jmapgen_int &x, const jmapgen_int &y,
+                    const std::string &/*context*/ ) const override {
+            const point r( x.get(), y.get() );
+            dat.m.set_tcolor( tripoint( r, dat.m.get_abs_sub().z() ), color );
+        }
+};
+/**
  * Place a vending machine with content.
  * "item_group": the item group that is used to generate the content of the vending machine.
  */

@@ -9021,6 +9021,64 @@ bool map::has_graffiti_at( const tripoint &p ) const
     return current_submap->has_graffiti( l );
 }
 
+void map::set_tcolor( const tripoint &p, const std::string &contents )
+{
+    if( !inbounds( p ) ) {
+        return;
+    }
+    point l;
+    submap *const current_submap = unsafe_get_submap_at( p, l );
+    if( current_submap == nullptr ) {
+        debugmsg( "Tried to set terrain color at (%d,%d) but the submap is not loaded", l.x, l.y );
+        return;
+    }
+    current_submap->set_tcolor( l, contents );
+}
+
+void map::delete_tcolor( const tripoint &p )
+{
+    if( !inbounds( p ) ) {
+        return;
+    }
+    point l;
+    submap *const current_submap = unsafe_get_submap_at( p, l );
+    if( current_submap == nullptr ) {
+        debugmsg( "Tried to delete terrain color at (%d,%d) but the submap is not loaded", l.x, l.y );
+        return;
+    }
+    current_submap->delete_tcolor( l );
+}
+
+const std::string &map::tcolor_at( const tripoint &p ) const
+{
+    if( !inbounds( p ) ) {
+        static const std::string empty_string;
+        return empty_string;
+    }
+    point l;
+    const submap *const current_submap = unsafe_get_submap_at( p, l );
+    if( current_submap == nullptr ) {
+        debugmsg( "Tried to get terrain color at (%d,%d) but the submap is not loaded", l.x, l.y );
+        static const std::string empty_string;
+        return empty_string;
+    }
+    return current_submap->get_tcolor( l );
+}
+
+bool map::has_tcolor_at( const tripoint &p ) const
+{
+    if( !inbounds( p ) ) {
+        return false;
+    }
+    point l;
+    const submap *const current_submap = unsafe_get_submap_at( p, l );
+    if( current_submap == nullptr ) {
+        debugmsg( "Tried to get terrain color at (%d,%d) but the submap is not loaded", l.x, l.y );
+        return false;
+    }
+    return current_submap->has_tcolor( l );
+}
+
 int map::determine_wall_corner( const tripoint &p ) const
 {
     const std::bitset<NUM_TERCONN> &test_connect_group = ter( p ).obj().connect_to_groups;
