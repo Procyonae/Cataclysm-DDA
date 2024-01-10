@@ -249,6 +249,10 @@ bool robotcontrol_can_target( Character *, const monster & );
 std::optional<int> handle_ground_graffiti( Character &p, item *it, const std::string &prefix,
         const tripoint &where );
 
+// Helper for handling peskier wannabeier-artists
+std::optional<int> handle_tcolor( Character &p, item *it, const std::string &color,
+                                  const tripoint &where );
+
 //helper for lit cigs
 std::optional<std::string> can_smoke( const Character &you );
 } // namespace iuse

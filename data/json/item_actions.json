@@ -705,6 +705,11 @@
   },
   {
     "type": "item_action",
+    "id": "PAINT",
+    "name": { "str": "Apply paint" }
+  },
+  {
+    "type": "item_action",
     "id": "PETFOOD",
     "name": { "str": "Feed a wild animal… or a human" }
   },
@@ -792,6 +797,11 @@
     "type": "item_action",
     "id": "REMOTEVEH",
     "name": { "str": "Control a vehicle" }
+  },
+  {
+    "type": "item_action",
+    "id": "REMOVE_PAINT",
+    "name": { "str": "Remove paint" }
   },
   {
     "type": "item_action",

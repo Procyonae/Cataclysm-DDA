@@ -834,7 +834,7 @@ void editmap::update_view_with_help( const std::string &txt, const std::string &
 
     if( here.has_tcolor_at( target ) ) {
         mvwprintw( w_info, point( 1, off ),
-                   "Color: %s",
+                   "Color: %s", // Need to get the actual name not c_
                    here.tcolor_at( target ) );
     }
 

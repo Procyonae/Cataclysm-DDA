@@ -4594,7 +4594,7 @@ bool mapgen_function_json_base::setup_common( const JsonObject &jo )
     objects.load_objects<jmapgen_computer>( jo, "place_computers", context_ );
     objects.load_objects<jmapgen_nested>( jo, "place_nested", context_ );
     objects.load_objects<jmapgen_graffiti>( jo, "place_graffiti", context_ );
-    objects.load_objects<jmapgen_tcolor>( jo, "place_color", context_ ); // Hopefully temporary
+    objects.load_objects<jmapgen_tcolor>( jo, "place_color", context_ );
     objects.load_objects<jmapgen_translate>( jo, "translate_ter", context_ );
     objects.load_objects<jmapgen_zone>( jo, "place_zones", context_ );
     objects.load_objects<jmapgen_ter_furn_transform>( jo, "place_ter_furn_transforms", context_ );

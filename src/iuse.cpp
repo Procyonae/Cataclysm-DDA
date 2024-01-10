@@ -5100,7 +5100,7 @@ std::optional<int> iuse::paint( Character *p, item *it, const tripoint & )
     if( !dest_ ) {
         return std::nullopt;
     }
-    std::string paint_color = it->color();
+    const std::string paint_color = string_from_color(it->color());
     return handle_tcolor( *p, it, paint_color, dest_.value() );
 }
 
@@ -5114,12 +5114,20 @@ std::optional<int> iuse::remove_paint( Character *p, item *it, const tripoint & 
 }
 
 std::optional<int> iuse::handle_tcolor( Character &p, item *it, const std::string &color,
-        const tripoint &where )
+                                        const tripoint &where )
 {
     map &here = get_map();
     int move_cost;
     if( color == "null" ) {
         if( here.has_tcolor_at( where ) ) {
+            if( here.has_graffiti_at( where ) ) {
+                if( !( p.is_npc() ||
+                       query_yn( _( "The %s here will also be removed, are you sure?" ),
+                                 "graffiti"/*graffiti or inscription*/ ) ) ) { // Add message context?
+                    return std::nullopt;
+                }
+                here.delete_graffiti( where );
+            }
             move_cost = 150; // Needs increasing dramatically
             here.delete_tcolor( where );
             p.add_msg_if_player( m_info, _( "You manage to get rid of the majority of the paint." ) );
@@ -5129,15 +5137,24 @@ std::optional<int> iuse::handle_tcolor( Character &p, item *it, const std::strin
     } else {
         // Check for paintbrush (flag?)
         if( here.has_tcolor_at( where ) ) {
-            std::string existing_color = here.get_tcolor_at( where );
+            const std::string existing_color = here.tcolor_at( where );
             if( color == existing_color ) {
                 p.add_msg_if_player( m_info, _( "It's already that color." ) ); // Add terrain context
                 return std::nullopt;
             }
-            if( !(p->is_npc() ||
-            query_yn( _( "It's already %s, are you sure you want to paint over it?" ), existing_color ) ) ) { // Add terrain context
+            if( !( p.is_npc() ||
+                   query_yn( _( "It's already painted %s, are you sure you want to paint over it?" ),
+                             existing_color ) ) ) { // Add terrain context
                 return std::nullopt;
             }
+        }
+        if( here.has_graffiti_at( where ) ) {
+            if( !( p.is_npc() ||
+                   query_yn( _( "The %s here will be covered up, are you sure?" ),
+                             "graffiti"/*graffiti or inscription*/ ) ) ) { // Add message context?
+                return std::nullopt;
+            }
+            here.delete_graffiti( where );
         }
         here.set_tcolor( where, color );
         p.add_msg_if_player( m_info, _( "You begin painting." ) ); // Add terrain/color context?

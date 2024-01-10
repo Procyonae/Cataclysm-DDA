@@ -41,7 +41,7 @@ void submap::clear_fields( const point &p )
 static const std::string COSMETICS_GRAFFITI( "GRAFFITI" );
 static const std::string COSMETICS_SIGNAGE( "SIGNAGE" );
 static const std::string
-COSMETICS_COLOR( "COLOR" ); // Should probably change to something referencing color.h
+COSMETICS_COLOR( "COLOR" );
 // Handle GCC warning: 'warning: returning reference to temporary'
 static const std::string STRING_EMPTY;
 
