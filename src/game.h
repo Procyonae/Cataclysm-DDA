@@ -957,6 +957,8 @@ class game
                                int last_line );
         void print_graffiti_info( const tripoint &lp, const catacurses::window &w_look, int column,
                                   int &line, int last_line );
+        void print_tcolor_info( const tripoint &lp, const catacurses::window &w_look, int column,
+                                  int &line, int last_line );
 
         input_context get_player_input( std::string &action );
 

@@ -5094,6 +5094,63 @@ std::optional<int> iuse::handle_ground_graffiti( Character &p, item *it, const s
     }
 }
 
+std::optional<int> iuse::paint( Character *p, item *it, const tripoint & )
+{
+    const std::optional<tripoint> dest_ = choose_adjacent( _( "Paint what?" ) );
+    if( !dest_ ) {
+        return std::nullopt;
+    }
+    std::string paint_color = it->color();
+    return handle_tcolor( *p, it, paint_color, dest_.value() );
+}
+
+std::optional<int> iuse::remove_paint( Character *p, item *it, const tripoint & )
+{
+    const std::optional<tripoint> dest_ = choose_adjacent( _( "Remove paint from where?" ) );
+    if( !dest_ ) {
+        return std::nullopt;
+    }
+    return handle_tcolor( *p, it, "null", dest_.value() );
+}
+
+std::optional<int> iuse::handle_tcolor( Character &p, item *it, const std::string &color,
+        const tripoint &where )
+{
+    map &here = get_map();
+    int move_cost;
+    if( color == "null" ) {
+        if( here.has_tcolor_at( where ) ) {
+            move_cost = 150; // Needs increasing dramatically
+            here.delete_tcolor( where );
+            p.add_msg_if_player( m_info, _( "You manage to get rid of the majority of the paint." ) );
+        } else {
+            return std::nullopt;
+        }
+    } else {
+        // Check for paintbrush (flag?)
+        if( here.has_tcolor_at( where ) ) {
+            std::string existing_color = here.get_tcolor_at( where );
+            if( color == existing_color ) {
+                p.add_msg_if_player( m_info, _( "It's already that color." ) ); // Add terrain context
+                return std::nullopt;
+            }
+            if( !(p->is_npc() ||
+            query_yn( _( "It's already %s, are you sure you want to paint over it?" ), existing_color ) ) ) { // Add terrain context
+                return std::nullopt;
+            }
+        }
+        here.set_tcolor( where, color );
+        p.add_msg_if_player( m_info, _( "You begin painting." ) ); // Add terrain/color context?
+        move_cost = 100; // Needs increasing dramatically
+    }
+    p.moves -= move_cost;
+    if( it != nullptr ) {
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
 /**
  * Heats up a food item.
  * @return 1 if an item was heated, false if nothing was heated.

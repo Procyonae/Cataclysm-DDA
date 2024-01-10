@@ -6393,6 +6393,7 @@ void game::print_all_tile_info( const tripoint &lp, const catacurses::window &w_
                                 last_line );
             print_items_info( lp, w_look, column, line, last_line );
             print_graffiti_info( lp, w_look, column, line, last_line );
+            print_tcolor_info( lp, w_look, column, line, last_line );
         }
         break;
         case visibility_type::BOOMER:
@@ -6740,6 +6741,23 @@ void game::print_graffiti_info( const tripoint &lp, const catacurses::window &w_
         const int lines = fold_and_print( w_look, point( column, ++line ), max_width, c_light_gray,
                                           m.ter( lp ) == t_grave_new ? _( "Graffiti: %s" ) : _( "Inscription: %s" ),
                                           m.graffiti_at( lp ) );
+        line += lines - 1;
+    }
+}
+
+void game::print_tcolor_info( const tripoint &lp, const catacurses::window &w_look,
+                                const int column, int &line,
+                                const int last_line )
+{
+    if( line > last_line ) {
+        return;
+    }
+
+    const int max_width = getmaxx( w_look ) - column - 2;
+    if( m.has_tcolor_at( lp ) ) {
+        const int lines = fold_and_print( w_look, point( column, ++line ), max_width, c_light_gray, // Making it appear in the color it is could be fun
+                                          "Color: %s",
+                                          m.tcolor_at( lp ) );
         line += lines - 1;
     }
 }

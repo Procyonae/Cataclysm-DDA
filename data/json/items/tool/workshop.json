@@ -204,6 +204,7 @@
     "material": [ "steel", "wood" ],
     "symbol": ";",
     "color": "brown",
+    "use_action": [ "REMOVE_PAINT" ],
     "flags": [ "BELT_CLIP" ],
     "melee_damage": { "cut": 2 }
   },

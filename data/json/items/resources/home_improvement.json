@@ -16,6 +16,7 @@
     "comestible_type": "INVALID",
     "freezing_point": -4,
     "charges": 15,
+    "use_action": [ "PAINT" ],
     "conditional_names": [ { "type": "FLAG", "condition": "DIRTY", "name": "paint spill" } ]
   },
   {

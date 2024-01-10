@@ -4316,6 +4316,7 @@ mapgen_palette mapgen_palette::load_internal( const JsonObject &jo, const std::s
     new_pal.load_place_mapings<jmapgen_liquid_item>( jo, "liquids", format_placings, c );
     new_pal.load_place_mapings<jmapgen_corpse>( jo, "corpses", format_placings, c );
     new_pal.load_place_mapings<jmapgen_graffiti>( jo, "graffiti", format_placings, c );
+    new_pal.load_place_mapings<jmapgen_tcolor>( jo, "color", format_placings, c );
     new_pal.load_place_mapings<jmapgen_translate>( jo, "translate", format_placings, c );
     new_pal.load_place_mapings<jmapgen_zone>( jo, "zones", format_placings, c );
     new_pal.load_place_mapings<jmapgen_ter_furn_transform>( jo, "ter_furn_transforms",
@@ -4593,6 +4594,7 @@ bool mapgen_function_json_base::setup_common( const JsonObject &jo )
     objects.load_objects<jmapgen_computer>( jo, "place_computers", context_ );
     objects.load_objects<jmapgen_nested>( jo, "place_nested", context_ );
     objects.load_objects<jmapgen_graffiti>( jo, "place_graffiti", context_ );
+    objects.load_objects<jmapgen_tcolor>( jo, "place_color", context_ ); // Hopefully temporary
     objects.load_objects<jmapgen_translate>( jo, "translate_ter", context_ );
     objects.load_objects<jmapgen_zone>( jo, "place_zones", context_ );
     objects.load_objects<jmapgen_ter_furn_transform>( jo, "place_ter_furn_transforms", context_ );
