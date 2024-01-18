@@ -724,7 +724,7 @@ bool Character::melee_attack_abstract( Creature &t, bool allow_special,
         if( has_force_technique ) {
             technique_id = force_technique;
         } else if( allow_special ) {
-            technique_id = pick_technique( t, cur_weapon, critical_hit, false, false );
+            technique_id = pick_technique( t, inv_dump, critical_hit, false, false );
         } else {
             technique_id = tec_none;
         }
@@ -1466,24 +1466,24 @@ void Character::roll_damage( const damage_type_id &dt, bool crit, damage_instanc
         di.add_damage( dt, other_dam, arpen, armor_mult, other_mul );
     }
 }
-matec_id Character::pick_technique( Creature &t, const item_location &weap, bool crit,
+matec_id Character::pick_technique( Creature &t, const std::vector<const item *> &equipped, bool crit,
                                     bool dodge_counter, bool block_counter, const std::vector<matec_id> &blacklist )
 {
-    std::vector<matec_id> possible = evaluate_techniques( t, weap, crit,
+    std::vector<matec_id> possible = evaluate_techniques( t, equipped, crit,
                                      dodge_counter,  block_counter, blacklist );
     return random_entry( possible, tec_none );
 }
-std::vector<matec_id> Character::evaluate_techniques( Creature &t, const item_location &weap,
+std::vector<matec_id> Character::evaluate_techniques( Creature &t, const std::vector<const item *> &equipped,
         bool crit, bool dodge_counter, bool block_counter, const std::vector<matec_id> &blacklist )
 {
 
-    const std::vector<matec_id> all = martial_arts_data->get_all_techniques( weap, *this );
+    const std::vector<matec_id> all = martial_arts_data->get_all_techniques( const std::vector<const item *> &equipped, *this );
 
     std::vector<matec_id> possible;
 
     bool wall_adjacent = get_map().is_wall_adjacent( pos() );
     // this could be more robust but for now it should work fine
-    bool is_loaded = weap && weap->is_magazine_full();
+    //bool is_loaded = weap && weap->is_magazine_full();
 
     // first add non-aoe tecs
     for( const matec_id &tec_id : all ) {
@@ -1569,10 +1569,10 @@ std::vector<matec_id> Character::evaluate_techniques( Creature &t, const item_lo
         }
 
         // if the technique needs a loaded weapon and it isn't loaded skip it
-        if( tec.needs_ammo && !is_loaded ) {
-            add_msg_debug( debugmode::DF_MELEE, "No ammo, attack discarded" );
-            continue;
-        }
+        //if( tec.needs_ammo && !is_loaded ) {
+        //    add_msg_debug( debugmode::DF_MELEE, "No ammo, attack discarded" );
+        //    continue;
+        //}
 
         // don't apply disarming techniques to someone without a weapon
         // TODO: these are the stat requirements for tec_disarm
@@ -1846,18 +1846,19 @@ void Character::perform_technique( const ma_technique &technique, Creature &t,
             }
         }
     }
-
     if( technique.needs_ammo ) {
-        const itype_id current_ammo = cur_weapon.get_item()->ammo_current();
+        //really icky
+        const item_location thing_with_the_technique = find thing with technique in equipped;
+        const itype_id current_ammo = thing_with_the_technique.get_item()->ammo_current();
         // if the weapon needs ammo we now expend it
-        cur_weapon.get_item()->ammo_consume( 1, pos(), this );
+        thing_with_the_technique.get_item()->ammo_consume( 1, pos(), this );
         // thing going off should be as loud as the ammo
         sounds::sound( pos(), current_ammo->ammo->loudness, sounds::sound_t::combat, _( "Crack!" ), true );
         const itype_id casing = *current_ammo->ammo->casing;
-        if( cur_weapon.get_item()->has_flag( flag_RELOAD_EJECT ) ) {
-            cur_weapon.get_item()->force_insert_item( item( casing ).set_flag( flag_CASING ),
+        if( thing_with_the_technique.get_item()->has_flag( flag_RELOAD_EJECT ) ) {
+            thing_with_the_technique.get_item()->force_insert_item( item( casing ).set_flag( flag_CASING ),
                     pocket_type::MAGAZINE );
-            cur_weapon.get_item()->on_contents_changed();
+            thing_with_the_technique.get_item()->on_contents_changed();
         }
     }
 

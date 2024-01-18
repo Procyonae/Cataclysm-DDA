@@ -1084,7 +1084,7 @@ class Character : public Creature, public visitable
         /** Calculates melee weapon wear-and-tear through use, returns true if item is destroyed. */
         bool handle_melee_wear( item_location shield, float wear_multiplier = 1.0f );
         /** Returns a random valid technique */
-        matec_id pick_technique( Creature &t, const item_location &weap,
+        matec_id pick_technique( Creature &t, const std::vector<const item *> &equipped,
                                  bool crit, bool dodge_counter, bool block_counter, const std::vector<matec_id> &blacklist = {} );
         // Houses the actual picking logic and returns the vector of eligable techniques
         std::vector<matec_id> evaluate_techniques( Creature &t, const item_location &weap,
