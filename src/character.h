@@ -1408,8 +1408,8 @@ class Character : public Creature, public visitable
         bool has_min_manipulators() const;
         // technically this is "has more than one arm"
         bool has_two_arms_lifting() const;
-        // Return all the limb special attacks the character has, if the parent limb isn't too encumbered
-        std::set<matec_id> get_limb_techs() const;
+        // Return all the limb special attacks the character has, if the parent limb isn't too encumbered, along with their respective bodypart_id
+        void get_limb_techs( const std::vector<std::pair<std::set<matec_id>, &bodypart_id>> ret );
         int get_working_arm_count() const;
         /** Returns true if enough of your legs are working
           * Currently requires all, new morphologies could be different

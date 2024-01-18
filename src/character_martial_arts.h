@@ -96,7 +96,9 @@ class character_martial_arts
         /** Returns true if the current style allows blocking with weapons */
         bool can_weapon_block() const;
 
-        std::vector<matec_id> get_all_techniques( const item_location &weap, const Character &u ) const;
+        void get_all_techniques( const Character &u,
+                                 std::vector < std::pair<std::set<matec_id>, item *> tecs_equipped,
+                                 std::vector<matec_id> tecs_ma, std::vector<matec_id, &bodypart_id > tecs_limbs );
         std::vector<matype_id> get_unknown_styles( const character_martial_arts &from,
                 bool teachable_only ) const;
         std::vector<matype_id> get_known_styles( bool teachable_only ) const;

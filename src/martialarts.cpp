@@ -1312,32 +1312,33 @@ std::string martialart::get_initiate_npc_message() const
 // Player stuff
 
 // technique
-std::vector<matec_id> character_martial_arts::get_all_techniques( const item_location &weap,
-        const Character &u ) const
+void character_martial_arts::get_all_techniques( const Character &u,
+        std::vector < std::pair<std::set<matec_id>, item *> tecs_equipped,
+        std::vector<matec_id> tecs_ma, std::vector<matec_id, &bodypart_id > tecs_limbs )
 {
-    std::vector<matec_id> tecs;
     const martialart &style = style_selected.obj();
-
+    const item_location *weapon_location = used_weapon();
+    std::vector<const item *> equipped;
+    inv_dump( equipped );
     // Grab individual item techniques if the style allows them
-    if( weap && !style.force_unarmed ) {
-        const auto &weapon_techs = weap->get_techniques();
-        tecs.insert( tecs.end(), weapon_techs.begin(), weapon_techs.end() );
+    if( weapon_location == nullptr || style.force_unarmed ) {
+        equipped.erase( equipped.find_if( equipped.begin, equipped.end, []( const it * ) {
+            return it->type() == WEAPON;
+        } ) );
     }
-    // If we have any items that also provide techniques
-    const std::vector<const item *> tech_providing_items = u.cache_get_items_with(
-                json_flag_PROVIDES_TECHNIQUES );
-    for( const item *it : tech_providing_items ) {
+    for( const item *it : equipped ) {
         const std::set<matec_id> &item_techs = it->get_techniques();
-        tecs.insert( tecs.end(), item_techs.begin(), item_techs.end() );
+        if( item_techs ) {
+            const std::pair<std::set<matec_id>, item *> pair{ &item_techs, *it };
+            tecs_equipped.push( pair );
+        }
+        // And martial art techniques
+        tecs_ma.insert( tecs_ma.end(), style.techniques.begin(), style.techniques.end() );
+        // And limb techniques
+        u.get_limb_techs( tecs_limbs );
     }
-    // and martial art techniques
-    tecs.insert( tecs.end(), style.techniques.begin(), style.techniques.end() );
-    // And limb techniques
-    const auto &limb_techs = u.get_limb_techs();
-    tecs.insert( tecs.end(), limb_techs.begin(), limb_techs.end() );
-
-    return tecs;
 }
+
 
 // defensive technique-related
 
