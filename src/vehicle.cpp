@@ -7532,7 +7532,7 @@ item vehicle::get_folded_item() const
     return folded;
 }
 
-bool vehicle::restore_folded_parts( const item &it )
+bool vehicle::restore_folded_parts( item &it )
 {
     const JsonValue jv_parts = json_loader::from_string( it.get_var( "folded_parts" ) );
     deserialize_parts( static_cast<JsonArray>( jv_parts ) );
@@ -7573,6 +7573,31 @@ bool vehicle::restore_folded_parts( const item &it )
                                applied_damage, pt.name(), damage_to_apply );
             }
         }
+    }
+
+    if( it.is_container() && !it.is_container_empty() ) {
+        std::vector<item_pocket *> pockets = it.get_all_contained_pockets();
+        if( pockets.size() != 1 ) {
+            debugmsg( "No support for multi pocket foldable items." );
+            return false; // Is this ok?
+        }
+        item_pocket *pocket = pockets[0];
+        const point expected_cargo_position = point( it.get_var( "cargo_x", 0 ), it.get_var( "cargo_y", 0 ) );
+        int part = part_with_feature( expected_cargo_position, "CARGO", false );
+        if( part < 0 ) {
+            debugmsg( "No CARGO parts at (%s, %s) of %s!", expected_cargo_position.x, expected_cargo_position.y, name );
+            return false; // Is this ok?
+        }
+        vehicle_part &vp = parts[part];
+        if( pocket->max_contains_volume() != vp.info().size ){
+            debugmsg( "Max volume of specified cargo space should be equal to the maximum volume of the item's pocket.", expected_cargo_position.x, expected_cargo_position.y, name );
+            return false; // Is this ok?
+        }
+
+        pocket->visit_contents( [vp]( const item * itm, item * ) { // defo not how this works
+            add_item( vp, itm& );
+            return VisitResponse::NEXT;
+        }, it&);
     }
 
     refresh();
