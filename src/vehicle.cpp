@@ -7532,7 +7532,7 @@ item vehicle::get_folded_item() const
     return folded;
 }
 
-bool vehicle::restore_folded_parts( item &it )
+bool vehicle::restore_folded_parts( const item &it )
 {
     const JsonValue jv_parts = json_loader::from_string( it.get_var( "folded_parts" ) );
     deserialize_parts( static_cast<JsonArray>( jv_parts ) );
@@ -7576,12 +7576,12 @@ bool vehicle::restore_folded_parts( item &it )
     }
 
     if( it.is_container() && !it.is_container_empty() ) {
-        std::vector<item_pocket *> pockets = it.get_all_contained_pockets();
+        std::vector<const item_pocket *> pockets = it.get_all_contained_pockets();
         if( pockets.size() != 1 ) {
             debugmsg( "No support for multi pocket foldable items." );
             return false; // Is this ok?
         }
-        item_pocket *pocket = pockets[0];
+        const item_pocket *pocket = pockets[0];
         const point expected_cargo_position = point( it.get_var( "cargo_x", 0 ), it.get_var( "cargo_y", 0 ) );
         int part = part_with_feature( expected_cargo_position, "CARGO", false );
         if( part < 0 ) {
@@ -7589,15 +7589,15 @@ bool vehicle::restore_folded_parts( item &it )
             return false; // Is this ok?
         }
         vehicle_part &vp = parts[part];
-        if( pocket->max_contains_volume() != vp.info().size ){
-            debugmsg( "Max volume of specified cargo space should be equal to the maximum volume of the item's pocket.", expected_cargo_position.x, expected_cargo_position.y, name );
+        if( vp.info().size.value() != pocket->max_contains_volume().value() ){
+            debugmsg( "Max volume of specified cargo space %s ml should be equal to the maximum volume of the item's pocket %s ml.", vp.info().size.value(), pocket->max_contains_volume().value() );
             return false; // Is this ok?
         }
 
-        pocket->visit_contents( [vp]( const item * itm, item * ) { // defo not how this works
-            add_item( vp, itm& );
-            return VisitResponse::NEXT;
-        }, it&);
+        for( const item *contained_item : pocket->all_items_top() ) {
+            add_item( vp, *contained_item );
+            //it.remove_item( *contained_item ); // Shouldn't need removing bc the whole item's about to get yeeted so we can keep stuff const instead
+        }
     }
 
     refresh();

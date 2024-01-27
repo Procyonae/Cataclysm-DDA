@@ -35,10 +35,10 @@
     "name": { "str": "folded Deployable Suitcase" },
     "description": "A folded Deployable Suitcase.",
     "weight": "20786 g",
-    "volume": "18500 ml",
+    "volume": "20000 ml",
     "symbol": "0",
     "color": "light_gray",
-    "pocket_data": [ { "pocket_type": "CONTAINER", "max_contains_volume": "15 L", "max_contains_weight": "15 kg", "moves": 400 } ],
+    "pocket_data": [ { "pocket_type": "CONTAINER", "max_contains_volume": "20000 ml", "max_contains_weight": "15 kg", "moves": 400 } ],
     "variables": {
       "vehicle_name": "Deployed Suitcase",
       "folded_parts": "[{\"id\":\"folding_frame\",\"base\":{\"typeid\":\"foldframe\",\"item_tags\":[\"VEHICLE\"]},\"mount_dx\":0,\"mount_dy\":0},{\"id\":\"wheel_mount_light\",\"base\":{\"typeid\":\"wheel_mount_light\",\"item_tags\":[\"VEHICLE\"]},\"mount_dx\":0,\"mount_dy\":0},{\"id\":\"wheel_wheelchair\",\"base\":{\"typeid\":\"wheel_wheelchair\",\"item_tags\":[\"VEHICLE\"]},\"mount_dx\":0,\"mount_dy\":0},{\"id\":\"basketsm\",\"base\":{\"typeid\":\"bike_basket\",\"item_tags\":[\"VEHICLE\"]},\"mount_dx\":0,\"mount_dy\":0}]"

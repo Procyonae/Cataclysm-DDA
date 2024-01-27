@@ -1961,7 +1961,7 @@ class vehicle
         item get_folded_item() const;
         // restores vehicle parts from a folded item
         // @returns true if succeeded
-        bool restore_folded_parts( item &it );
+        bool restore_folded_parts( const item &it );
 
         //true if an alarm part is installed on the vehicle
         bool has_security_working() const;
