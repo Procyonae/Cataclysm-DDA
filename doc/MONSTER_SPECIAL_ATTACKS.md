@@ -95,7 +95,6 @@ These special attacks are mostly hardcoded in C++ and are generally not configur
 - ```BRANDISH``` Brandishes a knife at the player.
 - ```BROWSE``` The monster will eat harvestable foods from BROWSABLE trees and plants when they're in season.
 - ```BREATHE``` Spawns a `breather`.  Note: `breather hub` only!
-- ```CALLBLOBS``` Calls 2/3 of nearby blobs to defend this monster, and sends 1/3 of nearby blobs after the player.
 - ```CHICKENBOT``` Robot can attack with tazer, M4, or MGL depending on distance.  Note: Legacy special attack.
 - ```COPBOT``` Cop-bot warns then tazes the player.
 - ```DANCE``` Monster dances.

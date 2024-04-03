@@ -73,7 +73,7 @@
       "mapgensize": [ 9, 9 ],
       "place_furniture": [ { "furn": "f_locker", "x": 8, "y": 0 } ],
       "place_items": [ { "item": "goo", "x": 8, "y": 0, "chance": 70 } ],
-      "place_monsters": [ { "monster": "GROUP_GOO", "x": [ 0, 8 ], "y": [ 0, 8 ], "density": 0.12 } ]
+      "place_monsters": [ { "monster": "GROUP_SLIME", "x": [ 0, 8 ], "y": [ 0, 8 ], "density": 0.12 } ]
     }
   },
   {

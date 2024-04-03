@@ -2478,187 +2478,121 @@ static void poly_keep_speed( monster &mon, const mtype_id &id )
     mon.set_speed_base( old_speed );
 }
 
-static bool blobify( monster &blob, monster &target )
+static void potential_poly_keep_speed( monster &mon, const mtype_id &id )
+{
+    // Change blob size if appropriate
+    const int old_speed = mon.get_speed_base();
+    if( mon.type->id == mon_blob_small ) {
+        if( old_speed >= mon_blob->speed ) {
+            poly_keep_speed( mon, mon_blob );
+        }
+    } else if( mon.type->id == mon_blob ) {
+        if( old_speed < mon_blob_small->speed ) {
+            poly_keep_speed( mon, mon_blob_small );
+        } else if( old_speed >= mon_blob_large->speed ) {
+            poly_keep_speed( mon, mon_blob_large );
+        }
+    } else if( mon.type->id == mon_blob_large ) {
+        if( old_speed < mon_blob->speed ) {
+            poly_keep_speed( mon, mon_blob );
+        }
+    }
+}
+
+static void blobify( monster &blob, monster &target )
 {
     add_msg_if_player_sees( target, m_warning, _( "%s is engulfed by %s!" ),
                             target.disp_name(), blob.disp_name() );
+    mtype_id blob_to_form;
     switch( target.get_size() ) {
         case creature_size::tiny:
             // Just consume it
-            target.set_hp( 0 );
+            target.die();
             blob.set_speed_base( blob.get_speed_base() + 5 );
-            return false;
+            return;
         case creature_size::small:
-            target.poly( mon_blob_small );
+            blob_to_form = mon_blob_small;
             break;
         case creature_size::medium:
-            target.poly( mon_blob );
+            blob_to_form = mon_blob;
             break;
         case creature_size::large:
-            target.poly( mon_blob_large );
+            blob_to_form = mon_blob_large;
             break;
         case creature_size::huge:
             // No polymorphing huge stuff
             target.add_effect( effect_slimed, rng( 2_turns, 10_turns ) );
-            break;
+            blob.set_speed_base( blob.get_speed_base() + 5 );
+            return;
         default:
             debugmsg( "Tried to blobify %s with invalid size: %d",
                       target.disp_name(), static_cast<int>( target.get_size() ) );
-            return false;
+            return;
     }
-
+    target.poly( blob_to_form );
     target.make_ally( blob );
-    return true;
+    blob.set_speed_base( blob.get_speed_base() - ( blob_to_form->speed / 3 ) );
+    return;
 }
 
 bool mattack::formblob( monster *z )
 {
     if( z->friendly ) {
         // TODO: handle friendly monsters
-        return false;
+        return true;
     }
-
-    bool didit = false;
     std::vector<tripoint> pts = closest_points_first( z->pos(), 1 );
     // Don't check own tile
     pts.erase( pts.begin() );
+    std::random_shuffle( pts.begin(), pts.end() );
     creature_tracker &creatures = get_creature_tracker();
+    const int babyblobroll = rng( 0, mon_blob_large->speed * 3 );
     for( const tripoint &dest : pts ) {
         Creature *critter = creatures.creature_at( dest );
         if( critter == nullptr ) {
-            if( z->get_speed_base() > mon_blob_small->speed + 35 && rng( 0, 250 ) < z->get_speed_base() ) {
-                // If we're big enough, spawn a baby blob.
+            if( z->get_speed_base() > mon_blob_small->speed * 2 && babyblobroll < z->get_speed_base() ) {
+                // If we're fast enough, split off a small blob.
                 shared_ptr_fast<monster> mon = make_shared_fast<monster>( mon_blob_small );
                 mon->ammo = mon->type->starting_ammo;
-                if( mon->will_move_to( dest ) && mon->know_danger_at( dest ) ) {
-                    didit = true;
+                if( mon->will_move_to( dest ) && mon->know_danger_at( dest ) &&
+                    monster *const blob = g->place_critter_around( mon, dest, 0 ) ) {
                     z->set_speed_base( z->get_speed_base() - mon_blob_small->speed );
-                    if( monster *const blob = g->place_critter_around( mon, dest, 0 ) ) {
-                        blob->make_ally( *z );
-                    }
-                    break;
+                    potential_poly_keep_speed( *z );
+                    z->moves = 0;
+                    blob->make_ally( *z );
+                    return true;
                 }
             }
-
-            continue;
-        }
-
-        if( critter->is_avatar() || critter->is_npc() ) {
+        } else if( critter->is_avatar() || critter->is_npc() ) {
             // If we hit the player or some NPC, cover them with slime
-            didit = true;
             // TODO: Add some sort of a resistance/dodge roll
-            critter->add_effect( effect_slimed, rng( 0_turns, 1_turns * z->get_hp() ) );
-            break;
-        }
-
-        monster &othermon = *( dynamic_cast<monster *>( critter ) );
-        // Hit a monster.  If it's a blob, give it our speed.  Otherwise, blobify it?
-        if( othermon.type->in_species( species_SLIME ) ) {
-            if( othermon.type->id == mon_blob_brain ) {
-                // Brain blobs don't get sped up, they heal at the cost of the other blob.
-                // But only if they are hurt badly.
-                const int othermon_half_hp = othermon.get_hp_max() / 2;
-                if( othermon.get_hp() < othermon_half_hp ) {
-                    const int heal_value = std::min( z->get_speed_base(), othermon_half_hp - othermon.get_hp() );
-                    othermon.heal( heal_value, true );
-                    if( heal_value >= z->get_speed_base() ) {
-                        z->set_speed_base( 0 );
-                        z->set_hp( 0 );
-                        return true;
-                    } else {
-                        didit = true;
-                        z->set_speed_base( z->get_speed_base() - heal_value );
-                    }
+            critter->add_effect( effect_slimed, rng( 0_turns, 1_turns * std::clamp( ( rng( 0,
+                                 z->get_speed_base() ) * 5 ) / mon_blob_large->speed, 1, 5 ) ) );
+            z->set_speed_base( z->get_speed_base() + 5 );
+            z->moves = 0;
+            return true;
+        } else {
+            monster &othermon = *( dynamic_cast<monster *>( critter ) );
+            // If it's a blob, rarely consume it.  Otherwise try to blobify it.
+            if( othermon.type->in_species( species_SLIME ) ) {
+                if( one_in( othermon->get_speed_base() * 4 ) ) {
+                    z.set_speed_base( z.get_speed_base() + othermon->get_speed_base() );
+                    othermon->die( nullptr );
+                    potential_poly_keep_speed( *z );
+                    return true;
                 }
-                continue;
-            }
-
-            if( z->get_speed_base() > 40 ) {
-                didit = true;
-                othermon.set_speed_base( othermon.get_speed_base() + 5 );
-                z->set_speed_base( z->get_speed_base() - 5 );
-                if( othermon.type->id == mon_blob_small &&
-                    othermon.get_speed_base() >= mon_blob_small->speed + 10 ) {
-                    poly_keep_speed( othermon, mon_blob );
-                } else if( othermon.type->id == mon_blob && othermon.get_speed_base() >= mon_blob->speed + 10 ) {
-                    poly_keep_speed( othermon, mon_blob_large );
-                }
-            } else if( one_in( z->get_speed_base() ) ) {
-                othermon.set_speed_base( othermon.get_speed_base() + z->get_speed_base() );
-                z->set_speed_base( 0 );
-                z->set_hp( 0 );
-                if( othermon.type->id == mon_blob_small &&
-                    othermon.get_speed_base() >= mon_blob_small->speed + 10 ) {
-                    poly_keep_speed( othermon, mon_blob );
-                } else if( othermon.type->id == mon_blob && othermon.get_speed_base() >= mon_blob->speed + 10 ) {
-                    poly_keep_speed( othermon, mon_blob_large );
-                }
+            } else if( othermon.made_of( material_flesh ) || othermon.made_of( material_veggy ) ||
+                       othermon.made_of( material_iflesh ) ) &&
+                std::min( rng( 0, z->get_speed_base() ) / mon_blob_large->speed,
+                          1 ) > othermon.get_hp() / othermon.get_hp_max() ) {
+                blobify( *z, othermon );
+                potential_poly_keep_speed( *z );
+                z->moves = 0;
                 return true;
             }
-        } else if( ( othermon.made_of( material_flesh ) ||
-                     othermon.made_of( material_veggy ) ||
-                     othermon.made_of( material_iflesh ) ) &&
-                   rng( 0, z->get_hp() ) > rng( othermon.get_hp() / 2, othermon.get_hp() ) ) {
-            didit = blobify( *z, othermon );
         }
     }
-
-    if( didit ) { // We did SOMEthing.
-        if( z->type->id == mon_blob && z->get_speed_base() <= mon_blob_small->speed ) {
-            // We shrank!
-            poly_keep_speed( *z, mon_blob_small );
-        } else if( z->type->id == mon_blob_large && z->get_speed_base() <= mon_blob->speed ) {
-            // We shrank!
-            poly_keep_speed( *z, mon_blob );
-        }
-
-        z->moves = 0;
-        return true;
-    }
-
-    return true; // consider returning false to try again immediately if nothing happened?
-}
-
-bool mattack::callblobs( monster *z )
-{
-    if( z->friendly ) {
-        // TODO: handle friendly monsters
-        return false;
-    }
-    // The huge brain blob interposes other blobs between it and any threat.
-    // For the moment just target the player, this gets a bit more complicated
-    // if we want to deal with NPCS and friendly monsters as well.
-    // The strategy is to send about 1/3 of the available blobs after the player,
-    // and keep the rest near the brain blob for protection.
-    const tripoint_abs_ms enemy = get_player_character().get_location();
-    const std::vector<tripoint_abs_ms> nearby_points = closest_points_first( z->get_location(), 3 );
-    std::list<monster *> allies;
-    for( monster &candidate : g->all_monsters() ) {
-        if( candidate.type->in_species( species_SLIME ) && candidate.type->id != mon_blob_brain ) {
-            // Just give the allies consistent assignments.
-            // Don't worry about trying to make the orders optimal.
-            allies.push_back( &candidate );
-        }
-    }
-    // 1/3 of the available blobs, unless they would fill the entire area near the brain.
-    const int num_guards = std::min( allies.size() / 3, nearby_points.size() );
-    int guards = 0;
-    for( std::list<monster *>::iterator ally = allies.begin();
-         ally != allies.end(); ++ally, ++guards ) {
-        tripoint_abs_ms post = enemy;
-        if( guards < num_guards ) {
-            // Each guard is assigned a spot in the nearby_points vector based on their order.
-            int assigned_spot = ( nearby_points.size() * guards ) / num_guards;
-            post = nearby_points[ assigned_spot ];
-        }
-        ( *ally )->set_dest( post );
-        if( !( *ally )->has_effect( effect_controlled ) ) {
-            ( *ally )->add_effect( effect_controlled, 1_turns, true );
-        }
-    }
-    // This is telepathy, doesn't take any moves.
-
-    return true;
+    return false;
 }
 
 bool mattack::jackson( monster *z )
