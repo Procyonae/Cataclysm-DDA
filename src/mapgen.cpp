@@ -3384,8 +3384,8 @@ class jmapgen_remove_vehicles : public jmapgen_piece
     public:
         std::vector<vproto_id> vehicles_to_remove;
         jmapgen_remove_vehicles( const JsonObject &jo, const std::string_view/*context*/ ) {
-            for( std::string item_id : jo.get_string_array( "vehicles" ) ) {
-                vehicles_to_remove.emplace_back( item_id );
+            for( std::string vehicle_prototype_id : jo.get_string_array( "vehicles" ) ) {
+                vehicles_to_remove.emplace_back( vehicle_prototype_id );
             }
         }
         mapgen_phase phase() const override {
@@ -3397,14 +3397,14 @@ class jmapgen_remove_vehicles : public jmapgen_piece
             const tripoint start( x.val, y.val, dat.zlevel() );
             const tripoint end( x.valmax, y.valmax, dat.zlevel() );
             const tripoint_range<tripoint> range = tripoint_range<tripoint>( start, end );
+            auto is_in_vehicles_to_remove = [&]( vproto_id & vproto ) -> bool {
+                return std::find( vehicles_to_remove.begin(), vehicles_to_remove.end(), vproto ) != vehicles_to_remove.end();
+            };
             for( const tripoint &p : range ) {
-                if( optional_vpart_position vp = dat.m.veh_at( p ) ) {
-                    const auto rit = std::find( vehicles_to_remove.begin(), vehicles_to_remove.end(),
-                                                vp->vehicle().type );
-                    if( rit != vehicles_to_remove.end() ) {
-                        get_map().remove_vehicle_from_cache( &vp->vehicle(), start.z, end.z );
-                        dat.m.destroy_vehicle( &vp->vehicle() );
-                    }
+                optional_vpart_position vp = dat.m.veh_at( p );
+                if( vp && ( vehicles_to_remove.empty() || is_in_vehicles_to_remove( vp->vehicle().type ) ) ) {
+                    get_map().remove_vehicle_from_cache( &vp->vehicle(), start.z, end.z );
+                    dat.m.destroy_vehicle( &vp->vehicle() );
                 }
             }
         }
