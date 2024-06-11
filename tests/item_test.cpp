@@ -28,6 +28,7 @@
 #include "value_ptr.h"
 
 static const flag_id json_flag_COLD( "COLD" );
+static const flag_id json_flag_DEBUG_ONLY( "DEBUG_ONLY" );
 static const flag_id json_flag_FILTHY( "FILTHY" );
 static const flag_id json_flag_FIX_NEARSIGHT( "FIX_NEARSIGHT" );
 static const flag_id json_flag_HOT( "HOT" );
@@ -799,23 +800,36 @@ TEST_CASE( "item_material_density_blacklist_is_pruned", "[item]" )
     }
 }
 
+static bool matches_item_disassembly_coverage_exclusion_filters( const itype *type,
+        const item &target )
+{
+    return
+        type->src.back().second.str() != "dda" || // Isn't from TEST_DATA
+        type->weight < 10_gram ||
+        type->volume < 10_ml ||
+        type->ammo ||
+        type->bionic ||
+        type->gun ||
+        type->gunmod ||
+        type->mod ||
+        !target.made_of( phase_id::SOLID ) || // Isn't a liquid or gas
+        type->has_flag( flag_CORPSE ) ||
+        type->has_flag( json_flag_DEBUG_ONLY ) ||
+        type->has_flag( flag_INTEGRATED ) ||
+        type->has_flag( flag_PSEUDO );
+}
+
 TEST_CASE( "item_disassembly_coverage", "[item]" )
 {
     /*
      *  TODO:
      *    Basic check:
      *      Can't be disassembled either with an uncraft or a "reversible": true
-     *    Extra filters:
-     *      Definately:
-     *        src = "dda"
-     *        not too small to salvage
-     *        not a gun or gun mod or ammo or bionic
-     *        not liquid
-     *        not DEBUG_ONLY
-     *        not CORPSE
-     *      Maybe:
-     *        not "food"
-     *        not NO_SALVAGE
+     *    Existing filters:
+     *      Improve weight/size check to care about constituent materials like can_produce_results()
+     *    Potential extra filters:
+     *      not "food"
+     *      not NO_SALVAGE
      */
     std::vector<const itype *> all_items = item_controller->all();
     std::string msg;
@@ -824,7 +838,8 @@ TEST_CASE( "item_disassembly_coverage", "[item]" )
     for( const itype *type : all_items ) {
         const item target( type, calendar::turn_zero, item::solitary_tag{} );
         if( !target.is_disassemblable() &&
-            test_data::known_missing_disassembly.count( target.typeId() ) == 0 ) {
+            test_data::known_missing_disassembly.count( target.typeId() ) == 0 &&
+            !matches_item_disassembly_coverage_exclusion_filters( type, target ) ) {
             msg += string_format( "\"%s\",\n", type->get_id().str() );
             unknown_missing++;
         }
