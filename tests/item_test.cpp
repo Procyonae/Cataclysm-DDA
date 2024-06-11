@@ -799,6 +799,59 @@ TEST_CASE( "item_material_density_blacklist_is_pruned", "[item]" )
     }
 }
 
+TEST_CASE( "item_disassembly_coverage", "[item]" )
+{
+    /*
+     *  TODO:
+     *    Basic check:
+     *      Can't be disassembled either with an uncraft or a "reversible": true
+     *    Extra filters:
+     *      Definately:
+     *        src = "dda"
+     *        not too small to salvage
+     *        not a gun or gun mod or ammo or bionic
+     *        not liquid
+     *        not DEBUG_ONLY
+     *        not CORPSE
+     *      Maybe:
+     *        not "food"
+     *        not NO_SALVAGE
+     */
+    std::vector<const itype *> all_items = item_controller->all();
+    std::string msg;
+    int unknown_missing;
+
+    for( const itype *type : all_items ) {
+        const item target( type, calendar::turn_zero, item::solitary_tag{} );
+        if( !target.is_disassemblable() &&
+            test_data::known_missing_disassembly.count( target.typeId() ) == 0 ) {
+            msg += string_format( "\"%s\",\n", type->get_id().str() );
+            unknown_missing++;
+        }
+    }
+    if( unknown_missing > 0 ) {
+        msg += string_format( "These %d items are missing disassembly recipies, either add recipes or add the ids as shown here to data/mods/TEST_DATA/known_missing_disassembly.json.",
+                              unknown_missing );
+    }
+    REQUIRE( msg == "" );
+}
+
+TEST_CASE( "item_disassembly_blacklist_is_pruned", "[item]" )
+{
+    // TODO: Add a flag or second TEST_DATA blacklist for items that don't match filters but shouldn't be disassemblable
+    for( const itype_id &missing : test_data::known_missing_disassembly ) {
+        if( !missing.is_valid() ) {
+            continue;
+        }
+        const item target( missing, calendar::turn_zero, item::solitary_tag{} );
+        if( target.is_disassemblable() ) {
+            INFO( string_format( "%s has a disassembly recipe, remove it from the list in data/mods/TEST_DATA/known_missing_disassembly.json",
+                                 missing.str() ) );
+        }
+    }
+}
+
+
 TEST_CASE( "armor_entry_consolidate_check", "[item][armor]" )
 {
     item test_consolidate( "test_consolidate" );

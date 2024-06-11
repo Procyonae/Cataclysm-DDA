@@ -4,6 +4,7 @@
 #include "generic_factory.h"
 
 std::set<itype_id> test_data::known_bad;
+std::set<itype_id> test_data::known_missing_disassembly;
 std::unordered_set<oter_type_id> test_data::overmap_terrain_coverage_whitelist;
 std::map<vproto_id, std::vector<double>> test_data::drag_data;
 std::map<vproto_id, efficiency_data> test_data::eff_data;
@@ -115,6 +116,13 @@ void test_data::load( const JsonObject &jo )
         std::set<itype_id> new_known_bad;
         jo.read( "known_bad", new_known_bad );
         known_bad.insert( new_known_bad.begin(), new_known_bad.end() );
+    }
+
+    if( jo.has_array( "known_missing_disassembly" ) ) {
+        std::set<itype_id> new_known_missing_disassembly;
+        jo.read( "known_missing_disassembly", new_known_missing_disassembly );
+        known_missing_disassembly.insert( new_known_missing_disassembly.begin(),
+                                          new_known_missing_disassembly.end() );
     }
 
     if( jo.has_array( "overmap_terrain_coverage_whitelist" ) ) {
