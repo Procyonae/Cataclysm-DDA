@@ -29,7 +29,7 @@ static std::vector<cata_variant> flags_of_itype( const cata_variant &v )
 
 static std::vector<cata_variant> flags_of_terrain( const cata_variant &v )
 {
-    const std::set<ter_furn_flag_id> &flags = v.get<ter_id>()->get_flags();
+    const std::unordered_set<ter_furn_flag_id> &flags = v.get<ter_id>()->get_flags();
     std::vector<cata_variant> result;
     result.reserve( flags.size() );
     for( const ter_furn_flag_id &flag : flags ) {

@@ -136,9 +136,9 @@ struct connect_group {
     public:
         connect_group_id id;
         int index;
-        std::set<ter_furn_flag_id> group_flags;
-        std::set<ter_furn_flag_id> connects_to_flags;
-        std::set<ter_furn_flag_id> rotates_to_flags;
+        std::unordered_set<ter_furn_flag_id> group_flags;
+        std::unordered_set<ter_furn_flag_id> connects_to_flags;
+        std::unordered_set<ter_furn_flag_id> rotates_to_flags;
 
         static void load( const JsonObject &jo );
         static void reset();
@@ -269,7 +269,7 @@ struct map_data_common_t {
 
     private:
         // string flags which possibly refer to what's documented above.
-        std::set<ter_furn_flag_id> flags;
+        std::unordered_set<ter_furn_flag_id> flags;
     public:
         ter_str_id curtain_transform;
 
@@ -324,7 +324,7 @@ struct map_data_common_t {
 
         bool transparent = false;
 
-        const std::set<ter_furn_flag_id> &get_flags() const {
+        const std::unordered_set<ter_furn_flag_id> &get_flags() const {
             return flags;
         }
 

@@ -2280,7 +2280,11 @@ void load_construction( const JsonObject &jo )
         }
     }
 
-    con.post_flags = jo.get_tags<ter_furn_flag_id>( "post_flags" );
+    if( jo.has_member( "post_flags" ) ) {
+        for( auto &jflag : jo.get_string_array( "post_flags" ) ) {
+            con.post_flags.insert( ter_furn_flag_id( jflag ) );
+        }
+    }
 
     if( jo.has_member( "byproducts" ) ) {
         con.byproduct_item_group = item_group::load_item_group( jo.get_member( "byproducts" ),

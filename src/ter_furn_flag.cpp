@@ -73,7 +73,7 @@ const ter_furn_flag_id TFLAG_HARVEST_REQ_CUT1( "HARVEST_REQ_CUT1" );
 const ter_furn_flag_id TFLAG_HARVESTED( "HARVESTED" );
 const ter_furn_flag_id TFLAG_HIDE_PLACE( "HIDE_PLACE" );
 const ter_furn_flag_id TFLAG_INDOORS( "INDOORS" );
-const ter_furn_flag_id TFLAG_KEEP_ITEMS( "KEEP_ITEMS" );
+const ter_furn_flag_id TFLAG_KEEP_ITEMS( "keep_items" );
 const ter_furn_flag_id TFLAG_LADDER( "LADDER" );
 const ter_furn_flag_id TFLAG_LIQUID( "LIQUID" );
 const ter_furn_flag_id TFLAG_LIQUIDCONT( "LIQUIDCONT" );

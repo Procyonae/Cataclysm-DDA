@@ -161,7 +161,7 @@ struct vpslot_toolkit {
 };
 
 struct vpslot_terrain_transform {
-    std::set<ter_furn_flag_id> pre_flags;
+    std::unordered_set<ter_furn_flag_id> pre_flags;
     std::string post_terrain;
     std::string post_furniture;
     std::string post_field;
