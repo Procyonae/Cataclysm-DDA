@@ -94,7 +94,6 @@ struct wrapped_vehicle {
 using VehicleList = std::vector<wrapped_vehicle>;
 class map;
 
-enum class ter_furn_flag : int;
 struct pathfinding_cache;
 struct pathfinding_settings;
 template<typename T>
@@ -1017,9 +1016,9 @@ class map
         }
         // Checks terrain, furniture and vehicles
         // TODO: fix point types (remove the first overload)
-        bool has_flag( const std::string &flag, const tripoint &p ) const;
-        bool has_flag( const std::string &flag, const tripoint_bub_ms &p ) const;
-        bool has_flag( const std::string &flag, const point &p ) const {
+        bool has_flag( const ter_furn_flag_id &flag, const tripoint &p ) const;
+        bool has_flag( const ter_furn_flag_id &flag, const tripoint_bub_ms &p ) const;
+        bool has_flag( const ter_furn_flag_id &flag, const point &p ) const {
             return has_flag( flag, tripoint( p, abs_sub.z() ) );
         }
         // True if items can be dropped in this tile
@@ -1037,52 +1036,22 @@ class map
             return can_put_items_ter_furn( tripoint( p, abs_sub.z() ) );
         }
         // Checks terrain
-        bool has_flag_ter( const std::string &flag, const tripoint &p ) const;
-        bool has_flag_ter( const std::string &flag, const point &p ) const {
+        bool has_flag_ter( const ter_furn_flag_id &flag, const tripoint &p ) const;
+        bool has_flag_ter( const ter_furn_flag_id &flag, const tripoint_bub_ms &p ) const;
+        bool has_flag_ter( const ter_furn_flag_id &flag, const point &p ) const {
             return has_flag_ter( flag, tripoint( p, abs_sub.z() ) );
         }
         // Checks furniture
         // TODO: fix point types (remove the first overload)
-        bool has_flag_furn( const std::string &flag, const tripoint &p ) const;
-        bool has_flag_furn( const std::string &flag, const tripoint_bub_ms &p ) const;
-        bool has_flag_furn( const std::string &flag, const point &p ) const {
+        bool has_flag_furn( const ter_furn_flag_id &flag, const tripoint &p ) const;
+        bool has_flag_furn( const ter_furn_flag_id &flag, const tripoint_bub_ms &p ) const;
+        bool has_flag_furn( const ter_furn_flag_id &flag, const point &p ) const {
             return has_flag_furn( flag, tripoint( p, abs_sub.z() ) );
         }
         // Checks terrain or furniture
-        bool has_flag_ter_or_furn( const std::string &flag, const tripoint &p ) const;
-        bool has_flag_ter_or_furn( const std::string &flag, const point &p ) const {
-            return has_flag_ter_or_furn( flag, tripoint( p, abs_sub.z() ) );
-        }
-        // Fast "oh hai it's update_scent/lightmap/draw/monmove/self/etc again, what about this one" flag checking
-        // Checks terrain, furniture and vehicles
-        // TODO: fix point types (remove the first overload)
-        bool has_flag( ter_furn_flag flag, const tripoint &p ) const;
-        bool has_flag( ter_furn_flag flag, const tripoint_bub_ms &p ) const;
-        bool has_flag( ter_furn_flag flag, const point &p ) const {
-            return has_flag( flag, tripoint( p, abs_sub.z() ) );
-        }
-        // Checks terrain
-        bool has_flag_ter( ter_furn_flag flag,
-                           const tripoint &p ) const;  // TODO: Get rid of untyped version
-        bool has_flag_ter( ter_furn_flag flag, const tripoint_bub_ms &p ) const;
-        bool has_flag_ter( ter_furn_flag flag, const point &p ) const {  // TODO: Get rid of untyped version
-            return has_flag_ter( flag, tripoint( p, abs_sub.z() ) );
-        }
-        bool has_flag_ter( ter_furn_flag flag, const point_bub_ms &p ) const {
-            return has_flag_ter( flag, tripoint_bub_ms( p, abs_sub.z() ) );
-        }
-        // Checks furniture
-        // TODO: fix point types (remove the first overload)
-        bool has_flag_furn( ter_furn_flag flag, const tripoint &p ) const;
-        bool has_flag_furn( ter_furn_flag flag, const tripoint_bub_ms &p ) const;
-        bool has_flag_furn( ter_furn_flag flag, const point &p ) const {
-            return has_flag_furn( flag, tripoint( p, abs_sub.z() ) );
-        }
-        // Checks terrain or furniture
-        // TODO: fix point types (remove the first overload)
-        bool has_flag_ter_or_furn( ter_furn_flag flag, const tripoint &p ) const;
-        bool has_flag_ter_or_furn( ter_furn_flag flag, const tripoint_bub_ms &p ) const;
-        bool has_flag_ter_or_furn( ter_furn_flag flag, const point &p ) const {
+        bool has_flag_ter_or_furn( const ter_furn_flag_id &flag, const tripoint &p ) const;
+        bool has_flag_ter_or_furn( const ter_furn_flag_id &flag, const tripoint_bub_ms &p ) const;
+        bool has_flag_ter_or_furn( const ter_furn_flag_id &flag, const point &p ) const {
             return has_flag_ter_or_furn( flag, tripoint( p, abs_sub.z() ) );
         }
 
@@ -2486,11 +2455,7 @@ class map
 
         /**returns positions of furnitures with matching flag in the specified radius*/
         std::list<tripoint> find_furnitures_with_flag_in_radius( const tripoint &center, size_t radius,
-                const std::string &flag,
-                size_t radiusz = 0 ) const;
-        /**returns positions of furnitures with matching flag in the specified radius*/
-        std::list<tripoint> find_furnitures_with_flag_in_radius( const tripoint &center, size_t radius,
-                ter_furn_flag flag,
+                const ter_furn_flag_id &flag,
                 size_t radiusz = 0 ) const;
         /**returns creatures in specified radius*/
         std::list<Creature *> get_creatures_in_radius( const tripoint &center, size_t radius,
@@ -2521,7 +2486,7 @@ map &get_map();
 template<int SIZE, int MULTIPLIER>
 void shift_bitset_cache( std::bitset<SIZE *SIZE> &cache, const point &s );
 
-bool ter_furn_has_flag( const ter_t &ter, const furn_t &furn, ter_furn_flag flag );
+bool ter_furn_has_flag( const ter_t &ter, const furn_t &furn, const ter_furn_flag_id &flag );
 bool generate_uniform( const tripoint_abs_sm &p, const oter_id &oter );
 bool generate_uniform_omt( const tripoint_abs_sm &p, const oter_id &terrain_type );
 
@@ -2590,13 +2555,6 @@ class tinymap : private map
         bool ter_set( const tripoint &p, const ter_id &new_terrain, bool avoid_creatures = false ) {
             return map::ter_set( p, new_terrain, avoid_creatures );    // TODO: Make it typed
         }
-        bool has_flag_ter( ter_furn_flag flag,
-                           const tripoint &p ) const { // TODO: remove when usages converted
-            return map::has_flag_ter( flag, p );
-        }
-        bool has_flag_ter( ter_furn_flag flag, const tripoint_omt_ms &p ) const {
-            return map::has_flag_ter( flag, p.raw() );
-        }
         void draw_line_ter( const ter_id &type, const point &p1, const point &p2,
                             bool avoid_creature = false ) {
             map::draw_line_ter( type, p1, p2, avoid_creature );
@@ -2635,9 +2593,6 @@ class tinymap : private map
         void draw_square_furn( const furn_id &type, const point &p1, const point &p2, // TODO: Make it typed
                                bool avoid_creatures = false ) {
             map::draw_square_furn( type, p1, p2, avoid_creatures );
-        }
-        bool has_flag_furn( ter_furn_flag flag, const tripoint &p ) const {
-            return map::has_flag_furn( flag, p );    // TODO: Make it typed
         }
         computer *add_computer( const tripoint &p, const std::string &name, int security ) {
             return map::add_computer( p, name, security );    // TODO: Make it typed
@@ -2724,10 +2679,19 @@ class tinymap : private map
         void delete_field( const tripoint_omt_ms &p, const field_type_id &field_to_remove ) {
             return map::delete_field( p.raw(), field_to_remove );
         }
-        bool has_flag( ter_furn_flag flag, const tripoint &p ) const {
+        bool has_flag_ter( const ter_furn_flag_id &flag, const tripoint &p ) const {
+            return map::has_flag_ter( flag, p ); // TODO: remove when usages converted
+        }
+        bool has_flag_ter( const ter_furn_flag_id &flag, const tripoint_omt_ms &p ) const {
+            return map::has_flag_ter( flag, p.raw() );
+        }
+        bool has_flag_furn( const ter_furn_flag_id &flag, const tripoint &p ) const {
+            return map::has_flag_furn( flag, p );    // TODO: Make it typed
+        }
+        bool has_flag( const ter_furn_flag_id &flag, const tripoint &p ) const {
             return map::has_flag( flag, p );    // TODO: Make it typed
         }
-        bool has_flag( ter_furn_flag flag, const point &p ) const { // TODO: Make it typed
+        bool has_flag( const ter_furn_flag_id &flag, const point &p ) const { // TODO: Make it typed
             return map::has_flag( flag, p );
         }
         void destroy( const tripoint &p, bool silent = false ) {

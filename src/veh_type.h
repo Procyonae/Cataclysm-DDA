@@ -132,7 +132,7 @@ struct vpslot_engine {
 };
 
 struct veh_ter_mod {
-    std::string terrain_flag; // terrain flag this mod block applies to
+    ter_furn_flag_id terrain_flag; // terrain flag this mod block applies to
     int move_override;        // override when on flagged terrain, ignored if 0
     int move_penalty;         // penalty added when not on flagged terrain, ignored if 0
 };
@@ -161,7 +161,7 @@ struct vpslot_toolkit {
 };
 
 struct vpslot_terrain_transform {
-    std::set<std::string> pre_flags;
+    std::set<ter_furn_flag_id> pre_flags;
     std::string post_terrain;
     std::string post_furniture;
     std::string post_field;

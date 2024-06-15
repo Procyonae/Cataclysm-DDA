@@ -62,6 +62,7 @@
 #include "skill.h"
 #include "sounds.h"
 #include "string_formatter.h"
+#include "ter_furn_flag.h"
 #include "translations.h"
 #include "trap.h"
 #include "try_parse_integer.h"

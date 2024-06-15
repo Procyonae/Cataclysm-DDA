@@ -83,6 +83,7 @@
 #include "sounds.h"
 #include "string_formatter.h"
 #include "string_input_popup.h"
+#include "ter_furn_flag.h"
 #include "timed_event.h"
 #include "translation.h"
 #include "translations.h"

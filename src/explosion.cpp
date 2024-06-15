@@ -56,6 +56,7 @@
 #include "rng.h"
 #include "shadowcasting.h"
 #include "sounds.h"
+#include "ter_furn_flag.h"
 #include "translations.h"
 #include "trap.h"
 #include "type_id.h"

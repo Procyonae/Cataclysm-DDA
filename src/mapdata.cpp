@@ -22,6 +22,7 @@
 #include "output.h"
 #include "rng.h"
 #include "string_formatter.h"
+#include "ter_furn_flag.h"
 #include "translations.h"
 #include "trap.h"
 #include "type_id.h"
@@ -134,151 +135,6 @@ int_id<furn_t>::int_id( const string_id<furn_t> &id ) : _id( id.id() )
 {
 }
 
-namespace io
-{
-
-template<>
-std::string enum_to_string<ter_furn_flag>( ter_furn_flag data )
-{
-    // see mapdata.h for commentary
-    switch( data ) {
-        // *INDENT-OFF*
-        case ter_furn_flag::TFLAG_TRANSPARENT: return "TRANSPARENT";
-        case ter_furn_flag::TFLAG_FLAMMABLE: return "FLAMMABLE";
-        case ter_furn_flag::TFLAG_REDUCE_SCENT: return "REDUCE_SCENT";
-        case ter_furn_flag::TFLAG_SWIMMABLE: return "SWIMMABLE";
-        case ter_furn_flag::TFLAG_SUPPORTS_ROOF: return "SUPPORTS_ROOF";
-        case ter_furn_flag::TFLAG_MINEABLE: return "MINEABLE";
-        case ter_furn_flag::TFLAG_NOITEM: return "NOITEM";
-        case ter_furn_flag::TFLAG_NO_SIGHT: return "NO_SIGHT";
-        case ter_furn_flag::TFLAG_NO_SCENT: return "NO_SCENT";
-        case ter_furn_flag::TFLAG_SEALED: return "SEALED";
-        case ter_furn_flag::TFLAG_ALLOW_FIELD_EFFECT: return "ALLOW_FIELD_EFFECT";
-        case ter_furn_flag::TFLAG_LIQUID: return "LIQUID";
-        case ter_furn_flag::TFLAG_COLLAPSES: return "COLLAPSES";
-        case ter_furn_flag::TFLAG_FLAMMABLE_ASH: return "FLAMMABLE_ASH";
-        case ter_furn_flag::TFLAG_DESTROY_ITEM: return "DESTROY_ITEM";
-        case ter_furn_flag::TFLAG_INDOORS: return "INDOORS";
-        case ter_furn_flag::TFLAG_LIQUIDCONT: return "LIQUIDCONT";
-        case ter_furn_flag::TFLAG_FIRE_CONTAINER: return "FIRE_CONTAINER";
-        case ter_furn_flag::TFLAG_FLAMMABLE_HARD: return "FLAMMABLE_HARD";
-        case ter_furn_flag::TFLAG_SUPPRESS_SMOKE: return "SUPPRESS_SMOKE";
-        case ter_furn_flag::TFLAG_SHARP: return "SHARP";
-        case ter_furn_flag::TFLAG_DIGGABLE: return "DIGGABLE";
-        case ter_furn_flag::TFLAG_ROUGH: return "ROUGH";
-        case ter_furn_flag::TFLAG_UNSTABLE: return "UNSTABLE";
-        case ter_furn_flag::TFLAG_WALL: return "WALL";
-        case ter_furn_flag::TFLAG_DEEP_WATER: return "DEEP_WATER";
-        case ter_furn_flag::TFLAG_SHALLOW_WATER: return "SHALLOW_WATER";
-        case ter_furn_flag::TFLAG_WATER_CUBE: return "WATER_CUBE";
-        case ter_furn_flag::TFLAG_CURRENT: return "CURRENT";
-        case ter_furn_flag::TFLAG_HARVESTED: return "HARVESTED";
-        case ter_furn_flag::TFLAG_PERMEABLE: return "PERMEABLE";
-        case ter_furn_flag::TFLAG_AUTO_WALL_SYMBOL: return "AUTO_WALL_SYMBOL";
-        case ter_furn_flag::TFLAG_CONNECT_WITH_WALL: return "CONNECT_WITH_WALL";
-        case ter_furn_flag::TFLAG_CLIMBABLE: return "CLIMBABLE";
-        case ter_furn_flag::TFLAG_GOES_DOWN: return "GOES_DOWN";
-        case ter_furn_flag::TFLAG_GOES_UP: return "GOES_UP";
-        case ter_furn_flag::TFLAG_NO_FLOOR: return "NO_FLOOR";
-        case ter_furn_flag::TFLAG_ALLOW_ON_OPEN_AIR: return "ALLOW_ON_OPEN_AIR";
-        case ter_furn_flag::TFLAG_SEEN_FROM_ABOVE: return "SEEN_FROM_ABOVE";
-        case ter_furn_flag::TFLAG_RAMP_DOWN: return "RAMP_DOWN";
-        case ter_furn_flag::TFLAG_RAMP_UP: return "RAMP_UP";
-        case ter_furn_flag::TFLAG_RAMP: return "RAMP";
-        case ter_furn_flag::TFLAG_HIDE_PLACE: return "HIDE_PLACE";
-        case ter_furn_flag::TFLAG_BLOCK_WIND: return "BLOCK_WIND";
-        case ter_furn_flag::TFLAG_FLAT: return "FLAT";
-        case ter_furn_flag::TFLAG_RAIL: return "RAIL";
-        case ter_furn_flag::TFLAG_THIN_OBSTACLE: return "THIN_OBSTACLE";
-        case ter_furn_flag::TFLAG_SMALL_PASSAGE: return "SMALL_PASSAGE";
-        case ter_furn_flag::TFLAG_Z_TRANSPARENT: return "Z_TRANSPARENT";
-        case ter_furn_flag::TFLAG_SUN_ROOF_ABOVE: return "SUN_ROOF_ABOVE";
-        case ter_furn_flag::TFLAG_FUNGUS: return "FUNGUS";
-        case ter_furn_flag::TFLAG_LOCKED: return "LOCKED";
-        case ter_furn_flag::TFLAG_PICKABLE: return "PICKABLE";
-        case ter_furn_flag::TFLAG_WINDOW: return "WINDOW";
-        case ter_furn_flag::TFLAG_DOOR: return "DOOR";
-        case ter_furn_flag::TFLAG_SHRUB: return "SHRUB";
-        case ter_furn_flag::TFLAG_YOUNG: return "YOUNG";
-        case ter_furn_flag::TFLAG_PLANT: return "PLANT";
-        case ter_furn_flag::TFLAG_FISHABLE: return "FISHABLE";
-        case ter_furn_flag::TFLAG_TREE: return "TREE";
-        case ter_furn_flag::TFLAG_PLOWABLE: return "PLOWABLE";
-        case ter_furn_flag::TFLAG_ORGANIC: return "ORGANIC";
-        case ter_furn_flag::TFLAG_CONSOLE: return "CONSOLE";
-        case ter_furn_flag::TFLAG_PLANTABLE: return "PLANTABLE";
-        case ter_furn_flag::TFLAG_GROWTH_HARVEST: return "GROWTH_HARVEST";
-        case ter_furn_flag::TFLAG_GROWTH_OVERGROWN: return "GROWTH_OVERGROWN";
-        case ter_furn_flag::TFLAG_MOUNTABLE: return "MOUNTABLE";
-        case ter_furn_flag::TFLAG_RAMP_END: return "RAMP_END";
-        case ter_furn_flag::TFLAG_FLOWER: return "FLOWER";
-        case ter_furn_flag::TFLAG_CAN_SIT: return "CAN_SIT";
-        case ter_furn_flag::TFLAG_FLAT_SURF: return "FLAT_SURF";
-        case ter_furn_flag::TFLAG_BUTCHER_EQ: return "BUTCHER_EQ";
-        case ter_furn_flag::TFLAG_GROWTH_SEEDLING: return "GROWTH_SEEDLING";
-        case ter_furn_flag::TFLAG_GROWTH_MATURE: return "GROWTH_MATURE";
-        case ter_furn_flag::TFLAG_WORKOUT_ARMS: return "WORKOUT_ARMS";
-        case ter_furn_flag::TFLAG_WORKOUT_LEGS: return "WORKOUT_LEGS";
-        case ter_furn_flag::TFLAG_TRANSLOCATOR: return "TRANSLOCATOR";
-        case ter_furn_flag::TFLAG_AUTODOC: return "AUTODOC";
-        case ter_furn_flag::TFLAG_AUTODOC_COUCH: return "AUTODOC_COUCH";
-        case ter_furn_flag::TFLAG_OPENCLOSE_INSIDE: return "OPENCLOSE_INSIDE";
-        case ter_furn_flag::TFLAG_SALT_WATER: return "SALT_WATER";
-        case ter_furn_flag::TFLAG_PLACE_ITEM: return "PLACE_ITEM";
-        case ter_furn_flag::TFLAG_BARRICADABLE_WINDOW_CURTAINS: return "BARRICADABLE_WINDOW_CURTAINS";
-        case ter_furn_flag::TFLAG_CLIMB_SIMPLE: return "CLIMB_SIMPLE";
-        case ter_furn_flag::TFLAG_NANOFAB_TABLE: return "NANOFAB_TABLE";
-        case ter_furn_flag::TFLAG_ROAD: return "ROAD";
-        case ter_furn_flag::TFLAG_TINY: return "TINY";
-        case ter_furn_flag::TFLAG_SHORT: return "SHORT";
-        case ter_furn_flag::TFLAG_NOCOLLIDE: return "NOCOLLIDE";
-        case ter_furn_flag::TFLAG_BARRICADABLE_DOOR: return "BARRICADABLE_DOOR";
-        case ter_furn_flag::TFLAG_BARRICADABLE_DOOR_DAMAGED: return "BARRICADABLE_DOOR_DAMAGED";
-        case ter_furn_flag::TFLAG_BARRICADABLE_DOOR_REINFORCED: return "BARRICADABLE_DOOR_REINFORCED";
-        case ter_furn_flag::TFLAG_USABLE_FIRE: return "USABLE_FIRE";
-        case ter_furn_flag::TFLAG_CONTAINER: return "CONTAINER";
-        case ter_furn_flag::TFLAG_NO_PICKUP_ON_EXAMINE: return "NO_PICKUP_ON_EXAMINE";
-        case ter_furn_flag::TFLAG_RUBBLE: return "RUBBLE";
-        case ter_furn_flag::TFLAG_DIGGABLE_CAN_DEEPEN: return "DIGGABLE_CAN_DEEPEN";
-        case ter_furn_flag::TFLAG_PIT_FILLABLE: return "PIT_FILLABLE";
-        case ter_furn_flag::TFLAG_DIFFICULT_Z: return "DIFFICULT_Z";
-        case ter_furn_flag::TFLAG_ALIGN_WORKBENCH: return "ALIGN_WORKBENCH";
-        case ter_furn_flag::TFLAG_NO_SPOIL: return "NO_SPOIL";
-        case ter_furn_flag::TFLAG_EASY_DECONSTRUCT: return "EASY_DECONSTRUCT";
-        case ter_furn_flag::TFLAG_LADDER: return "LADDER";
-        case ter_furn_flag::TFLAG_ALARMED: return "ALARMED";
-        case ter_furn_flag::TFLAG_CHOCOLATE: return "CHOCOLATE";
-        case ter_furn_flag::TFLAG_SIGN: return "SIGN";
-        case ter_furn_flag::TFLAG_SIGN_ALWAYS: return "SIGN_ALWAYS";
-        case ter_furn_flag::TFLAG_DONT_REMOVE_ROTTEN: return "DONT_REMOVE_ROTTEN";
-        case ter_furn_flag::TFLAG_BLOCKSDOOR: return "BLOCKSDOOR";
-        case ter_furn_flag::TFLAG_SMALL_HIDE: return "SMALL_HIDE";
-        case ter_furn_flag::TFLAG_NO_SELF_CONNECT: return "NO_SELF_CONNECT";
-        case ter_furn_flag::TFLAG_BURROWABLE: return "BURROWABLE";
-        case ter_furn_flag::TFLAG_MURKY: return "MURKY";
-        case ter_furn_flag::TFLAG_AMMOTYPE_RELOAD: return "AMMOTYPE_RELOAD";
-        case ter_furn_flag::TFLAG_TRANSPARENT_FLOOR: return "TRANSPARENT_FLOOR";
-        case ter_furn_flag::TFLAG_TOILET_WATER: return "TOILET_WATER";
-        case ter_furn_flag::TFLAG_ELEVATOR: return "ELEVATOR";
-		case ter_furn_flag::TFLAG_ACTIVE_GENERATOR: return "ACTIVE_GENERATOR";
-		case ter_furn_flag::TFLAG_NO_FLOOR_WATER: return "NO_FLOOR_WATER";
-        case ter_furn_flag::TFLAG_GRAZABLE: return "GRAZABLE";
-        case ter_furn_flag::TFLAG_GRAZER_INEDIBLE: return "GRAZER_INEDIBLE";
-        case ter_furn_flag::TFLAG_BROWSABLE: return "BROWSABLE";
-        case ter_furn_flag::TFLAG_SINGLE_SUPPORT: return "SINGLE_SUPPORT";
-        case ter_furn_flag::TFLAG_CLIMB_ADJACENT: return "CLIMB_ADJACENT";
-        case ter_furn_flag::TFLAG_FLOATS_IN_AIR: return "FLOATS_IN_AIR";
-        case ter_furn_flag::TFLAG_HARVEST_REQ_CUT1: return "HARVEST_REQ_CUT1";
-
-        // *INDENT-ON*
-        case ter_furn_flag::NUM_TFLAG_FLAGS:
-            break;
-    }
-    cata_fatal( "Invalid ter_furn_flag" );
-}
-
-} // namespace io
-
 static std::unordered_map<std::string, connect_group> ter_connects_map;
 
 connect_group get_connect_group( const std::string &name )
@@ -304,24 +160,21 @@ void connect_group::load( const JsonObject &jo )
     if( jo.has_string( "group_flags" ) || jo.has_array( "group_flags" ) ) {
         const std::vector<std::string> str_flags = jo.get_as_string_array( "group_flags" );
         for( const std::string &flag : str_flags ) {
-            const ter_furn_flag f = io::string_to_enum<ter_furn_flag>( flag );
-            result.group_flags.insert( f );
+            result.group_flags.insert( ter_furn_flag_id( flag ) );
         }
     }
 
     if( jo.has_string( "connects_to_flags" ) || jo.has_array( "connects_to_flags" ) ) {
         const std::vector<std::string> str_flags = jo.get_as_string_array( "connects_to_flags" );
         for( const std::string &flag : str_flags ) {
-            const ter_furn_flag f = io::string_to_enum<ter_furn_flag>( flag );
-            result.connects_to_flags.insert( f );
+            result.connects_to_flags.insert( ter_furn_flag_id( flag ) );
         }
     }
 
     if( jo.has_string( "rotates_to_flags" ) || jo.has_array( "rotates_to_flags" ) ) {
         const std::vector<std::string> str_flags = jo.get_as_string_array( "rotates_to_flags" );
         for( const std::string &flag : str_flags ) {
-            const ter_furn_flag f = io::string_to_enum<ter_furn_flag>( flag );
-            result.rotates_to_flags.insert( f );
+            result.rotates_to_flags.insert( ter_furn_flag_id( flag ) );
         }
     }
 
@@ -667,7 +520,7 @@ void load_terrain( const JsonObject &jo, const std::string &src )
     terrain_data.load( jo, src );
 }
 
-void map_data_common_t::extraprocess_flags( const ter_furn_flag flag )
+void map_data_common_t::extraprocess_flags( const ter_furn_flag_id &flag )
 {
     if( !transparent && flag == ter_furn_flag::TFLAG_TRANSPARENT ) {
         transparent = true;
@@ -686,20 +539,9 @@ void map_data_common_t::extraprocess_flags( const ter_furn_flag flag )
     }
 }
 
-void map_data_common_t::set_flag( const std::string &flag )
+void map_data_common_t::set_flag( const ter_furn_flag_id &flag )
 {
     flags.insert( flag );
-    std::optional<ter_furn_flag> f = io::string_to_enum_optional<ter_furn_flag>( flag );
-    if( f.has_value() ) {
-        bitflags.set( f.value() );
-        extraprocess_flags( f.value() );
-    }
-}
-
-void map_data_common_t::set_flag( const ter_furn_flag flag )
-{
-    flags.insert( io::enum_to_string<ter_furn_flag>( flag ) );
-    bitflags.set( flag );
     extraprocess_flags( flag );
 }
 
@@ -744,6 +586,13 @@ void map_data_common_t::set_groups( std::bitset<NUM_TERCONN> &bits,
             debugmsg( "can't find terrain group %s", group.c_str() );
         }
     }
+}
+
+bool map_data_common_t::is_flammable() const
+{
+    return has_flag( ter_furn_flag::TFLAG_FLAMMABLE ) ||
+           has_flag( ter_furn_flag::TFLAG_FLAMMABLE_ASH ) ||
+           has_flag( ter_furn_flag::TFLAG_FLAMMABLE_HARD );
 }
 
 ter_id t_null;
@@ -891,7 +740,7 @@ void ter_t::load( const JsonObject &jo, const std::string &src )
     rotate_to_groups.reset();
 
     for( auto &flag : jo.get_string_array( "flags" ) ) {
-        set_flag( flag );
+        set_flag( ter_furn_flag_id( flag ) );
     }
     // connect_to_groups is initialized to none, then terrain flags are set, then finally
     // connections from JSON are set. This is so that wall flags can set wall connections
@@ -1073,7 +922,7 @@ void furn_t::load( const JsonObject &jo, const std::string &src )
     rotate_to_groups.reset();
 
     for( auto &flag : jo.get_string_array( "flags" ) ) {
-        set_flag( flag );
+        set_flag( ter_furn_flag_id( flag ) );
     }
 
     if( jo.has_member( "connect_groups" ) ) {

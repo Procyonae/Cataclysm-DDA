@@ -21,6 +21,7 @@
 #include "mapdata.h"
 #include "point.h"
 #include "submap.h"
+#include "ter_furn_flag.h"
 #include "trap.h"
 #include "type_id.h"
 #include "veh_type.h"
@@ -118,7 +119,7 @@ static pathfinder pf;
 // Modifies `t` to point to a tile with `flag` in a 1-submap radius of `t`'s original value,
 // searching nearest points first (starting with `t` itself).
 // return false if it could not find a suitable point
-static bool vertical_move_destination( const map &m, ter_furn_flag flag, tripoint &t )
+static bool vertical_move_destination( const map &m, const ter_furn_flag_id &flag, tripoint &t )
 {
     const pathfinding_cache &pf_cache = m.get_pathfinding_cache_ref( t.z );
     for( const point &p : closest_points_first( t.xy(), SEEX ) ) {

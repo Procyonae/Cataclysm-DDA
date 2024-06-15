@@ -100,6 +100,7 @@
 #include "string_formatter.h"
 #include "string_input_popup.h"
 #include "teleport.h"
+#include "ter_furn_flag.h"
 #include "text_snippets.h"
 #include "translations.h"
 #include "trap.h"
@@ -413,7 +414,7 @@ static std::string format_object_pair_no_article( const std::pair<std::string, i
 static std::string colorized_field_description_at( const tripoint &point );
 static std::string colorized_trap_name_at( const tripoint &point );
 static std::string colorized_ter_name_flags_at( const tripoint &point,
-        const std::vector<std::string> &flags = {}, const std::vector<ter_str_id> &ter_whitelist = {} );
+        const std::vector<ter_furn_flag_id> &flags = {}, const std::vector<ter_str_id> &ter_whitelist = {} );
 static std::string colorized_feature_description_at( const tripoint &center_point, bool &item_found,
         const units::volume &min_visible_volume );
 
@@ -434,10 +435,11 @@ static item::extended_photo_def photo_def_for_camera_point( const tripoint &aim_
         const tripoint &camera_pos,
         std::vector<monster *> &monster_vec, std::vector<Character *> &character_vec );
 
-static const std::vector<std::string> camera_ter_whitelist_flags = {
-    "HIDE_PLACE", "FUNGUS", "TREE", "PERMEABLE", "SHRUB",
-    "PLACE_ITEM", "GROWTH_HARVEST", "GROWTH_MATURE", "GOES_UP",
-    "GOES_DOWN", "RAMP", "SHARP", "SIGN", "CLIMBABLE"
+static const std::vector<ter_furn_flag_id> camera_ter_whitelist_flags = {
+    ter_furn_flag::TFLAG_HIDE_PLACE, ter_furn_flag::TFLAG_FUNGUS, ter_furn_flag::TFLAG_TREE,
+    ter_furn_flag::TFLAG_PERMEABLE, ter_furn_flag::TFLAG_SHRUB, ter_furn_flag::TFLAG_PLACE_ITEM,
+    ter_furn_flag::TFLAG_GROWTH_HARVEST, ter_furn_flag::TFLAG_GROWTH_MATURE, ter_furn_flag::TFLAG_GOES_UP,
+    ter_furn_flag::TFLAG_GOES_DOWN, ter_furn_flag::TFLAG_RAMP, ter_furn_flag::TFLAG_SHARP, ter_furn_flag::TFLAG_SIGN, ter_furn_flag::TFLAG_CLIMBABLE
 };
 static const std::vector<ter_str_id> camera_ter_whitelist_types = {
     ter_t_pit_covered, ter_t_grave_new, ter_t_grave, ter_t_pit,
@@ -5764,7 +5766,7 @@ static item get_top_item_at_point( const tripoint &point,
 }
 
 static std::string colorized_ter_name_flags_at( const tripoint &point,
-        const std::vector<std::string> &flags, const std::vector<ter_str_id> &ter_whitelist )
+        const std::vector<ter_furn_flag_id> &flags, const std::vector<ter_str_id> &ter_whitelist )
 {
     map &here = get_map();
     const ter_id ter = here.ter( point );
@@ -5789,7 +5791,7 @@ static std::string colorized_ter_name_flags_at( const tripoint &point,
             return name;
         }
     }
-    for( const std::string &flag : flags ) {
+    for( const ter_furn_flag_id &flag : flags ) {
         if( ter->has_flag( flag ) ) {
             return name;
         }

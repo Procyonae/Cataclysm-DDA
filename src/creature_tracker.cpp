@@ -22,6 +22,7 @@
 #include "point.h"
 #include "string_formatter.h"
 #include "submap.h"  // IWYU pragma: keep
+#include "ter_furn_flag.h"
 #include "type_id.h"
 
 static const efftype_id effect_ridden( "ridden" );

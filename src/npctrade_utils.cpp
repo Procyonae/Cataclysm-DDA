@@ -8,6 +8,7 @@
 #include "npc.h"
 #include "npc_class.h"
 #include "rng.h"
+#include "ter_furn_flag.h"
 #include "vehicle.h"
 #include "vpart_position.h"
 

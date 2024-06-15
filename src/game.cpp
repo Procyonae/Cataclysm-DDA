@@ -182,6 +182,7 @@
 #include "string_formatter.h"
 #include "string_input_popup.h"
 #include "talker.h"
+#include "ter_furn_flag.h"
 #include "text_snippets.h"
 #include "tileray.h"
 #include "timed_event.h"
@@ -11278,7 +11279,7 @@ point game::place_player( const tripoint &dest_loc, bool quick )
     }
     // Drench the player if swimmable
     if( m.has_flag( ter_furn_flag::TFLAG_SWIMMABLE, u.pos() ) &&
-        !m.has_flag_furn( "BRIDGE", u.pos() ) &&
+        !m.has_flag_furn( ter_furn_flag::TFLAG_BRIDGE, u.pos() ) &&
         !( u.is_mounted() || ( u.in_vehicle && vp1->vehicle().can_float() ) ) ) {
         u.drench( 80, u.get_drenching_body_parts( false, false ),
                   false );

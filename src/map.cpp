@@ -89,6 +89,7 @@
 #include "sounds.h"
 #include "string_formatter.h"
 #include "submap.h"
+#include "ter_furn_flag.h"
 #include "tileray.h"
 #include "translations.h"
 #include "trap.h"
@@ -2302,7 +2303,7 @@ bool map::ter_set( const tripoint &p, const ter_id &new_terrain, bool avoid_crea
         set_seen_cache_dirty( p );
     }
 
-    if( new_t.has_flag( "SPAWN_WITH_WATER" ) ) {
+    if( new_t.has_flag( ter_furn_flag::TFLAG_SPAWN_WITH_WATER ) ) {
         itype_id water_type = new_t.has_flag( ter_furn_flag::TFLAG_MURKY ) ? itype_water_murky :
                               itype_water;
         item water( water_type, calendar::start_of_cataclysm );
@@ -2402,7 +2403,7 @@ int map::move_cost_internal( const furn_t &furniture, const ter_t &terrain, cons
     int movecost = std::max( terrain.movecost + field.total_move_cost(), 0 );
 
     if( furniture.id ) {
-        if( furniture.has_flag( "BRIDGE" ) ) {
+        if( furniture.has_flag( ter_furn_flag::TFLAG_BRIDGE ) ) {
             movecost = 2 + std::max( furniture.movecost, 0 );
         } else {
             movecost += std::max( furniture.movecost, 0 );
@@ -3090,12 +3091,12 @@ void map::process_falling()
     }
 }
 
-bool map::has_flag( const std::string &flag, const tripoint &p ) const
+bool map::has_flag( const ter_furn_flag_id &flag, const tripoint &p ) const
 {
     return has_flag_ter_or_furn( flag, p ); // Does bound checking
 }
 
-bool map::has_flag( const std::string &flag, const tripoint_bub_ms &p ) const
+bool map::has_flag( const ter_furn_flag_id &flag, const tripoint_bub_ms &p ) const
 {
     return has_flag_ter_or_furn( flag, p.raw() ); // Does bound checking
 }
@@ -3120,22 +3121,27 @@ bool map::can_put_items_ter_furn( const tripoint_bub_ms &p ) const
     return can_put_items_ter_furn( p.raw() );
 }
 
-bool map::has_flag_ter( const std::string &flag, const tripoint &p ) const
+bool map::has_flag_ter( const ter_furn_flag_id &flag, const tripoint &p ) const
 {
     return ter( p ).obj().has_flag( flag );
 }
 
-bool map::has_flag_furn( const std::string &flag, const tripoint &p ) const
+bool map::has_flag_ter( const ter_furn_flag_id &flag, const tripoint_bub_ms &p ) const
+{
+    return has_flag_ter( flag, p.raw() );
+}
+
+bool map::has_flag_furn( const ter_furn_flag_id &flag, const tripoint &p ) const
 {
     return furn( p ).obj().has_flag( flag );
 }
 
-bool map::has_flag_furn( const std::string &flag, const tripoint_bub_ms &p ) const
+bool map::has_flag_furn( const ter_furn_flag_id &flag, const tripoint_bub_ms &p ) const
 {
     return furn( p ).obj().has_flag( flag );
 }
 
-bool map::has_flag_ter_or_furn( const std::string &flag, const tripoint &p ) const
+bool map::has_flag_ter_or_furn( const ter_furn_flag_id &flag, const tripoint &p ) const
 {
     if( !inbounds( p ) ) {
         return false;
@@ -3152,54 +3158,7 @@ bool map::has_flag_ter_or_furn( const std::string &flag, const tripoint &p ) con
            current_submap->get_furn( l ).obj().has_flag( flag );
 }
 
-bool map::has_flag( const ter_furn_flag flag, const tripoint &p ) const
-{
-    return has_flag_ter_or_furn( flag, p ); // Does bound checking
-}
-
-bool map::has_flag( const ter_furn_flag flag, const tripoint_bub_ms &p ) const
-{
-    return has_flag( flag, p.raw() );
-}
-
-bool map::has_flag_ter( const ter_furn_flag flag, const tripoint &p ) const
-{
-    return ter( p ).obj().has_flag( flag );
-}
-
-bool map::has_flag_ter( const ter_furn_flag flag, const tripoint_bub_ms &p ) const
-{
-    return ter( p ).obj().has_flag( flag );
-}
-
-bool map::has_flag_furn( const ter_furn_flag flag, const tripoint &p ) const
-{
-    return furn( p ).obj().has_flag( flag );
-}
-
-bool map::has_flag_furn( const ter_furn_flag flag, const tripoint_bub_ms &p ) const
-{
-    return furn( p ).obj().has_flag( flag );
-}
-
-bool map::has_flag_ter_or_furn( const ter_furn_flag flag, const tripoint &p ) const
-{
-    if( !inbounds( p ) ) {
-        return false;
-    }
-
-    point l;
-    const submap *const current_submap = unsafe_get_submap_at( p, l );
-    if( current_submap == nullptr ) {
-        debugmsg( "Tried to process terrain at (%d,%d) but the submap is not loaded", l.x, l.y );
-        return false;
-    }
-
-    return current_submap->get_ter( l ).obj().has_flag( flag ) ||
-           current_submap->get_furn( l ).obj().has_flag( flag );
-}
-
-bool map::has_flag_ter_or_furn( const ter_furn_flag flag, const tripoint_bub_ms &p ) const
+bool map::has_flag_ter_or_furn( const ter_furn_flag_id &flag, const tripoint_bub_ms &p ) const
 {
     return has_flag_ter_or_furn( flag, p.raw() );
 }
@@ -4297,7 +4256,7 @@ void map::bash_ter_furn( const tripoint &p, bash_params &params )
         spawn_items( p, item_group::items_from( bash->drop_group, calendar::turn ) );
     }
 
-    if( smash_ter && ter( p )->has_flag( "EMPTY_SPACE" ) && zlevels ) {
+    if( smash_ter && ter( p )->has_flag( ter_furn_flag::TFLAG_EMPTY_SPACE ) && zlevels ) {
         tripoint below( p.xy(), p.z - 1 );
         const ter_str_id roof = get_roof( below, params.bash_floor && ter( below ).obj().movecost != 0 );
         ter_set( p, roof );
@@ -5886,8 +5845,7 @@ bool map::could_see_items( const tripoint &p, const Creature &who ) const
 
 bool map::could_see_items( const tripoint &p, const tripoint &from ) const
 {
-    static const std::string container_string( "CONTAINER" );
-    const bool container = has_flag_ter_or_furn( container_string, p );
+    const bool container = has_flag_ter_or_furn( ter_furn_flag::TFLAG_CONTAINER, p );
     const bool sealed = has_flag_ter_or_furn( ter_furn_flag::TFLAG_SEALED, p );
     if( sealed && container ) {
         // never see inside of sealed containers
@@ -8499,7 +8457,7 @@ void map::grow_plant( const tripoint &p )
         return;
     }
     // TODO: this should probably be read from the seed's data. But for now, everything uses exactly this many growth stages.
-    std::map<ter_furn_flag, int> plant_epochs;
+    std::map<ter_furn_flag_id, int> plant_epochs;
     plant_epochs[ter_furn_flag::TFLAG_GROWTH_SEEDLING] = 1;
     plant_epochs[ter_furn_flag::TFLAG_GROWTH_MATURE] = 2;
     plant_epochs[ter_furn_flag::TFLAG_GROWTH_HARVEST] = 3;
@@ -8509,7 +8467,7 @@ void map::grow_plant( const tripoint &p )
     if( seed->age() >= epoch_duration ) {
         const int epoch_age = seed->age() / epoch_duration;
         int current_epoch = 0;
-        for( std::pair<const ter_furn_flag, int> pair : plant_epochs ) {
+        for( std::pair<const ter_furn_flag_id, int> pair : plant_epochs ) {
             if( has_flag_furn( pair.first, p ) ) {
                 current_epoch = pair.second;
                 break;
@@ -10197,16 +10155,14 @@ void map::scent_blockers( std::array<std::array<bool, MAPSIZE_X>, MAPSIZE_Y> &bl
                           std::array<std::array<bool, MAPSIZE_X>, MAPSIZE_Y> &reduces_scent,
                           const point &min, const point &max )
 {
-    ter_furn_flag reduce = ter_furn_flag::TFLAG_REDUCE_SCENT;
-    ter_furn_flag block = ter_furn_flag::TFLAG_NO_SCENT;
     auto fill_values = [&]( const tripoint & gp, const submap * sm, const point & lp ) {
         // We need to generate the x/y coordinates, because we can't get them "for free"
         const point p = lp + sm_to_ms_copy( gp.xy() );
-        if( sm->get_ter( lp ).obj().has_flag( block ) ) {
+        if( sm->get_ter( lp ).obj().has_flag( ter_furn_flag::TFLAG_NO_SCENT ) ) {
             blocks_scent[p.x][p.y] = true;
             reduces_scent[p.x][p.y] = false;
-        } else if( sm->get_ter( lp ).obj().has_flag( reduce ) ||
-                   sm->get_furn( lp ).obj().has_flag( reduce ) ) {
+        } else if( sm->get_ter( lp ).obj().has_flag( ter_furn_flag::TFLAG_REDUCE_SCENT ) ||
+                   sm->get_furn( lp ).obj().has_flag( ter_furn_flag::TFLAG_REDUCE_SCENT ) ) {
             blocks_scent[p.x][p.y] = false;
             reduces_scent[p.x][p.y] = true;
         } else {
@@ -10354,21 +10310,7 @@ std::list<item_location> map::get_active_items_in_radius( const tripoint &center
 
 std::list<tripoint> map::find_furnitures_with_flag_in_radius( const tripoint &center,
         size_t radius,
-        const std::string &flag,
-        size_t radiusz ) const
-{
-    std::list<tripoint> furn_locs;
-    for( const tripoint &furn_loc : points_in_radius( center, radius, radiusz ) ) {
-        if( has_flag_furn( flag, furn_loc ) ) {
-            furn_locs.push_back( furn_loc );
-        }
-    }
-    return furn_locs;
-}
-
-std::list<tripoint> map::find_furnitures_with_flag_in_radius( const tripoint &center,
-        size_t radius,
-        const ter_furn_flag flag,
+        const ter_furn_flag_id &flag,
         size_t radiusz ) const
 {
     std::list<tripoint> furn_locs;

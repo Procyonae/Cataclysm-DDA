@@ -37,9 +37,11 @@ class ter_furn_transform
 {
     private:
         std::map<ter_str_id, ter_furn_data<ter_str_id>> ter_transform;
+        // TODO: Change std::string to ter_furn_flag_id
         std::map<std::string, ter_furn_data<ter_str_id>> ter_flag_transform;
 
         std::map<furn_str_id, ter_furn_data<furn_str_id>> furn_transform;
+        // TODO: Change std::string to ter_furn_flag_id
         std::map<std::string, ter_furn_data<furn_str_id>> furn_flag_transform;
 
         std::map<trap_str_id, ter_furn_data<trap_str_id>> trap_transform;

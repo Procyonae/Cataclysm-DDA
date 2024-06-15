@@ -85,6 +85,7 @@
 #include "string_formatter.h"
 #include "talker.h"
 #include "teleport.h"
+#include "ter_furn_flag.h"
 #include "translations.h"
 #include "ui.h"
 #include "units.h"

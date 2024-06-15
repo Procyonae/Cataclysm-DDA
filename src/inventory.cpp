@@ -32,6 +32,7 @@
 #include "proficiency.h"
 #include "ret_val.h"
 #include "rng.h"
+#include "ter_furn_flag.h"
 #include "translations.h"
 #include "type_id.h"
 #include "units.h"

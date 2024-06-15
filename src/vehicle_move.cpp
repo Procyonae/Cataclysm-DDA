@@ -32,6 +32,7 @@
 #include "options.h"
 #include "rng.h"
 #include "sounds.h"
+#include "ter_furn_flag.h"
 #include "translations.h"
 #include "trap.h"
 #include "units.h"
@@ -1630,7 +1631,7 @@ float get_collision_factor( const float delta_v )
 }
 
 void vehicle::precalculate_vehicle_turning( units::angle new_turn_dir, bool check_rail_direction,
-        const ter_furn_flag ter_flag_to_check, int &wheels_on_rail,
+        const ter_furn_flag_id &ter_flag_to_check, int &wheels_on_rail,
         int &turning_wheels_that_are_one_axis ) const
 {
     // The direction we're moving

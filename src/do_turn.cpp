@@ -64,6 +64,7 @@
 #include "stats_tracker.h"
 #include "string_formatter.h"
 #include "timed_event.h"
+#include "ter_furn_flag.h"
 #include "translations.h"
 #include "type_id.h"
 #include "ui.h"

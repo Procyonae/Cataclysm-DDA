@@ -4,6 +4,7 @@
 #include "mapdata.h"
 #include "monster.h"
 #include "monster_oracle.h"
+#include "ter_furn_flag.h"
 
 struct tripoint;
 

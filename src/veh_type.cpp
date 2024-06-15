@@ -394,7 +394,7 @@ void vpart_info::load( const JsonObject &jo, const std::string &src )
             wheel_info->terrain_modifiers.clear();
             for( const JsonMember jo_mod : static_cast<JsonObject>( *jo_termod ) ) {
                 const JsonArray jo_mod_values = jo_mod.get_array();
-                veh_ter_mod mod { jo_mod.name(), jo_mod_values.get_int( 0 ), jo_mod_values.get_int( 1 ) };
+                veh_ter_mod mod { ter_furn_flag_id( jo_mod.name() ), jo_mod_values.get_int( 0 ), jo_mod_values.get_int( 1 ) };
                 wheel_info->terrain_modifiers.emplace_back( std::move( mod ) );
             }
         }

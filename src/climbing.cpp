@@ -348,7 +348,7 @@ climbing_aid::condition_list climbing_aid::detect_conditions( Character &you,
     auto detect_ter_furn_flag = [&here, &fall]( condition & cond ) {
         tripoint pos = fall.pos_furniture_or_floor();
         cond.range = fall.pos_top().z - pos.z;
-        return here.has_flag( cond.flag, pos );
+        return here.has_flag( ter_furn_flag_id( cond.flag ), pos );
     };
     auto detect_vehicle = [&fall]( condition & cond ) {
         // TODO implement flags and range?

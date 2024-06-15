@@ -1121,7 +1121,7 @@ struct islot_seed {
     /**
      * Terrain tag required to plant the seed.
      */
-    ter_furn_flag required_terrain_flag = ter_furn_flag::TFLAG_PLANTABLE;
+    ter_furn_flag_id required_terrain_flag;
     islot_seed() = default;
 };
 

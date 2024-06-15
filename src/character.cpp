@@ -108,6 +108,7 @@
 #include "stomach.h"
 #include "string_formatter.h"
 #include "submap.h"  // IWYU pragma: keep
+#include "ter_furn_flag.h"
 #include "text_snippets.h"
 #include "translation.h"
 #include "translations.h"
@@ -6226,7 +6227,7 @@ float Character::rest_quality() const
     bool has_vehicle_seat = !!veh_part.part_with_feature( "SEAT", true );
     if( ur_act_level <= LIGHT_EXERCISE ) {
         rest += 0.1f;
-        if( here.has_flag_ter_or_furn( "CAN_SIT", your_pos.xy() ) || has_vehicle_seat ) {
+        if( here.has_flag_ter_or_furn( ter_furn_flag::TFLAG_CAN_SIT, your_pos.xy() ) || has_vehicle_seat ) {
             // If not performing any real exercise (not even moving around), chairs allow you to rest a little bit.
             rest += 0.2f;
         } else if( floor_bedding_warmth( your_pos ) > 0_C_delta ) {
@@ -7038,7 +7039,7 @@ void Character::burn_move_stamina( int moves )
     if( get_map().has_flag( ter_furn_flag::TFLAG_DEEP_WATER, pos() ) &&
         ( !has_flag( json_flag_WALK_UNDERWATER ) ||
           get_map().has_flag( ter_furn_flag::TFLAG_GOES_DOWN, pos() ) ) &&
-        !get_map().has_flag_furn( "BRIDGE", pos() ) &&
+        !get_map().has_flag_furn( ter_furn_flag::TFLAG_BRIDGE, pos() ) &&
         !( in_vehicle && get_map().veh_at( pos() )->vehicle().can_float() ) ) {
         burn_ratio += 100 / std::pow( 1.1, get_skill_level( skill_swimming ) );
     }
@@ -13190,7 +13191,7 @@ void Character::pause()
     map &here = get_map();
 
     // effects of being partially/fully underwater
-    if( !in_vehicle && !get_map().has_flag_furn( "BRIDGE", pos( ) ) ) {
+    if( !in_vehicle && !get_map().has_flag_furn( ter_furn_flag::TFLAG_BRIDGE, pos( ) ) ) {
         if( underwater ) {
             // TODO: gain "swimming" proficiency but not "athletics" skill
             drench( 100, get_drenching_body_parts(), false );

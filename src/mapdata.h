@@ -16,6 +16,7 @@
 #include "enum_bitset.h"
 #include "game_constants.h"
 #include "iexamine.h"
+#include "ter_furn_flag.h"
 #include "translations.h"
 #include "type_id.h"
 #include "units.h"
@@ -131,217 +132,13 @@ struct plant_data {
     bool load( const JsonObject &jsobj, std::string_view member );
 };
 
-/*
- * List of known flags, used in both terrain.json and furniture.json.
- * TRANSPARENT - Players and monsters can see through/past it. Also sets ter_t.transparent
- * FLAT - Player can build and move furniture on
- * CONTAINER - Items on this square are hidden until looted by the player
- * PLACE_ITEM - Valid terrain for place_item() to put items on
- * DOOR - Can be opened (used for NPC pathfinding)
- * FLAMMABLE - Can be lit on fire
- * FLAMMABLE_HARD - Harder to light on fire, but still possible
- * DIGGABLE - Digging monsters, seeding monsters, digging with shovel, etc
- * LIQUID - Blocks movement, but isn't a wall (lava, water, etc)
- * SWIMMABLE - Player and monsters can swim through it
- * SHARP - May do minor damage to players/monsters passing through it
- * ROUGH - May hurt the player's feet
- * SEALED - Can't use 'e' to retrieve items, must smash open first
- * NOITEM - Items 'fall off' this space
- * NO_SIGHT - When on this tile sight is reduced to 1
- * NO_SCENT - Scent on this tile (and thus scent diffusing through it) is reduced to 0. This acts like a wall for scent
- * MOUNTABLE - Player can fire mounted weapons from here (e.g. M2 Browning)
- * DESTROY_ITEM - Items that land here are destroyed
- * GOES_DOWN - Can use '>' to go down a level
- * GOES_UP - Can use '<' to go up a level
- * CONSOLE - Used as a computer
- * ALARMED - Sets off an alarm if smashed
- * SUPPORTS_ROOF - Used as a boundary for roof construction
- * MINEABLE - Able to broken with the jackhammer/pickaxe, but does not necessarily support a roof
- * INDOORS - Has roof over it; blocks rain, sunlight, etc.
- * COLLAPSES - Has a roof that can collapse
- * FLAMMABLE_ASH - Burns to ash rather than rubble.
- * REDUCE_SCENT - Reduces scent even more, only works if also bashable
- * FIRE_CONTAINER - Stops fire from spreading (brazier, wood stove, etc)
- * SUPPRESS_SMOKE - Prevents smoke from fires, used by ventilated wood stoves etc
- * PLANT - A "furniture" that grows and fruits
- * LIQUIDCONT - Furniture that contains liquid, allows for contents to be accessed in some checks even if SEALED
- * OPENCLOSE_INSIDE - If it's a door (with an 'open' or 'close' field), it can only be opened or closed if you're inside.
- * PERMEABLE - Allows gases to flow through unimpeded.
- * RAMP - Higher z-levels can be accessed from this tile
- * EASY_DECONSTRUCT - Player can deconstruct this without tools
- * HIDE_PLACE - Creature on this tile can't be seen by other creature not standing on adjacent tiles
- * BLOCK_WIND - This tile will partially block wind
- * FLAT_SURF - Furniture or terrain or vehicle part with flat hard surface (ex. table, but not chair; tree stump, etc.).
- * ROAD - Mainly affects the speed of rollerblades
- *
- * Currently only used for Fungal conversions
- * WALL - This terrain is an upright obstacle
- * THIN_OBSTACLE - This terrain is a thin obstacle, i.e. fence
- * ORGANIC - This furniture is partly organic
- * FLOWER - This furniture is a flower
- * SHRUB - This terrain is a shrub
- * TREE - This terrain is a tree
- * HARVESTED - This terrain has been harvested so it won't bear any fruit
- * YOUNG - This terrain is a young tree
- * FUNGUS - Fungal covered
- *
- * Furniture only:
- * BLOCKSDOOR - This will boost map terrain's resistance to bashing if str_*_blocked is set (see map_bash_info)
- * WORKBENCH1/WORKBENCH2/WORKBENCH3 - This is an adequate/good/great workbench for crafting.  Must be paired with a workbench iexamine.
- */
-
-/*
- * Note; All flags are defined as strings dynamically in data/json/terrain.json and furniture.json. The list above
- * represent the common builtins. The enum below is an alternative means of fast-access, for those flags that are checked
- * so much that strings produce a significant performance penalty. The following are equivalent:
- *  m->has_flag("FLAMMABLE");     //
- *  m->has_flag(ter_furn_flag::TFLAG_FLAMMABLE); // ~ 20 x faster than the above, ( 2.5 x faster if the above uses static const std::string str_flammable("FLAMMABLE");
- * To add a new ter_bitflag, add below and in mapdata.cpp
- * Order does not matter.
- */
-enum class ter_furn_flag : int {
-    TFLAG_TRANSPARENT,
-    TFLAG_FLAMMABLE,
-    TFLAG_REDUCE_SCENT,
-    TFLAG_SWIMMABLE,
-    TFLAG_SUPPORTS_ROOF,
-    TFLAG_MINEABLE,
-    TFLAG_NOITEM,
-    TFLAG_NO_SIGHT,
-    TFLAG_NO_SCENT,
-    TFLAG_SEALED,
-    TFLAG_ALLOW_FIELD_EFFECT,
-    TFLAG_LIQUID,
-    TFLAG_COLLAPSES,
-    TFLAG_FLAMMABLE_ASH,
-    TFLAG_DESTROY_ITEM,
-    TFLAG_INDOORS,
-    TFLAG_LIQUIDCONT,
-    TFLAG_FIRE_CONTAINER,
-    TFLAG_FLAMMABLE_HARD,
-    TFLAG_SUPPRESS_SMOKE,
-    TFLAG_SHARP,
-    TFLAG_DIGGABLE,
-    TFLAG_ROUGH,
-    TFLAG_UNSTABLE,
-    TFLAG_WALL,
-    TFLAG_DEEP_WATER,
-    TFLAG_SHALLOW_WATER,
-    TFLAG_WATER_CUBE,
-    TFLAG_CURRENT,
-    TFLAG_HARVESTED,
-    TFLAG_PERMEABLE,
-    TFLAG_AUTO_WALL_SYMBOL,
-    TFLAG_CONNECT_WITH_WALL,
-    TFLAG_CLIMBABLE,
-    TFLAG_GOES_DOWN,
-    TFLAG_GOES_UP,
-    TFLAG_NO_FLOOR,
-    TFLAG_ALLOW_ON_OPEN_AIR,
-    TFLAG_SEEN_FROM_ABOVE,
-    TFLAG_RAMP_DOWN,
-    TFLAG_RAMP_UP,
-    TFLAG_RAMP,
-    TFLAG_HIDE_PLACE,
-    TFLAG_BLOCK_WIND,
-    TFLAG_FLAT,
-    TFLAG_RAIL,
-    TFLAG_THIN_OBSTACLE,
-    TFLAG_SMALL_PASSAGE,
-    TFLAG_Z_TRANSPARENT,
-    TFLAG_SUN_ROOF_ABOVE,
-    TFLAG_FUNGUS,
-    TFLAG_LOCKED,
-    TFLAG_PICKABLE,
-    TFLAG_WINDOW,
-    TFLAG_DOOR,
-    TFLAG_SHRUB,
-    TFLAG_YOUNG,
-    TFLAG_PLANT,
-    TFLAG_FISHABLE,
-    TFLAG_GRAZABLE,
-    TFLAG_GRAZER_INEDIBLE,
-    TFLAG_BROWSABLE,
-    TFLAG_TREE,
-    TFLAG_PLOWABLE,
-    TFLAG_ORGANIC,
-    TFLAG_CONSOLE,
-    TFLAG_PLANTABLE,
-    TFLAG_GROWTH_HARVEST,
-    TFLAG_GROWTH_OVERGROWN,
-    TFLAG_MOUNTABLE,
-    TFLAG_RAMP_END,
-    TFLAG_FLOWER,
-    TFLAG_CAN_SIT,
-    TFLAG_FLAT_SURF,
-    TFLAG_BUTCHER_EQ,
-    TFLAG_GROWTH_SEEDLING,
-    TFLAG_GROWTH_MATURE,
-    TFLAG_WORKOUT_ARMS,
-    TFLAG_WORKOUT_LEGS,
-    TFLAG_TRANSLOCATOR,
-    TFLAG_AUTODOC,
-    TFLAG_AUTODOC_COUCH,
-    TFLAG_OPENCLOSE_INSIDE,
-    TFLAG_SALT_WATER,
-    TFLAG_PLACE_ITEM,
-    TFLAG_BARRICADABLE_WINDOW_CURTAINS,
-    TFLAG_CLIMB_SIMPLE,
-    TFLAG_NANOFAB_TABLE,
-    TFLAG_ROAD,
-    TFLAG_TINY,
-    TFLAG_SHORT,
-    TFLAG_NOCOLLIDE,
-    TFLAG_BARRICADABLE_DOOR,
-    TFLAG_BARRICADABLE_DOOR_DAMAGED,
-    TFLAG_BARRICADABLE_DOOR_REINFORCED,
-    TFLAG_USABLE_FIRE,
-    TFLAG_CONTAINER,
-    TFLAG_NO_PICKUP_ON_EXAMINE,
-    TFLAG_RUBBLE,
-    TFLAG_DIGGABLE_CAN_DEEPEN,
-    TFLAG_PIT_FILLABLE,
-    TFLAG_DIFFICULT_Z,
-    TFLAG_ALIGN_WORKBENCH,
-    TFLAG_NO_SPOIL,
-    TFLAG_EASY_DECONSTRUCT,
-    TFLAG_LADDER,
-    TFLAG_ALARMED,
-    TFLAG_CHOCOLATE,
-    TFLAG_SIGN,
-    TFLAG_SIGN_ALWAYS,
-    TFLAG_DONT_REMOVE_ROTTEN,
-    TFLAG_BLOCKSDOOR,
-    TFLAG_NO_SELF_CONNECT,
-    TFLAG_BURROWABLE,
-    TFLAG_MURKY,
-    TFLAG_AMMOTYPE_RELOAD,
-    TFLAG_TRANSPARENT_FLOOR,
-    TFLAG_TOILET_WATER,
-    TFLAG_ELEVATOR,
-    TFLAG_ACTIVE_GENERATOR,
-    TFLAG_SMALL_HIDE,
-    TFLAG_NO_FLOOR_WATER,
-    TFLAG_SINGLE_SUPPORT,
-    TFLAG_CLIMB_ADJACENT,
-    TFLAG_FLOATS_IN_AIR,
-    TFLAG_HARVEST_REQ_CUT1,
-
-    NUM_TFLAG_FLAGS
-};
-
-template<>
-struct enum_traits<ter_furn_flag> {
-    static constexpr ter_furn_flag last = ter_furn_flag::NUM_TFLAG_FLAGS;
-};
-
 struct connect_group {
     public:
         connect_group_id id;
         int index;
-        std::set<ter_furn_flag> group_flags;
-        std::set<ter_furn_flag> connects_to_flags;
-        std::set<ter_furn_flag> rotates_to_flags;
+        std::set<ter_furn_flag_id> group_flags;
+        std::set<ter_furn_flag_id> connects_to_flags;
+        std::set<ter_furn_flag_id> rotates_to_flags;
 
         static void load( const JsonObject &jo );
         static void reset();
@@ -471,9 +268,8 @@ struct map_data_common_t {
         cata::clone_ptr<iexamine_actor> examine_actor;
 
     private:
-        std::set<std::string> flags;    // string flags which possibly refer to what's documented above.
-        enum_bitset<ter_furn_flag> bitflags; // bitfield of -certain- string flags which are heavily checked
-
+        // string flags which possibly refer to what's documented above.
+        std::set<ter_furn_flag_id> flags;
     public:
         ter_str_id curtain_transform;
 
@@ -528,23 +324,17 @@ struct map_data_common_t {
 
         bool transparent = false;
 
-        const std::set<std::string> &get_flags() const {
+        const std::set<ter_furn_flag_id> &get_flags() const {
             return flags;
         }
 
-        bool has_flag( const std::string &flag ) const {
+        bool has_flag( const ter_furn_flag_id &flag ) const {
             return flags.count( flag ) > 0;
         }
 
-        bool has_flag( const ter_furn_flag flag ) const {
-            return bitflags[flag];
-        }
+        void extraprocess_flags( const ter_furn_flag_id &flag );
 
-        void extraprocess_flags( ter_furn_flag flag );
-
-        void set_flag( const std::string &flag );
-
-        void set_flag( ter_furn_flag flag );
+        void set_flag( const ter_furn_flag_id &flag );
 
         // Terrain groups of this type, for others to connect or rotate to; not symmetric, passive part
         std::bitset<NUM_TERCONN> connect_groups;
@@ -582,11 +372,7 @@ struct map_data_common_t {
 
         bool was_loaded = false;
 
-        bool is_flammable() const {
-            return has_flag( ter_furn_flag::TFLAG_FLAMMABLE ) ||
-                   has_flag( ter_furn_flag::TFLAG_FLAMMABLE_ASH ) ||
-                   has_flag( ter_furn_flag::TFLAG_FLAMMABLE_HARD );
-        }
+        bool is_flammable() const;
 
         virtual void load( const JsonObject &jo, const std::string & );
         virtual void check() const {};

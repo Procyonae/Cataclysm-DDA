@@ -70,6 +70,7 @@
 #include "sounds.h"
 #include "string_formatter.h"
 #include "submap.h"
+#include "ter_furn_flag.h"
 #include "translations.h"
 #include "units_utility.h"
 #include "value_ptr.h"

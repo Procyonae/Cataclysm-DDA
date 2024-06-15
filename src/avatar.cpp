@@ -73,6 +73,7 @@
 #include "string_formatter.h"
 #include "talker.h"
 #include "talker_avatar.h"
+#include "ter_furn_flag.h"
 #include "timed_event.h"
 #include "translations.h"
 #include "trap.h"

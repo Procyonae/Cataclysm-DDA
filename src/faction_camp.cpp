@@ -69,6 +69,7 @@
 #include "skill.h"
 #include "string_formatter.h"
 #include "string_input_popup.h"
+#include "ter_furn_flag.h"
 #include "translations.h"
 #include "type_id.h"
 #include "ui.h"

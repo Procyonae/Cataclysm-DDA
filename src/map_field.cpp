@@ -60,6 +60,7 @@
 #include "scent_map.h"
 #include "submap.h"
 #include "teleport.h"
+#include "ter_furn_flag.h"
 #include "translations.h"
 #include "type_id.h"
 #include "units.h"
@@ -181,7 +182,7 @@ void map::process_fields()
     }
 }
 
-bool ter_furn_has_flag( const ter_t &ter, const furn_t &furn, const ter_furn_flag flag )
+bool ter_furn_has_flag( const ter_t &ter, const furn_t &furn, const ter_furn_flag_id &flag )
 {
     return ter.has_flag( flag ) || furn.has_flag( flag );
 }

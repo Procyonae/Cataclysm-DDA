@@ -26,6 +26,7 @@
 #include "point.h"
 #include "rng.h"
 #include "string_formatter.h"
+#include "ter_furn_flag.h"
 #include "translations.h"
 #include "units.h"
 

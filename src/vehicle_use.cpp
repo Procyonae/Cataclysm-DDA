@@ -46,6 +46,7 @@
 #include "sounds.h"
 #include "string_formatter.h"
 #include "string_input_popup.h"
+#include "ter_furn_flag.h"
 #include "translations.h"
 #include "ui.h"
 #include "units.h"
@@ -972,7 +973,7 @@ void vehicle::crash_terrain_around()
             for( const vpart_reference &vp_tmp : get_all_parts() ) {
                 busy_pos |= vp_tmp.pos() == cur_pos;
             }
-            for( const std::string &flag : ttd.pre_flags ) {
+            for( const ter_furn_flag_id &flag : ttd.pre_flags ) {
                 if( here.has_flag( flag, cur_pos ) && !busy_pos ) {
                     crush_target = cur_pos;
                     break;
@@ -997,7 +998,7 @@ void vehicle::transform_terrain()
         const tripoint start_pos = vp.pos();
         const vpslot_terrain_transform &ttd = *vp.info().transform_terrain_info;
         bool prereq_fulfilled = false;
-        for( const std::string &flag : ttd.pre_flags ) {
+        for( const ter_furn_flag_id &flag : ttd.pre_flags ) {
             if( here.has_flag( flag, start_pos ) ) {
                 prereq_fulfilled = true;
                 break;

@@ -57,10 +57,10 @@ struct construction {
 
         // Flags beginning furniture/terrain must have
         // Second element forces flags to be evaluated on terrain
-        std::map<std::string, bool> pre_flags;
+        std::map<ter_furn_flag_id, bool> pre_flags;
 
         // Post construction flags
-        std::set<std::string> post_flags;
+        std::set<ter_furn_flag_id> post_flags;
 
         /** Skill->skill level mapping. Can be empty. */
         std::map<skill_id, int> required_skills;

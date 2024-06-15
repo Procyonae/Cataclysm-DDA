@@ -99,7 +99,7 @@ void ter_furn_transform::load( const JsonObject &jo, const std::string_view )
             }
 
             for( const std::string valid_terrain : ter_obj.get_array( "valid_flags" ) ) {
-                ter_flag_transform.emplace( valid_terrain, cur_results );
+                ter_flag_transform.emplace( ter_furn_flag_id( valid_terrain ), cur_results );
             }
         }
     }
@@ -114,7 +114,7 @@ void ter_furn_transform::load( const JsonObject &jo, const std::string_view )
             }
 
             for( const std::string valid_terrain : furn_obj.get_array( "valid_flags" ) ) {
-                furn_flag_transform.emplace( valid_terrain, cur_results );
+                furn_flag_transform.emplace( ter_furn_flag_id( valid_terrain ), cur_results );
             }
         }
     }
@@ -244,7 +244,7 @@ void ter_furn_transform::transform( map &m, const tripoint_bub_ms &location ) co
     if( !ter_potential ) {
         for( const std::pair<const std::string, ter_furn_data<ter_str_id>> &flag_result :
              ter_flag_transform )             {
-            if( ter_at_loc->has_flag( flag_result.first ) ) {
+            if( ter_at_loc->has_flag( ter_furn_flag_id( flag_result.first ) ) ) {
                 ter_potential = next_ter( flag_result.first );
                 if( ter_potential ) {
                     break;
@@ -256,7 +256,7 @@ void ter_furn_transform::transform( map &m, const tripoint_bub_ms &location ) co
     if( !furn_potential ) {
         for( const std::pair<const std::string, ter_furn_data<furn_str_id>> &flag_result :
              furn_flag_transform ) {
-            if( furn_at_loc->has_flag( flag_result.first ) ) {
+            if( furn_at_loc->has_flag( ter_furn_flag_id( flag_result.first ) ) ) {
                 furn_potential = next_furn( flag_result.first );
                 if( furn_potential ) {
                     break;

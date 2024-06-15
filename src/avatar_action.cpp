@@ -54,6 +54,7 @@
 #include "ranged.h"
 #include "ret_val.h"
 #include "rng.h"
+#include "ter_furn_flag.h"
 #include "translations.h"
 #include "type_id.h"
 #include "ui.h"
@@ -443,9 +444,9 @@ bool avatar_action::move( avatar &you, map &m, const tripoint &d )
         }
     }
     bool toSwimmable = m.has_flag( ter_furn_flag::TFLAG_SWIMMABLE, dest_loc ) &&
-                       !m.has_flag_furn( "BRIDGE", dest_loc );
+                       !m.has_flag_furn( ter_furn_flag::TFLAG_BRIDGE, dest_loc );
     bool toDeepWater = m.has_flag( ter_furn_flag::TFLAG_DEEP_WATER, dest_loc ) &&
-                       !m.has_flag_furn( "BRIDGE", dest_loc );
+                       !m.has_flag_furn( ter_furn_flag::TFLAG_BRIDGE, dest_loc );
     bool fromSwimmable = m.has_flag( ter_furn_flag::TFLAG_SWIMMABLE, you.pos() );
     bool fromDeepWater = m.has_flag( ter_furn_flag::TFLAG_DEEP_WATER, you.pos() );
     bool fromBoat = veh0 != nullptr;

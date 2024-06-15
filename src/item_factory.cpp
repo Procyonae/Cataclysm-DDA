@@ -48,6 +48,7 @@
 #include "ret_val.h"
 #include "stomach.h"
 #include "string_formatter.h"
+#include "ter_furn_flag.h"
 #include "text_snippets.h"
 #include "translations.h"
 #include "try_parse_integer.h"

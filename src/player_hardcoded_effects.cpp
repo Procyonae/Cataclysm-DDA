@@ -35,6 +35,7 @@
 #include "stomach.h"
 #include "string_formatter.h"
 #include "teleport.h"
+#include "ter_furn_flag.h"
 #include "translations.h"
 #include "uistate.h"
 #include "units.h"

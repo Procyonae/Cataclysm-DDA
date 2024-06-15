@@ -58,6 +58,7 @@
 #include "rng.h"
 #include "sounds.h"
 #include "string_formatter.h"
+#include "ter_furn_flag.h"
 #include "text_snippets.h"
 #include "timed_event.h"
 #include "translation.h"

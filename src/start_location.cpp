@@ -28,6 +28,7 @@
 #include "overmapbuffer.h"
 #include "point.h"
 #include "rng.h"
+#include "ter_furn_flag.h"
 
 class item;
 

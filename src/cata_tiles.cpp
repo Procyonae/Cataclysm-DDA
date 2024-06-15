@@ -63,6 +63,7 @@
 #include "string_formatter.h"
 #include "string_id.h"
 #include "submap.h"
+#include "ter_furn_flag.h"
 #include "tileray.h"
 #include "translations.h"
 #include "trap.h"

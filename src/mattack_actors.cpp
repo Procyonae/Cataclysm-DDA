@@ -33,6 +33,7 @@
 #include "ret_val.h"
 #include "rng.h"
 #include "sounds.h"
+#include "ter_furn_flag.h"
 #include "tileray.h"
 #include "translations.h"
 #include "ui_manager.h"

@@ -78,6 +78,7 @@
 #include "sounds.h"
 #include "string_formatter.h"
 #include "string_input_popup.h"
+#include "ter_furn_flag.h"
 #include "timed_event.h"
 #include "translations.h"
 #include "trap.h"
@@ -5437,7 +5438,7 @@ void iexamine::ledge( Character &you, const tripoint &examp )
     // NOTE this menu is merged with the climb down menu, manage keys carefully.
     cmenu.addentry( ledge_peek_down, true, 'p', _( "Peek down." ) );
     g->climb_down_menu_gen( examp, cmenu );
-    if( here.has_flag_furn( "EXAMINE_FROM_ABOVE", just_below ) ) {
+    if( here.has_flag_furn( ter_furn_flag::TFLAG_EXAMINE_FROM_ABOVE, just_below ) ) {
         cmenu.addentry( ledge_examine_furniture_below, true, 'e',
                         _( "Reach for the %s below." ), here.furn( just_below ).obj().name() );
     }

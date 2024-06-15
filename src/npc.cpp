@@ -71,6 +71,7 @@
 #include "string_formatter.h"
 #include "talker.h"
 #include "talker_npc.h"
+#include "ter_furn_flag.h"
 #include "text_snippets.h"
 #include "tileray.h"
 #include "trait_group.h"

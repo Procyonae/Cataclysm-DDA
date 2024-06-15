@@ -68,6 +68,7 @@
 #include "talker_character.h"
 #include "talker_monster.h"
 #include "talker_npc.h"
+#include "ter_furn_flag.h"
 #include "translation.h"
 #include "translations.h"
 #include "units.h"

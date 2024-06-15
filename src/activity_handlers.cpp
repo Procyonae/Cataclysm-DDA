@@ -90,6 +90,7 @@
 #include "skill.h"
 #include "sounds.h"
 #include "string_formatter.h"
+#include "ter_furn_flag.h"
 #include "text_snippets.h"
 #include "translation.h"
 #include "translations.h"

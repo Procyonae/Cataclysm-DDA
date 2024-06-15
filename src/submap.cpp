@@ -8,6 +8,7 @@
 
 #include "basecamp.h"
 #include "mapdata.h"
+#include "ter_furn_flag.h"
 #include "tileray.h"
 #include "trap.h"
 #include "units.h"

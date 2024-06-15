@@ -67,6 +67,7 @@
 #include "rng.h"
 #include "string_formatter.h"
 #include "submap.h"
+#include "ter_furn_flag.h"
 #include "text_snippets.h"
 #include "tileray.h"
 #include "to_string_id.h"

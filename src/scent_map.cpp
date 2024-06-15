@@ -16,6 +16,7 @@
 #include "map.h"
 #include "output.h"
 #include "point.h"
+#include "ter_furn_flag.h"
 
 static constexpr int SCENT_RADIUS = 40;
 

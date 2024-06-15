@@ -7,6 +7,7 @@
 #include "item.h"
 #include "map.h"
 #include "output.h"
+#include "ter_furn_flag.h"
 #include "units.h"
 
 struct tripoint;

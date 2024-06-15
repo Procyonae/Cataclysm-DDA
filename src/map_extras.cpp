@@ -51,6 +51,7 @@
 #include "sets_intersect.h"
 #include "string_formatter.h"
 #include "string_id.h"
+#include "ter_furn_flag.h"
 #include "text_snippets.h"
 #include "translations.h"
 #include "trap.h"

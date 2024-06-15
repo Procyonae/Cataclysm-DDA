@@ -61,6 +61,7 @@
 #include "sounds.h"
 #include "string_formatter.h"
 #include "string_input_popup.h"
+#include "ter_furn_flag.h"
 #include "translation_cache.h"
 #include "translations.h"
 #include "trap.h"
@@ -1339,7 +1340,7 @@ void complete_construction( Character *you )
     }
 
     // Some constructions are allowed to have items left on the tile.
-    if( built.post_flags.count( "keep_items" ) == 0 ) {
+    if( built.post_flags.count( ter_furn_flag::TFLAG_KEEP_ITEMS ) == 0 ) {
         // Move any items that have found their way onto the construction site.
         std::vector<tripoint_bub_ms> dump_spots;
         for( const tripoint_bub_ms &pt : here.points_in_radius( terp, 1 ) ) {
@@ -1369,15 +1370,16 @@ void complete_construction( Character *you )
                 const int_id<ter_t> post_terrain = ter_id( built.post_terrain );
                 if( post_terrain->roof ) {
                     const tripoint_bub_ms top = terp + tripoint_above;
-                    if( here.ter( top )->has_flag( "EMPTY_SPACE" ) ) {
+                    if( here.ter( top )->has_flag( ter_furn_flag::TFLAG_EMPTY_SPACE ) ) {
                         here.ter_set( top, ter_id( post_terrain->roof ) );
                     }
                 }
             }
 
-            if( ter_id( built.post_terrain )->has_flag( "EMPTY_SPACE" ) ) {
+            if( ter_id( built.post_terrain )->has_flag( ter_furn_flag::TFLAG_EMPTY_SPACE ) ) {
                 const tripoint_bub_ms below = terp + tripoint_below;
-                if( below.z() > -OVERMAP_DEPTH && here.ter( below ).obj().has_flag( "SUPPORTS_ROOF" ) ) {
+                if( below.z() > -OVERMAP_DEPTH &&
+                    here.ter( below ).obj().has_flag( ter_furn_flag::TFLAG_SUPPORTS_ROOF ) ) {
                     const map_bash_info bash_info = here.ter( below ).obj().bash;
                     // ter_set_bashed_from_above should default to ter_set
                     if( bash_info.ter_set_bashed_from_above.id() == t_null ) {
@@ -1799,7 +1801,7 @@ void construct::done_deconstruct( const tripoint_bub_ms &p, Character &player_ch
             deconstruction_practice_skill( f.deconstruct.skill.value() );
         }
         // if furniture has liquid in it and deconstructs into watertight containers then fill them
-        if( f.has_flag( "LIQUIDCONT" ) && item_here.made_of( phase_id::LIQUID ) ) {
+        if( f.has_flag( ter_furn_flag::TFLAG_LIQUIDCONT ) && item_here.made_of( phase_id::LIQUID ) ) {
             for( item *it : drop ) {
                 if( it->get_remaining_capacity_for_liquid( item_here ) <= 0 ) {
                     continue;
@@ -2260,23 +2262,25 @@ void load_construction( const JsonObject &jo )
     if( jo.has_member( "pre_flags" ) ) {
         con.pre_flags.clear();
         if( jo.has_string( "pre_flags" ) ) {
-            con.pre_flags.emplace( jo.get_string( "pre_flags" ), false );
+            con.pre_flags.emplace( ter_furn_flag_id( jo.get_string( "pre_flags" ) ), false );
         } else if( jo.has_object( "pre_flags" ) ) {
             JsonObject jflag = jo.get_object( "pre_flags" );
-            con.pre_flags.emplace( jflag.get_string( "flag" ), jflag.get_bool( "force_terrain" ) );
+            con.pre_flags.emplace( ter_furn_flag_id( jflag.get_string( "flag" ) ),
+                                   jflag.get_bool( "force_terrain" ) );
         } else if( jo.has_array( "pre_flags" ) ) {
             for( JsonValue jval : jo.get_array( "pre_flags" ) ) {
                 if( jval.test_string() ) {
-                    con.pre_flags.emplace( jval.get_string(), false );
+                    con.pre_flags.emplace( ter_furn_flag_id( jval.get_string() ), false );
                 } else if( jval.test_object() ) {
                     JsonObject jflag = jval.get_object();
-                    con.pre_flags.emplace( jflag.get_string( "flag" ), jflag.get_bool( "force_terrain" ) );
+                    con.pre_flags.emplace( ter_furn_flag_id( jflag.get_string( "flag" ) ),
+                                           jflag.get_bool( "force_terrain" ) );
                 }
             }
         }
     }
 
-    con.post_flags = jo.get_tags( "post_flags" );
+    con.post_flags = jo.get_tags<ter_furn_flag_id>( "post_flags" );
 
     if( jo.has_member( "byproducts" ) ) {
         con.byproduct_item_group = item_group::load_item_group( jo.get_member( "byproducts" ),

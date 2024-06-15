@@ -31,6 +31,7 @@
 #include "point.h"
 #include "submap.h"
 #include "temp_crafting_inventory.h"
+#include "ter_furn_flag.h"
 #include "units.h"
 #include "value_ptr.h"
 #include "veh_type.h"

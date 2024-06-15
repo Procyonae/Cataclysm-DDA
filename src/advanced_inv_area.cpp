@@ -20,6 +20,7 @@
 #include "mapdata.h"
 #include "mdarray.h"
 #include "pimpl.h"
+#include "ter_furn_flag.h"
 #include "translations.h"
 #include "trap.h"
 #include "type_id.h"

@@ -36,6 +36,7 @@
 #include "rng.h"
 #include "safemode_ui.h"
 #include "string_formatter.h"
+#include "ter_furn_flag.h"
 #include "translations.h"
 #include "trap.h"
 #include "type_id.h"

@@ -30,6 +30,7 @@
 #include "mapdata.h"
 #include "messages.h"
 #include "point.h"
+#include "ter_furn_flag.h"
 #include "tileray.h"
 #include "translations.h"
 #include "type_id.h"

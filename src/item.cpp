@@ -100,6 +100,7 @@
 #include "string_formatter.h"
 #include "string_id.h"
 #include "string_id_utils.h"
+#include "ter_furn_flag.h"
 #include "text_snippets.h"
 #include "translations.h"
 #include "trap.h"

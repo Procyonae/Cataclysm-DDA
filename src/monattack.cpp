@@ -76,6 +76,7 @@
 #include "sounds.h"
 #include "speech.h"
 #include "string_formatter.h"
+#include "ter_furn_flag.h"
 #include "text_snippets.h"
 #include "tileray.h"
 #include "timed_event.h"

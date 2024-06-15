@@ -39,6 +39,7 @@
 #include "pimpl.h"
 #include "player_activity.h"
 #include "rng.h"
+#include "ter_furn_flag.h"
 #include "text_snippets.h"
 #include "translations.h"
 #include "uistate.h"

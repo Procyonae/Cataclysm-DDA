@@ -54,6 +54,7 @@
 #include "string_formatter.h"
 #include "string_input_popup.h"
 #include "submap.h"
+#include "ter_furn_flag.h"
 #include "translation.h"
 #include "translations.h"
 #include "trap.h"

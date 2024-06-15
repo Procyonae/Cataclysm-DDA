@@ -30,6 +30,7 @@
 #include "popup.h"
 #include "ret_val.h"
 #include "string_formatter.h"
+#include "ter_furn_flag.h"
 #include "translations.h"
 #include "type_id.h"
 #include "ui.h"

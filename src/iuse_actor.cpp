@@ -78,6 +78,7 @@
 #include "string_formatter.h"
 #include "string_input_popup.h"
 #include "talker.h"
+#include "ter_furn_flag.h"
 #include "translations.h"
 #include "trap.h"
 #include "ui.h"
@@ -1311,7 +1312,7 @@ bool firestarter_actor::prep_firestarter_use( const Character &p, tripoint_bub_m
     for( const tripoint_bub_ms &query : here.points_in_radius( pos, 1 ) ) {
         // Don't ask if we're setting a fire on top of a fireplace
         // TODO: fix point types
-        if( here.has_flag_furn( "FIRE_CONTAINER", pos.raw() ) ) {
+        if( here.has_flag_furn( ter_furn_flag::TFLAG_FIRE_CONTAINER, pos.raw() ) ) {
             break;
         }
         // Skip the position we're trying to light on fire
@@ -1319,7 +1320,7 @@ bool firestarter_actor::prep_firestarter_use( const Character &p, tripoint_bub_m
             continue;
         }
         // TODO: fix point types
-        if( here.has_flag_furn( "FIRE_CONTAINER", query.raw() ) ) {
+        if( here.has_flag_furn( ter_furn_flag::TFLAG_FIRE_CONTAINER, query.raw() ) ) {
             if( !query_yn( _( "Are you sure you want to start fire here?  There's a fireplace adjacent." ) ) ) {
                 return false;
             } else {

@@ -318,6 +318,9 @@ using flag_id = string_id<json_flag>;
 
 using json_character_flag = string_id<json_flag>;
 
+class flag_ter_furn;
+using ter_furn_flag_id = string_id<flag_ter_furn>;
+
 struct jmath_func;
 using jmath_func_id = string_id<jmath_func>;
 

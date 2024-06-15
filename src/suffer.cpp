@@ -57,6 +57,7 @@
 #include "stomach.h"
 #include "string_formatter.h"
 #include "teleport.h"
+#include "ter_furn_flag.h"
 #include "text_snippets.h"
 #include "translations.h"
 #include "type_id.h"

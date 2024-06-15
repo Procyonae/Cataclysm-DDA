@@ -13,6 +13,7 @@
 #include "omdata.h"
 #include "overmapbuffer.h"
 #include "point.h"
+#include "ter_furn_flag.h"
 #include "type_id.h"
 
 static std::vector<cata_variant> flags_of_itype( const cata_variant &v )
@@ -28,11 +29,12 @@ static std::vector<cata_variant> flags_of_itype( const cata_variant &v )
 
 static std::vector<cata_variant> flags_of_terrain( const cata_variant &v )
 {
-    const std::set<std::string> &flags = v.get<ter_id>()->get_flags();
+    const std::set<ter_furn_flag_id> &flags = v.get<ter_id>()->get_flags();
     std::vector<cata_variant> result;
     result.reserve( flags.size() );
-    for( const std::string &s : flags ) {
-        result.push_back( cata_variant::make<cata_variant_type::string>( s ) );
+    for( const ter_furn_flag_id &flag : flags ) {
+        // TODO: Add cata_variant_type::ter_furn_flag_id
+        result.push_back( cata_variant::make<cata_variant_type::string>( flag.c_str() ) );
     }
     return result;
 }

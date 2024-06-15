@@ -18,6 +18,7 @@
 #include "mapdata.h"
 #include "messages.h"
 #include "rng.h"
+#include "ter_furn_flag.h"
 #include "translations.h"
 #include "type_id.h"
 

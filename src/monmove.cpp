@@ -45,6 +45,7 @@
 #include "sounds.h"
 #include "string_formatter.h"
 #include "submap.h"
+#include "ter_furn_flag.h"
 #include "tileray.h"
 #include "translations.h"
 #include "trap.h"
@@ -1764,7 +1765,7 @@ bool monster::attack_at( const tripoint &p )
     return false;
 }
 
-static tripoint find_closest_stair( const tripoint &near_this, const ter_furn_flag stair_type )
+static tripoint find_closest_stair( const tripoint &near_this, const ter_furn_flag_id &stair_type )
 {
     map &here = get_map();
     for( const tripoint &candidate : closest_points_first( near_this, 10 ) ) {

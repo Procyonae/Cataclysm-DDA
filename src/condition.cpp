@@ -1636,9 +1636,9 @@ conditional_t::func f_map_ter_furn_with_flag( const JsonObject &jo, std::string_
     return [terrain, furn_type, loc_var]( dialogue const & d ) {
         tripoint loc = get_map().getlocal( get_tripoint_from_var( loc_var, d, false ) );
         if( terrain ) {
-            return get_map().ter( loc )->has_flag( furn_type.evaluate( d ) );
+            return get_map().ter( loc )->has_flag( ter_furn_flag_id( furn_type.evaluate( d ) ) );
         } else {
-            return get_map().furn( loc )->has_flag( furn_type.evaluate( d ) );
+            return get_map().furn( loc )->has_flag( ter_furn_flag_id( furn_type.evaluate( d ) ) );
         }
     };
 }
@@ -1899,7 +1899,8 @@ conditional_t::func f_is_on_terrain_with_flag( const JsonObject &jo, std::string
     str_or_var terrain_type = get_str_or_var( jo.get_member( member ), member, true );
     return [terrain_type, is_npc]( dialogue const & d ) {
         map &here = get_map();
-        return here.ter( d.actor( is_npc )->pos() )->has_flag( terrain_type.evaluate( d ) );
+        return here.ter( d.actor( is_npc )->pos() )->has_flag(
+                   ter_furn_flag_id( terrain_type.evaluate( d ) ) );
     };
 }
 

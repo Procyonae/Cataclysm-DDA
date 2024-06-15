@@ -71,6 +71,7 @@
 #include "sounds.h"
 #include "stomach.h"
 #include "talker.h"
+#include "ter_furn_flag.h"
 #include "translations.h"
 #include "units.h"
 #include "value_ptr.h"
