@@ -144,51 +144,12 @@ extern const ter_furn_flag_id TFLAG_YOUNG;
 extern const ter_furn_flag_id TFLAG_Z_TRANSPARENT;
 }
 
-class JsonObject;
-template <typename T> class generic_factory;
-
 // TODO Rename flag_ter_furn -> ter_furn_flag once extern list is gone (only named this to temporarily preserve old ids)
 class flag_ter_furn
 {
         friend class DynamicDataLoader;
-        friend class generic_factory<flag_ter_furn>;
-
     public:
-        // used by generic_factory
-        ter_furn_flag_id id = ter_furn_flag_id::NULL_ID();
-        std::vector<std::pair<ter_furn_flag_id, mod_id>> src;
-        bool was_loaded = false;
-
         flag_ter_furn() = default;
-
-        /** Fetches flag definition (or null flag if not found) */
-        static const flag_ter_furn &get( const std::string &id );
-
-        /** Is this a valid (non-null) flag */
-        explicit operator bool() const;
-
-        void check() const;
-
-        /** true, if flags were loaded */
-        static bool is_ready();
-
-        static const std::vector<flag_ter_furn> &get_all();
-
-    private:
-        /** Load flag definition from JSON */
-        void load( const JsonObject &jo, std::string_view src );
-
-        /** Load all flags from JSON */
-        static void load_all( const JsonObject &jo, const std::string &src );
-
-        /** finalize */
-        static void finalize_all( );
-
-        /** Check consistency of all loaded flags */
-        static void check_consistency();
-
-        /** Clear all loaded flags (invalidating any pointers) */
-        static void reset();
 };
 
 #endif // CATA_SRC_TER_FURN_FLAG_H
