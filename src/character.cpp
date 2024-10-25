@@ -1278,18 +1278,17 @@ int Character::unimpaired_range() const
 bool Character::overmap_los( const tripoint_abs_omt &omt, int sight_points ) const
 {
     const tripoint_abs_omt ompos = global_omt_location();
-    const point_rel_omt offset = omt.xy() - ompos.xy();
-    if( offset.x() < -sight_points || offset.x() > sight_points ||
-        offset.y() < -sight_points || offset.y() > sight_points ) {
-        // Outside maximum sight range
+    if( std::abs( rl_dist( ompos, omt ) ) > sight_points ) {
         return false;
     }
 
-    const std::vector<tripoint_abs_omt> line = line_to( ompos, omt );
-    for( size_t i = 0; i < line.size() && sight_points >= 0; i++ ) {
-        const tripoint_abs_omt &pt = line[i];
-        const oter_id &ter = overmap_buffer.ter( pt );
-        sight_points -= static_cast<int>( ter->get_see_cost() );
+    std::vector<tripoint_abs_omt> line = line_to( ompos, omt );
+    line.insert( line.begin(), ompos );
+    for( size_t i = 1; i < line.size() && sight_points >= 0; i++ ) {
+        const tripoint_abs_omt &cur_pt = line[i];
+        const tripoint_abs_omt &last_pt = line[i - 1];
+        const oter_id &ter = overmap_buffer.ter( cur_pt );
+        sight_points -= static_cast<int>( ter->get_see_cost() ) * rl_dist( last_pt, cur_pt );
         if( sight_points < 0 ) {
             return false;
         }
