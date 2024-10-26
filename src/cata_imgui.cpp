@@ -112,8 +112,6 @@ cataimgui::client::client()
 
     ImGui::GetIO().IniFilename = nullptr;
     ImGui::GetIO().LogFilename = nullptr;
-
-    init_imgui_theme();
 }
 
 cataimgui::client::~client()
@@ -268,6 +266,9 @@ cataimgui::client::client( const SDL_Renderer_Ptr &sdl_renderer, const SDL_Windo
     ImGui::StyleColorsDark();
 
     ImGuiStyle &style = ImGui::GetStyle();
+    
+    // Override default colours with CDDA colour manager ones
+    init_imgui_theme();
     // Default cellPadding is {4, 2}. We reduce this to {3, 2}.
     ImGui::PushStyleVar( ImGuiStyleVar_CellPadding, ImVec2( 3, style.CellPadding.y ) );
 
