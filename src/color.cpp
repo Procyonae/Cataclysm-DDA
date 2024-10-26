@@ -539,6 +539,11 @@ void init_colors()
         {"C", {c_cyan, to_translation( "cyan" )}}, {"c", {c_light_cyan, to_translation( "light cyan" )}},
         {"P", {c_pink, to_translation( "pink" )}}, {"m", {c_magenta, to_translation( "magenta" )}}
     };
+}
+
+void init_imgui_theme()
+{
+
     ImGuiStyle &style = ImGui::GetStyle();
 
     style.Colors[ImGuiCol_Text]                   = c_white;

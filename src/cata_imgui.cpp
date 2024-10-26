@@ -112,6 +112,8 @@ cataimgui::client::client()
 
     ImGui::GetIO().IniFilename = nullptr;
     ImGui::GetIO().LogFilename = nullptr;
+
+    init_imgui_theme();
 }
 
 cataimgui::client::~client()
