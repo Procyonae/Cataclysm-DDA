@@ -331,7 +331,6 @@ class JsonArray;
 class JsonOut;
 
 void init_colors();
-void init_imgui_theme();
 
 // Index for highlight cache
 enum hl_enum {
