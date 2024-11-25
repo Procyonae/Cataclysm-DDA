@@ -221,3 +221,13 @@ time_duration duration_or_var::evaluate( const_dialogue const &d ) const
     }
     return min.evaluate( d );
 }
+
+bool duration_or_var::is_uninitialised() const
+{
+    if( !pair ) {
+        if( !min.dur_val && !min.var_val && !min.default_val && !min.math_val ) {
+            return true;
+        }
+    }
+    return false;
+}

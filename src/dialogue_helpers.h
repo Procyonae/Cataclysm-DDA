@@ -175,6 +175,7 @@ struct duration_or_var {
     duration_or_var_part min;
     duration_or_var_part max;
     time_duration evaluate( const_dialogue const &d ) const;
+    bool is_uninitialised() const;
 };
 
 #endif // CATA_SRC_DIALOGUE_HELPERS_H

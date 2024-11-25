@@ -278,6 +278,12 @@ void game::unserialize( std::istream &fin, const cata_path &path )
             for( const JsonMember &jm : elem.get_object( "context" ) ) {
                 context[jm.name()] = jm.get_string();
             }
+
+            // Handle eocs that are no longer recurrence
+            if( temp.eoc.obj().recurrence.is_uninitialised() ) {
+                continue;
+            }
+
             temp.context = context;
             queued_global_effect_on_conditions.push( temp );
         }

@@ -1269,6 +1269,12 @@ void Character::load( const JsonObject &data )
         for( const JsonMember &jm : elem.get_object( "context" ) ) {
             context[jm.name()] = jm.get_string();
         }
+
+        // Handle eocs that are no longer recurrence
+        if( temp.eoc.obj().recurrence.is_uninitialised() ) {
+            continue;
+        }
+
         game::legacy_migrate_npctalk_var_prefix( context );
 
         temp.context = context;
