@@ -22,5 +22,5 @@ jobs:
       - name: Request review
         uses: Procyonae/auto-request-review@b32824f26643e2e3e01ef0823b034e1b91cc1ebd
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.REVIEW_TOKEN }}
           config: .github/reviewers.yml
