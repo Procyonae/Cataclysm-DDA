@@ -1005,16 +1005,9 @@ std::vector<tripoint_bub_ms> spell::targetable_locations( const Character &sourc
 
     std::vector<tripoint_bub_ms> selectable_targets;
     for( const tripoint_bub_ms &query : here.points_in_radius( char_pos, range( source ) ) ) {
-        if( !ignore_walls && has_obstruction( query ) ) {
-            // it's blocked somewhere!
+        if( ( !ignore_walls && has_obstruction( query ) ) || ( !select_ground && !source.sees( query ) ) ) {
+            // it's blocked somewhere or you can't target a critter you can't see
             continue;
-        }
-
-        if( !select_ground ) {
-            if( !source.sees( query ) ) {
-                // can't target a critter you can't see
-                continue;
-            }
         }
 
         if( is_valid_target( source, query ) ) {
