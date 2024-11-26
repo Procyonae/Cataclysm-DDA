@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Request review
-        uses: Procyonae/auto-request-review@b32824f26643e2e3e01ef0823b034e1b91cc1ebd
+        uses: Procyonae/auto-request-review@non-collaborators
         with:
           token: ${{ secrets.REVIEW_TOKEN }}
           config: .github/reviewers.yml
