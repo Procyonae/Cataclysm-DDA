@@ -15,12 +15,12 @@ jobs:
   auto-request-review:
     # Do not spam reviewer with PRs in forks. If fork owners wish to alert
     # people of their changes they may change this line themselves.
-    if: github.repository == 'CleverRaven/Cataclysm-DDA'
+    if: github.repository == 'Procyonae/Cataclysm-DDA'
     name: Auto request review
     runs-on: ubuntu-latest
     steps:
       - name: Request review
-        uses: qrox/auto-request-review@481e6cd2f5d57b6e914d81ca731211384a76798f
+        uses: Procyonae/auto-request-review@321544c3cb11da73e01b81591576fb70e8fd46a1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           config: .github/reviewers.yml
