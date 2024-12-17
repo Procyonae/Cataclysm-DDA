@@ -133,31 +133,106 @@ void help_window::draw_controls()
     }
 }
 
+
+static std::string exampleMarkdownString()
+{
+    return R"(
+# Markdown example
+
+Hello World! <br>
+![World](images/world.png)
+
+## Acknowledgments
+This markdown renderer is based on [imgui_md](https://github.com/mekhontsev/imgui_md), by Dmitry Mekhontsev.
+
+### Supported features
+
+imgui_md currently supports the following markdown functionality:
+
+* Wrapped text
+* Headers
+* *Emphasis* (\*Emphasis\*)
+* **Bold** (\*\*Bold\*\*)
+* Ordered and unordered list, sub-lists
+* [Link](https://github.com/mekhontsev/imgui_md)  ( \[Link\](https://github.com/mekhontsev/imgui_md) )
+* Image
+* Horizontal rule (add "\-\-\-" on a line)
+* Tables
+* <u>Underline</u> via \<u>...\</u>
+* ~~Strikethrough~~
+* HTML elements: \<br> \<hr> \<u> \<div> \&nbsp;
+* Backslash Escapes
+* Inline `code element` (using \`code element\`)
+* Tables
+* Block code like this (using \`\`\`)
+```
+int answer()
+{
+    return 42;
+}
+```
+* Separator (see below)
+
+----
+
+*Warning about tables layout*: the first row will impose the columns widths.
+Use nbsp\; to increase the columns sizes on the first row if required.
+
+As an example, the table below:
+
+| Continent&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Population&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Number of Countries |
+|-----------|------------|---------------------|
+| Africa    | 1.3 billion | 54                  |
+| Antarctica | 0 | 0          |
+| Asia      | 4.5 billion | 48                  |
+| Europe    | 743 million | 44                  |
+| North America | 579 million | 23              |
+| Oceania   | 41 million  | 14                  |
+| South America | 422 million | 12              |
+
+Can be created with this code (where lots of nbsp\; were added to enforce the column widths on the first row):<br><br>
+
+```
+| Continent&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Population&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Number of Countries |
+|-----------|------------|---------------------|
+| Africa    | 1.3 billion | 54                  |
+| Antarctica | 0 | 0          |
+| Asia      | 4.5 billion | 48                  |
+| Europe    | 743 million | 44                  |
+| North America | 579 million | 23              |
+| Oceania   | 41 million  | 14                  |
+| South America | 422 million | 12              |
+```
+)";
+}
+
 void help_window::draw_category_selection()
 {
-    // TODO: Add one column display for tiny screens and screen reader users
-    selected_option = -1;
-    //~ Help menu header
-    format_title( _( "Help" ) );
-    // Split the categories in half
-    if( ImGui::BeginTable( "Category Options", 2, ImGuiTableFlags_None ) ) {
-        ImGui::TableSetupColumn( "Left Column", ImGuiTableColumnFlags_WidthStretch, 1.0f );
-        ImGui::TableSetupColumn( "Right Column", ImGuiTableColumnFlags_WidthStretch, 1.0f );
-        int half_size = static_cast<float>( data.help_categories.size() / 2.0f ) + 1;
-        auto half_it = data.help_categories.begin();
-        std::advance( half_it, half_size );
-        auto jt = data.help_categories.begin();
-        std::advance( jt, half_size );
-        for( auto it = data.help_categories.begin(); it != half_it; it++, jt++ ) {
-            ImGui::TableNextColumn();
-            draw_category_option( it->first, it->second );
-            ImGui::TableNextColumn();
-            if( jt != data.help_categories.end() ) {
-                draw_category_option( jt->first, jt->second );
-            }
-        }
-        ImGui::EndTable();
-    }
+    //// TODO: Add one column display for tiny screens and screen reader users
+    //selected_option = -1;
+    ////~ Help menu header
+    //format_title( _( "Help" ) );
+    //// Split the categories in half
+    //if( ImGui::BeginTable( "Category Options", 2, ImGuiTableFlags_None ) ) {
+    //    ImGui::TableSetupColumn( "Left Column", ImGuiTableColumnFlags_WidthStretch, 1.0f );
+    //    ImGui::TableSetupColumn( "Right Column", ImGuiTableColumnFlags_WidthStretch, 1.0f );
+    //    int half_size = static_cast<float>( data.help_categories.size() / 2.0f ) + 1;
+    //    auto half_it = data.help_categories.begin();
+    //    std::advance( half_it, half_size );
+    //    auto jt = data.help_categories.begin();
+    //    std::advance( jt, half_size );
+    //    for( auto it = data.help_categories.begin(); it != half_it; it++, jt++ ) {
+    //        ImGui::TableNextColumn();
+    //        draw_category_option( it->first, it->second );
+    //        ImGui::TableNextColumn();
+    //        if( jt != data.help_categories.end() ) {
+    //            draw_category_option( jt->first, jt->second );
+    //        }
+    //    }
+    //    ImGui::EndTable();
+    //}
+    const std::string &md = exampleMarkdownString();
+    markdown( md.c_str(), md.c_str() + md.size() );
 }
 
 void help_window::draw_category_option( const int &option, const help_category &category )

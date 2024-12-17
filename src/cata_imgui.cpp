@@ -1,10 +1,8 @@
 #include "cata_imgui.h"
 
-#define IMGUI_DEFINE_MATH_OPERATORS
 #include <imgui/imgui.h>
 #include <imgui/imgui_internal.h>
 #include <imgui/imgui_stdlib.h>
-#undef IMGUI_DEFINE_MATH_OPERATORS
 #include <imgui/imgui_freetype.h>
 
 #include "color.h"
@@ -928,7 +926,7 @@ void cataimgui::window::draw()
         ImGui::SetNextWindowSize( { cached_bounds.w, cached_bounds.h } );
     } else if( cached_bounds.h > 0.0 && cached_bounds.w > 0.0 && cached_bounds.h <= 1.0 &&
                cached_bounds.w <= 1.0 ) {
-        ImGui::SetNextWindowSize( ImGui::GetMainViewport()->Size * ImVec2 { cached_bounds.w, cached_bounds.h } );
+        ImGui::SetNextWindowSize( ImVec2{ ImGui::GetMainViewport()->Size.x * cached_bounds.w, ImGui::GetMainViewport()->Size.y * cached_bounds.h } );
     }
     if( ImGui::Begin( id.c_str(), &is_open, window_flags ) ) {
         draw_controls();
@@ -1220,5 +1218,11 @@ void cataimgui::init_colors()
         debugmsg( "Failed to load imgui color data from \"%s\": %s",
                   style_path.generic_u8string(), err.what() );
     }
+}
+
+void cataimgui::window::markdown( const char *str, const char *str_end )
+{
+    static my_markdown s_printer;
+    s_printer.print( str, str_end );
 }
 

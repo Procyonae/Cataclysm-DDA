@@ -113,7 +113,11 @@ WARNINGS = \
   -Wzero-as-null-pointer-constant \
   -Wno-unknown-warning-option \
   -Wno-dangling-reference \
-  -Wno-c++20-compat
+  -Wno-c++20-compat \
+  -Wno-format \
+  -Wno-sign-compare \
+  -Wno-old-style-cast \
+  -Wno-unused-value
 ifeq ($(NATIVE), emscripten)
   # The EM_ASM macro triggers this warning.
   WARNINGS += -Wno-gnu-zero-variadic-macro-arguments
