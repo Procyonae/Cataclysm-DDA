@@ -16,7 +16,9 @@
 #include "filesystem.h"
 #include "flexbuffer_json-inl.h"
 #include "flexbuffer_json.h"
+#define IMGUI_DEFINE_MATH_OPERATORS
 #include "imgui/imgui.h"
+#undef IMGUI_DEFINE_MATH_OPERATORS
 #include "input_context.h"
 #include "json.h"
 #include "output.h"

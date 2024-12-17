@@ -149,11 +149,6 @@ class window
         void draw_filter( const input_context &ctxt, bool filtering_active );
 };
 
-//extern ImFont *g_font_regular;
-//extern ImFont *g_font_bold;
-//extern ImFont *g_font_bold_large;
-extern ImTextureID g_texture1;
-
 struct my_markdown : public imgui_md {
     ImFont *get_font() const override {
         //if( m_is_table_header ) {
@@ -176,14 +171,14 @@ struct my_markdown : public imgui_md {
         SDL_OpenURL( m_href.c_str() );
     }
 
-    bool get_image( image_info &nfo ) const override {
+    bool get_image( image_info &/*nfo*/ ) const override {
         //use m_href to identify images
-        nfo.texture_id = g_texture1;
-        nfo.size = {40, 20};
-        nfo.uv0 = { 0, 0 };
-        nfo.uv1 = {1, 1};
-        nfo.col_tint = { 1, 1, 1, 1 };
-        nfo.col_border = { 0, 0, 0, 0 };
+        //nfo.texture_id = g_texture1;
+        //nfo.size = {40, 20};
+        //nfo.uv0 = { 0, 0 };
+        //nfo.uv1 = {1, 1};
+        //nfo.col_tint = { 1, 1, 1, 1 };
+        //nfo.col_border = { 0, 0, 0, 0 };
         return true;
     }
 

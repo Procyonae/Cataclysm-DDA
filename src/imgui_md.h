@@ -29,9 +29,11 @@
 #include "md4c.h"
 #include <string>
 #include <vector>
+#define IMGUI_DEFINE_MATH_OPERATORS
 #include <imgui/imgui.h>
 #include <imgui/imgui_internal.h>
 #include <imgui/imgui_stdlib.h>
+#undef IMGUI_DEFINE_MATH_OPERATORS
 #include <imgui/imgui_freetype.h>
 
 struct imgui_md {

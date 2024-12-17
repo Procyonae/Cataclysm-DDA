@@ -1,12 +1,5 @@
 #include "cata_imgui.h"
 
-#define IMGUI_DEFINE_MATH_OPERATORS
-#include <imgui/imgui.h>
-#include <imgui/imgui_internal.h>
-#include <imgui/imgui_stdlib.h>
-#undef IMGUI_DEFINE_MATH_OPERATORS
-#include <imgui/imgui_freetype.h>
-
 #include "color.h"
 #include "input.h"
 #include "output.h"
