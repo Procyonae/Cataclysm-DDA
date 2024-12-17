@@ -26,7 +26,7 @@
 #ifndef IMGUI_MD_H
 #define IMGUI_MD_H
 
-#include "md4c.h"
+#include <md4c/md4c.h>
 #include <string>
 #include <vector>
 #define IMGUI_DEFINE_MATH_OPERATORS

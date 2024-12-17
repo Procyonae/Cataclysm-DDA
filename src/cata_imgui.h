@@ -5,7 +5,7 @@
 #include <vector>
 #include <unordered_map>
 
-#include "imgui_md.h"
+#include <imgui_md/imgui_md.h>
 
 class nc_color;
 struct input_event;
