@@ -3194,7 +3194,7 @@ class jmapgen_ter_furn_transform: public jmapgen_piece
             }
             for( int ix = x.val; ix <= x.valmax; ix++ ) {
                 for( int iy = y.val; iy <= y.valmax; iy++ ) {
-                    chosen_id->transform( dat.m, tripoint_bub_ms( ix, iy, dat.zlevel() + z.get() ), dat );
+                    chosen_id->transform( dat, tripoint_bub_ms( ix, iy, dat.zlevel() + z.get() ) );
                 }
             }
         }
