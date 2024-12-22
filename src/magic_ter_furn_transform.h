@@ -12,6 +12,7 @@
 
 class Creature;
 class JsonObject;
+class mapgendata;
 struct tripoint;
 
 // this is a small class that contains the "results" of a terrain transform.
@@ -47,6 +48,8 @@ class ter_furn_transform
 
         std::map<field_type_id, ter_furn_data<field_type_id>> field_transform;
 
+        std::map<ter_str_id, ter_furn_data<nested_mapgen_id>> nest_transform;
+
         std::optional<std::pair<ter_str_id, std::pair<translation, bool>>> next_ter(
             const ter_str_id &ter ) const;
         std::optional<std::pair<ter_str_id, std::pair<translation, bool>>> next_ter(
@@ -60,8 +63,9 @@ class ter_furn_transform
         std::optional<std::pair<trap_str_id, std::pair<translation, bool>>> next_trap(
             const std::string &flag ) const;
         std::optional<std::pair<field_type_id, std::pair<translation, bool>>> next_field(
-            const field_type_id &field )
-        const;
+            const field_type_id &field ) const;
+        std::optional<std::pair<nested_mapgen_id, std::pair<translation, bool>>> next_nest(
+            const ter_str_id &ter ) const;
 
         template<class T, class K>
         std::optional<ter_furn_data<T>> find_transform( const std::map<K, ter_furn_data<T>> &list,
@@ -78,6 +82,7 @@ class ter_furn_transform
         std::vector<std::pair<ter_furn_transform_id, mod_id>> src;
         bool was_loaded = false;
 
+        void transform( map &m, const tripoint_bub_ms &location, const mapgendata &dat ) const;
         void transform( map &m, const tripoint_bub_ms &location ) const;
 
         static void reset();

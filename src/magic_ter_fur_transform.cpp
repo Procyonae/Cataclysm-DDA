@@ -144,6 +144,17 @@ void ter_furn_transform::load( const JsonObject &jo, const std::string_view )
             }
         }
     }
+
+    if( jo.has_member( "nest" ) ) {
+        for( JsonObject nest_obj : jo.get_array( "nest" ) ) {
+            ter_furn_data<nested_mapgen_id> cur_results = ter_furn_data<nested_mapgen_id>();
+            cur_results.load( nest_obj );
+
+            for( const std::string valid_terrain : nest_obj.get_array( "valid_terrain" ) ) {
+                nest_transform.emplace( ter_str_id( valid_terrain ), cur_results );
+            }
+        }
+    }
 }
 
 template<class T, class K>
@@ -211,6 +222,124 @@ std::optional<std::pair<trap_str_id, std::pair<translation, bool>>> ter_furn_tra
     const std::string &flag ) const
 {
     return next( trap_flag_transform, flag );
+}
+
+std::optional<std::pair<nested_mapgen_id, std::pair<translation, bool>>>
+ter_furn_transform::next_nest(
+    const ter_str_id &ter ) const
+{
+    return next( nest_transform, ter );
+}
+
+void ter_furn_transform::transform( map &m, const tripoint_bub_ms &location,
+                                    const mapgendata &dat ) const
+{
+    avatar &you = get_avatar();
+    const ter_id &ter_at_loc = m.ter( location );
+    std::optional<std::pair<ter_str_id, std::pair<translation, bool>>> ter_potential = next_ter(
+                ter_at_loc->id );
+    std::optional<std::pair<nested_mapgen_id, std::pair<translation, bool>>> nest_potential = next_nest(
+                ter_at_loc->id );
+    const furn_id &furn_at_loc = m.furn( location );
+    std::optional<std::pair<furn_str_id, std::pair<translation, bool>>> furn_potential = next_furn(
+                furn_at_loc->id );
+    const trap_str_id trap_at_loc = m.maptile_at( location ).get_trap().id();
+    std::optional<std::pair<trap_str_id, std::pair<translation, bool>>> trap_potential = next_trap(
+                trap_at_loc );
+
+    const field &field_at_loc = m.field_at( location );
+    for( const auto &fld : field_at_loc ) {
+        std::optional<std::pair<field_type_id, std::pair<translation, bool>>> field_potential = next_field(
+                    fld.first );
+        if( field_potential ) {
+            m.add_field( location, field_potential->first, fld.second.get_field_intensity(),
+                         fld.second.get_field_age(), true );
+            m.remove_field( location, fld.first );
+            if( you.sees( location ) && !field_potential->second.first.empty() ) {
+                you.add_msg_if_player( field_potential->second.first.translated(),
+                                       field_potential->second.second ? m_good : m_bad );
+            }
+        }
+    }
+
+    if( !ter_potential ) {
+        for( const std::pair<const std::string, ter_furn_data<ter_str_id>> &flag_result :
+             ter_flag_transform )             {
+            if( ter_at_loc->has_flag( flag_result.first ) ) {
+                ter_potential = next_ter( flag_result.first );
+                if( ter_potential ) {
+                    break;
+                }
+            }
+        }
+    }
+
+    if( !furn_potential ) {
+        for( const std::pair<const std::string, ter_furn_data<furn_str_id>> &flag_result :
+             furn_flag_transform ) {
+            if( furn_at_loc->has_flag( flag_result.first ) ) {
+                furn_potential = next_furn( flag_result.first );
+                if( furn_potential ) {
+                    break;
+                }
+            }
+        }
+    }
+
+    if( !trap_potential ) {
+        for( const std::pair<const std::string, ter_furn_data<trap_str_id>> &flag_result :
+             trap_flag_transform ) {
+            if( trap_at_loc->has_flag( flag_id( flag_result.first ) ) ) {
+                trap_potential = next_trap( flag_result.first );
+                if( trap_potential ) {
+                    break;
+                }
+            }
+        }
+    }
+
+    if( ter_potential ) {
+        m.ter_set( location, ter_potential->first );
+        if( you.sees( location ) && !ter_potential->second.first.empty() ) {
+            you.add_msg_if_player( ter_potential->second.first.translated(),
+                                   ter_potential->second.second ? m_good : m_bad );
+        }
+    }
+    if( furn_potential ) {
+        m.furn_set( location, furn_potential->first );
+        if( you.sees( location ) && !furn_potential->second.first.empty() ) {
+            you.add_msg_if_player( furn_potential->second.first.translated(),
+                                   furn_potential->second.second ? m_good : m_bad );
+        }
+    }
+    if( trap_potential ) {
+        m.trap_set( location, trap_potential->first );
+        if( you.sees( location ) && !trap_potential->second.first.empty() ) {
+            you.add_msg_if_player( trap_potential->second.first.translated(),
+                                   trap_potential->second.second ? m_good : m_bad );
+        }
+    }
+    if( nest_potential ) {
+        const auto iter = nested_mapgens.find( nest_potential->first );
+        if( iter == nested_mapgens.end() ) {
+            debugmsg( "Unknown nested mapgen function id %s", nest_potential->first.str() );
+            return;
+        }
+
+        const auto &ptr = iter->second.funcs().pick();
+        if( ptr == nullptr ) {
+            return;
+        }
+        const tripoint_abs_ms loc_abs = m.getglobal( location );
+        tripoint_abs_omt pos_abs;
+        point_omt_ms pos_rel;
+        std::tie( pos_abs, pos_rel ) = project_remain<coords::omt>( loc_abs );
+        ( *ptr )->nest( dat, tripoint_rel_ms( rebase_rel( pos_rel ), pos_abs.z() ), "" );
+        if( you.sees( location ) && !nest_potential->second.first.empty() ) {
+            you.add_msg_if_player( nest_potential->second.first.translated(),
+                                   nest_potential->second.second ? m_good : m_bad );
+        }
+    }
 }
 
 void ter_furn_transform::transform( map &m, const tripoint_bub_ms &location ) const
