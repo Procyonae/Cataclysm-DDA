@@ -231,9 +231,9 @@ ter_furn_transform::next_nest(
     return next( nest_transform, ter );
 }
 
-void ter_furn_transform::transform( map &m, const tripoint_bub_ms &location,
-                                    const mapgendata &dat ) const
+void ter_furn_transform::transform( const mapgendata &dat, const tripoint_bub_ms &location ) const
 {
+    map &m = dat.m;
     avatar &you = get_avatar();
     const ter_id &ter_at_loc = m.ter( location );
     std::optional<std::pair<ter_str_id, std::pair<translation, bool>>> ter_potential = next_ter(
@@ -344,89 +344,9 @@ void ter_furn_transform::transform( map &m, const tripoint_bub_ms &location,
 
 void ter_furn_transform::transform( map &m, const tripoint_bub_ms &location ) const
 {
-    avatar &you = get_avatar();
-    const ter_id &ter_at_loc = m.ter( location );
-    std::optional<std::pair<ter_str_id, std::pair<translation, bool>>> ter_potential = next_ter(
-                ter_at_loc->id );
-    const furn_id &furn_at_loc = m.furn( location );
-    std::optional<std::pair<furn_str_id, std::pair<translation, bool>>> furn_potential = next_furn(
-                furn_at_loc->id );
-    const trap_str_id trap_at_loc = m.maptile_at( location ).get_trap().id();
-    std::optional<std::pair<trap_str_id, std::pair<translation, bool>>> trap_potential = next_trap(
-                trap_at_loc );
-
-    const field &field_at_loc = m.field_at( location );
-    for( const auto &fld : field_at_loc ) {
-        std::optional<std::pair<field_type_id, std::pair<translation, bool>>> field_potential = next_field(
-                    fld.first );
-        if( field_potential ) {
-            m.add_field( location, field_potential->first, fld.second.get_field_intensity(),
-                         fld.second.get_field_age(), true );
-            m.remove_field( location, fld.first );
-            if( you.sees( location ) && !field_potential->second.first.empty() ) {
-                you.add_msg_if_player( field_potential->second.first.translated(),
-                                       field_potential->second.second ? m_good : m_bad );
-            }
-        }
-    }
-
-    if( !ter_potential ) {
-        for( const std::pair<const std::string, ter_furn_data<ter_str_id>> &flag_result :
-             ter_flag_transform )             {
-            if( ter_at_loc->has_flag( flag_result.first ) ) {
-                ter_potential = next_ter( flag_result.first );
-                if( ter_potential ) {
-                    break;
-                }
-            }
-        }
-    }
-
-    if( !furn_potential ) {
-        for( const std::pair<const std::string, ter_furn_data<furn_str_id>> &flag_result :
-             furn_flag_transform ) {
-            if( furn_at_loc->has_flag( flag_result.first ) ) {
-                furn_potential = next_furn( flag_result.first );
-                if( furn_potential ) {
-                    break;
-                }
-            }
-        }
-    }
-
-    if( !trap_potential ) {
-        for( const std::pair<const std::string, ter_furn_data<trap_str_id>> &flag_result :
-             trap_flag_transform ) {
-            if( trap_at_loc->has_flag( flag_id( flag_result.first ) ) ) {
-                trap_potential = next_trap( flag_result.first );
-                if( trap_potential ) {
-                    break;
-                }
-            }
-        }
-    }
-
-    if( ter_potential ) {
-        m.ter_set( location, ter_potential->first );
-        if( you.sees( location ) && !ter_potential->second.first.empty() ) {
-            you.add_msg_if_player( ter_potential->second.first.translated(),
-                                   ter_potential->second.second ? m_good : m_bad );
-        }
-    }
-    if( furn_potential ) {
-        m.furn_set( location, furn_potential->first );
-        if( you.sees( location ) && !furn_potential->second.first.empty() ) {
-            you.add_msg_if_player( furn_potential->second.first.translated(),
-                                   furn_potential->second.second ? m_good : m_bad );
-        }
-    }
-    if( trap_potential ) {
-        m.trap_set( location, trap_potential->first );
-        if( you.sees( location ) && !trap_potential->second.first.empty() ) {
-            you.add_msg_if_player( trap_potential->second.first.translated(),
-                                   trap_potential->second.second ? m_good : m_bad );
-        }
-    }
+    const tripoint_abs_omt abs_omt = project_to<coords::omt>( m.get_abs_sub() );
+    const mapgendata dat( abs_omt, m, 0.0f, calendar::turn, nullptr );
+    transform( dat, location );
 }
 
 template<class T>
