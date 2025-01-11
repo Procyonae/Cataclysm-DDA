@@ -64,7 +64,6 @@
     "death_function": { "effect": { "id": "death_guilt", "min_level": 6 } },
     "path_settings": { "max_dist": 30, "allow_open_doors": true, "avoid_traps": true, "avoid_sharp": true },
     "upgrades": { "half_life": 2, "into": "mon_feral_human_clair" },
-    "special_attacks": [ [ "PARROT_AT_DANGER", 2 ] ],
     "death_drops": "default_zombie_death_drops",
     "zombify_into": "mon_zombie",
     "flags": [ "SEES", "HEARS", "WARM", "HUMAN", "CAN_OPEN_DOORS", "PATH_AVOID_DANGER", "CONVERSATION", "GUILT_HUMAN" ]
@@ -91,7 +90,6 @@
     "dodge": 1,
     "upgrades": { "half_life": 2, "into": "mon_feral_human_electrokin" },
     "special_attacks": [
-      [ "PARROT_AT_DANGER", 10 ],
       {
         "id": "psi_civilian_electrokinetic_zap",
         "type": "spell",
@@ -126,7 +124,6 @@
     "dodge": 1,
     "upgrades": { "half_life": 2, "into": "mon_feral_human_photokin" },
     "special_attacks": [
-      [ "PARROT_AT_DANGER", 10 ],
       {
         "id": "psi_civilian_photokinetic_lightbeam",
         "type": "spell",
@@ -159,7 +156,6 @@
     "dodge": 1,
     "upgrades": { "half_life": 2, "into": "mon_feral_human_pyrokin" },
     "special_attacks": [
-      [ "PARROT_AT_DANGER", 10 ],
       {
         "id": "psi_civilian_pyrokinetic_flameblast",
         "type": "spell",
@@ -223,8 +219,7 @@
     "vision_night": 0,
     "dodge": 1,
     "copy-from": "mon_civilian_clairsentient",
-    "upgrades": { "half_life": 2, "into": "mon_feral_human_teep" },
-    "special_attacks": [ [ "PARROT_AT_DANGER", 5 ] ]
+    "upgrades": { "half_life": 2, "into": "mon_feral_human_teep" }
   },
   {
     "id": "mon_civilian_teleporter",
@@ -268,7 +263,6 @@
     "vision_day": 10,
     "vision_night": 1,
     "dodge": 1,
-    "upgrades": { "half_life": 2, "into": "mon_feral_human_vita" },
-    "special_attacks": [ [ "PARROT_AT_DANGER", 10 ] ]
+    "upgrades": { "half_life": 2, "into": "mon_feral_human_vita" }
   }
 ]

@@ -16,7 +16,7 @@
     "vision_night": 3,
     "luminance": 16,
     "harvest": "zombie_humanoid_electric",
-    "special_attacks": [ [ "PARROT", 8 ], { "id": "smash", "throw_strength": 36, "cooldown": 30 } ],
+    "special_attacks": [ { "id": "smash", "throw_strength": 36, "cooldown": 30 } ],
     "special_when_hit": [ "ZAPBACK", 75 ],
     "upgrades": false,
     "extend": { "families": [ "prof_electromagnetics" ], "flags": [ "ELECTRIC" ] }
@@ -37,7 +37,6 @@
     "bleed_rate": 50,
     "luminance": 8,
     "harvest": "zombie_humanoid_electric",
-    "special_attacks": [ [ "PARROT", 8 ] ],
     "special_when_hit": [ "ZAPBACK", 100 ],
     "upgrades": { "half_life": 42, "into_group": "GROUP_ZOMBIE_ELECTRIC_UPGRADE" },
     "extend": { "families": [ "prof_electromagnetics" ], "flags": [ "ELECTRIC" ] }
@@ -61,7 +60,6 @@
     "melee_damage": [ { "damage_type": "electric", "amount": 6 } ],
     "luminance": 16,
     "harvest": "zombie_humanoid_electric",
-    "special_attacks": [ [ "PARROT", 5 ] ],
     "emit_fields": [ { "emit_id": "emit_shock_cloud", "delay": "1 s" } ],
     "special_when_hit": [ "ZAPBACK", 75 ],
     "upgrades": false,

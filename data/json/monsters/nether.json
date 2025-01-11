@@ -562,7 +562,6 @@
     "vision_night": 30,
     "grab_strength": 50,
     "special_attacks": [
-      [ "PARROT", 5 ],
       { "id": "grab", "cooldown": 5, "grab_data": { "pull_weight_ratio": 2.0 } },
       {
         "type": "monster_attack",
@@ -757,7 +756,6 @@
     "regeneration_modifiers": [ [ "star_vampire_blood_drank", 5 ] ],
     "color": "pink",
     "special_attacks": [
-      [ "PARROT", 5 ],
       { "id": "grab", "cooldown": 5, "grab_data": { "pull_weight_ratio": 2.0 } },
       {
         "type": "monster_attack",
@@ -1413,7 +1411,7 @@
     "weakpoint_sets": [ "wps_netherium_abomination" ],
     "harvest": "exempt",
     "path_settings": { "max_dist": 5 },
-    "special_attacks": [ [ "PARROT", 400 ], [ "ABSORB_ITEMS", 0 ], [ "SPLIT", 5 ] ],
+    "special_attacks": [ [ "ABSORB_ITEMS", 0 ], [ "SPLIT", 5 ] ],
     "death_function": { "corpse_type": "NO_CORPSE", "message": "The %s melts away." },
     "regenerates": 50,
     "regen_morale": true,
@@ -1739,7 +1737,7 @@
     "melee_dice_sides": 1,
     "melee_damage": [ { "damage_type": "cut", "amount": 0 } ],
     "grab_strength": 20,
-    "special_attacks": [ { "id": "grab", "cooldown": 2 }, [ "PARROT", 4 ] ],
+    "special_attacks": [ { "id": "grab", "cooldown": 2 } ],
     "death_function": { "corpse_type": "NO_CORPSE", "message": "The %s begins to cry as it disappears." },
     "flags": [ "NO_BREATHE", "HAS_MIND", "GRABS", "BIOLOGICALPROOF", "PUSH_MON", "GROUP_BASH" ]
   },

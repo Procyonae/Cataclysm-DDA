@@ -29,7 +29,6 @@
     "harvest": "human_fur",
     "dissect": "dissect_beast_sample_small",
     "special_attacks": [
-      [ "PARROT", 20 ],
       {
         "type": "bite",
         "cooldown": 10,

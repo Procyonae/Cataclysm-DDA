@@ -27,8 +27,6 @@
     "decay": "zombie_decay_bone_human_skull",
     "grab_strength": 20,
     "special_attacks": [
-      [ "PARROT", 400 ],
-      [ "PARROT_AT_DANGER", 0 ],
       { "id": "grab" },
       { "id": "bite_humanoid", "cooldown": 5 },
       { "id": "scratch_humanoid" }

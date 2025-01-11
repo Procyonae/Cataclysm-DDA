@@ -29,10 +29,7 @@
     "harvest": "mi-go",
     "path_settings": { "max_dist": 50, "allow_open_doors": true, "avoid_traps": true, "avoid_sharp": true },
     "scents_ignored": [ "sc_fetid" ],
-    "special_attacks": [
-      [ "PARROT", 100 ],
-      { "id": "scratch", "damage_max_instance": [ { "damage_type": "cut", "amount": 23, "armor_multiplier": 0.8 } ] }
-    ],
+    "special_attacks": [ { "id": "scratch", "damage_max_instance": [ { "damage_type": "cut", "amount": 23, "armor_multiplier": 0.8 } ] } ],
     "flags": [
       "SEES",
       "SMELLS",
@@ -82,7 +79,6 @@
     "path_settings": { "max_dist": 50, "allow_open_doors": true, "avoid_traps": true, "avoid_sharp": true },
     "scents_ignored": [ "sc_fetid" ],
     "special_attacks": [
-      [ "PARROT", 100 ],
       { "id": "scratch", "damage_max_instance": [ { "damage_type": "cut", "amount": 23, "armor_multiplier": 0.8 } ] },
       {
         "type": "spell",
@@ -139,10 +135,7 @@
     "families": [ "prof_wp_mi-go_basic", "prof_wp_mi-go_advanced", "prof_wp_nat_armored" ],
     "path_settings": { "max_dist": 50, "allow_open_doors": true, "avoid_traps": true, "avoid_sharp": true },
     "scents_ignored": [ "sc_fetid" ],
-    "special_attacks": [
-      [ "PARROT", 100 ],
-      { "id": "scratch", "damage_max_instance": [ { "damage_type": "cut", "amount": 12, "armor_multiplier": 0.4 } ] }
-    ],
+    "special_attacks": [ { "id": "scratch", "damage_max_instance": [ { "damage_type": "cut", "amount": 12, "armor_multiplier": 0.4 } ] } ],
     "flags": [
       "SEES",
       "SMELLS",
@@ -192,7 +185,6 @@
     "path_settings": { "max_dist": 50, "allow_open_doors": true, "avoid_traps": true, "avoid_sharp": true },
     "scents_ignored": [ "sc_fetid" ],
     "special_attacks": [
-      [ "PARROT", 100 ],
       [ "SHRIEK_ALERT", 5 ],
       [ "SHRIEK_STUN", 4 ],
       [ "TAZER", 5 ],
@@ -253,7 +245,6 @@
     "path_settings": { "max_dist": 50, "allow_open_doors": true, "avoid_traps": true, "avoid_sharp": true },
     "scents_ignored": [ "sc_fetid" ],
     "special_attacks": [
-      [ "PARROT", 100 ],
       { "id": "stretch_attack" },
       { "id": "longswipe", "cooldown": 12 },
       { "id": "cut_throat", "cooldown": 12 },
@@ -306,7 +297,6 @@
     "weakpoint_sets": [ "wps_mi-go", "wps_natural_armor" ],
     "families": [ "prof_wp_mi-go_basic", "prof_wp_mi-go_advanced", "prof_wp_nat_armored" ],
     "scents_ignored": [ "sc_fetid" ],
-    "special_attacks": [ [ "PARROT", 4 ] ],
     "flags": [
       "WARM",
       "NO_BREATHE",

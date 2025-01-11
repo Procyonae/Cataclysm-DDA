@@ -113,7 +113,6 @@
     "zombify_into": "mon_zombie_survivor",
     "extend": {
       "special_attacks": [
-        [ "PARROT_AT_DANGER", 10 ],
         {
           "id": "smash",
           "attack_upper": true,
@@ -482,7 +481,6 @@
     "upgrades": { "half_life": 45, "into": "mon_feral_human_photokin3" },
     "extend": {
       "special_attacks": [
-        [ "PARROT_AT_DANGER", 10 ],
         {
           "id": "psi_photokin2_lightdodge",
           "type": "spell",
@@ -545,7 +543,6 @@
     "luminance": 200,
     "extend": {
       "special_attacks": [
-        [ "PARROT_AT_DANGER", 10 ],
         {
           "id": "psi_photokin3_lightdodge",
           "type": "spell",
@@ -656,7 +653,6 @@
     "upgrades": { "half_life": 45, "into": "mon_feral_human_pyrokin3" },
     "extend": {
       "special_attacks": [
-        [ "PARROT_AT_DANGER", 10 ],
         {
           "type": "monster_attack",
           "attack_type": "melee",
@@ -720,7 +716,6 @@
     "luminance": 200,
     "extend": {
       "special_attacks": [
-        [ "PARROT_AT_DANGER", 10 ],
         {
           "type": "monster_attack",
           "attack_type": "melee",
@@ -1091,7 +1086,6 @@
     "upgrades": { "half_life": 45, "into": "mon_feral_human_teep3" },
     "extend": {
       "special_attacks": [
-        [ "PARROT_AT_DANGER", 10 ],
         {
           "id": "psi_telepath2_scream",
           "type": "spell",
@@ -1138,7 +1132,6 @@
     "upgrades": { "half_life": 45, "into": "mon_feral_human_teep3" },
     "extend": {
       "special_attacks": [
-        [ "PARROT_AT_DANGER", 10 ],
         {
           "id": "psi_telepath3_scream",
           "type": "spell",
@@ -1295,7 +1288,6 @@
     "luminance": 25,
     "extend": {
       "special_attacks": [
-        [ "PARROT_AT_DANGER", 10 ],
         {
           "type": "monster_attack",
           "attack_type": "melee",

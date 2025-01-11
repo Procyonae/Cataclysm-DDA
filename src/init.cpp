@@ -95,7 +95,6 @@
 #include "skill.h"
 #include "skill_boost.h"
 #include "sounds.h"
-#include "speech.h"
 #include "speed_description.h"
 #include "start_location.h"
 #include "test_data.h"
@@ -288,7 +287,6 @@ void DynamicDataLoader::initialize()
     add( "monstergroup", &MonsterGroupManager::LoadMonsterGroup );
     add( "MONSTER_BLACKLIST", &MonsterGroupManager::LoadMonsterBlacklist );
     add( "MONSTER_WHITELIST", &MonsterGroupManager::LoadMonsterWhitelist );
-    add( "speech", &load_speech );
     add( "ammunition_type", &ammunition_type::load_ammunition_type );
     add( "start_location", &start_locations::load );
     add( "scenario", &scenario::load_scenario );
@@ -718,7 +716,6 @@ void DynamicDataLoader::unload_data()
     reset_recipe_categories();
     reset_region_settings();
     reset_scenarios_blacklist();
-    reset_speech();
     rotatable_symbols::reset();
     scenario::reset();
     scent_type::reset();

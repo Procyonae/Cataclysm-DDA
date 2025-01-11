@@ -47,8 +47,6 @@
     "species": [ "ZOMBIE", "GOBLIN" ],
     "weakpoint_sets": [ "wps_humanoid_body", "wps_humanoid_child_body" ],
     "special_attacks": [
-      [ "PARROT", 400 ],
-      [ "PARROT_AT_DANGER", 0 ],
       { "id": "grab" },
       { "id": "bite_humanoid", "cooldown": 5, "attack_upper": false },
       {
@@ -133,8 +131,6 @@
     "harvest": "zombie_lizardfolk",
     "//": "No grab--they have multiple natural weapons so they just attack",
     "special_attacks": [
-      [ "PARROT", 400 ],
-      [ "PARROT_AT_DANGER", 0 ],
       {
         "id": "scratch",
         "attack_upper": true,

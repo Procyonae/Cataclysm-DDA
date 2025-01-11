@@ -1068,10 +1068,7 @@
     "grab_strength": 75,
     "melee_dice": 2,
     "bleed_rate": 60,
-    "special_attacks": [
-      [ "PARROT", 20 ],
-      { "id": "scratch", "damage_max_instance": [ { "damage_type": "cut", "amount": 23, "armor_multiplier": 0.8 } ] }
-    ],
+    "special_attacks": [ { "id": "scratch", "damage_max_instance": [ { "damage_type": "cut", "amount": 23, "armor_multiplier": 0.8 } ] } ],
     "vision_day": 84,
     "dissect": "dissect_crustacean_large",
     "zombify_into": "mon_meat_cocoon_large",

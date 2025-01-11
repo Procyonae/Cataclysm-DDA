@@ -25,7 +25,6 @@
     "melee_dice_sides": 2,
     "melee_damage": [ { "damage_type": "cut", "amount": 3 } ],
     "families": [ "prof_gross_anatomy", "prof_intro_biology", "prof_physiology" ],
-    "special_attacks": [ [ "PARROT_AT_DANGER", 0 ] ],
     "//": "They are human after all",
     "harvest": "human",
     "dissect": "dissect_human_sample_single",
@@ -219,7 +218,6 @@
     "id": "mon_civilian_parent",
     "type": "MONSTER",
     "name": { "str": "gawky guardian" },
-    "special_attacks": [ [ "PARROT", 0 ] ],
     "description": "Obsessed with finding their offspring, they scour the environment for certain death.",
     "chat_topics": [ "TALK_CIVILIAN_PARENT" ],
     "copy-from": "mon_civilian_panic"

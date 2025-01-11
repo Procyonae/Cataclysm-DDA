@@ -812,7 +812,7 @@
     "volume": "20 ml",
     "weight": "4 g",
     "hp": 1,
-    "special_attacks": [ [ "PARROT", 30 ], { "type": "leap", "cooldown": 32, "max_range": 4, "allow_no_target": true } ],
+    "special_attacks": [ { "type": "leap", "cooldown": 32, "max_range": 4, "allow_no_target": true } ],
     "reproduction": { "baby_type": { "baby_egg": "egg_peeper_frog" }, "baby_count": 8, "baby_timer": 20 }
   },
   {
@@ -1162,7 +1162,6 @@
     "description": "Now the size of a dog, this tan, speckled tree frog will not stop making noise.  Its increased size has only boosted its volume.  It belts out sound in a relentless series of piercing, grinding chirps.",
     "copy-from": "mon_jumbo_bigfrog",
     "special_attacks": [
-      [ "PARROT", 30 ],
       {
         "id": "ranged_pull",
         "cooldown": 10,

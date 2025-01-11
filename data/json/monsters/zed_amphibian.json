@@ -266,8 +266,7 @@
         "no_dmg_msg_npc": "%s catches <npcname> with its tongue and pulls them in!"
       },
       { "id": "grab_drag", "cooldown": 3 },
-      { "id": "drag_followup" },
-      [ "PARROT", 8 ]
+      { "id": "drag_followup" }
     ],
     "special_when_hit": [ "ZAPBACK", 100 ],
     "burn_into": "mon_frog_mummy",

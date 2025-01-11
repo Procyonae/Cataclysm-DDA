@@ -31,7 +31,6 @@
     "path_settings": { "max_dist": 50, "allow_open_doors": true, "avoid_traps": true, "avoid_sharp": true },
     "scents_ignored": [ "sc_fetid" ],
     "special_attacks": [
-      [ "PARROT", 100 ],
       { "id": "stretch_attack", "cooldown": { "math": [ "10 + rand(20)" ] } },
       {
         "id": "longswipe",
@@ -125,7 +124,6 @@
     "path_settings": { "max_dist": 50, "allow_open_doors": true, "avoid_traps": true, "avoid_sharp": true },
     "scents_ignored": [ "sc_fetid" ],
     "special_attacks": [
-      [ "PARROT", 100 ],
       {
         "id": "scratch",
         "damage_max_instance": [ { "damage_type": "cut", "amount": 23, "armor_multiplier": 0.8 } ],
@@ -205,7 +203,6 @@
     "path_settings": { "max_dist": 50, "allow_open_doors": true, "avoid_traps": true, "avoid_sharp": true },
     "scents_ignored": [ "sc_fetid" ],
     "special_attacks": [
-      [ "PARROT", 100 ],
       {
         "id": "scratch",
         "damage_max_instance": [ { "damage_type": "cut", "amount": 23, "armor_multiplier": 0.8 } ],

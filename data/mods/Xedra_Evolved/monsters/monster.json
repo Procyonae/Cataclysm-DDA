@@ -278,7 +278,7 @@
     "vision_night": 5,
     "special_when_hit": [ "ZAPBACK", 100 ],
     "emit_fields": [ { "emit_id": "emit_shock_cloud", "delay": "1 s" } ],
-    "special_attacks": [ [ "PARROT", 20 ], [ "SHOCKSTORM", 20 ] ],
+    "special_attacks": [ [ "SHOCKSTORM", 20 ] ],
     "path_settings": { "max_dist": 5, "avoid_traps": true, "avoid_sharp": true },
     "death_function": { "corpse_type": "BROKEN" },
     "flags": [

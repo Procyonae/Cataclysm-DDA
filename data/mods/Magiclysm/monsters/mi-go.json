@@ -34,7 +34,6 @@
     "path_settings": { "max_dist": 50, "allow_open_doors": true, "avoid_traps": true, "avoid_sharp": true },
     "scents_ignored": [ "sc_fetid" ],
     "special_attacks": [
-      [ "PARROT", 100 ],
       {
         "id": "scratch",
         "damage_max_instance": [ { "damage_type": "cut", "amount": 16, "armor_multiplier": 0.8 } ],
@@ -116,7 +115,6 @@
     "path_settings": { "max_dist": 50, "allow_open_doors": true, "avoid_traps": true, "avoid_sharp": true },
     "scents_ignored": [ "sc_fetid" ],
     "special_attacks": [
-      [ "PARROT", 100 ],
       { "id": "scratch", "damage_max_instance": [ { "damage_type": "cut", "amount": 12, "armor_multiplier": 0.4 } ] },
       {
         "id": "migo_nethermancer_grab",

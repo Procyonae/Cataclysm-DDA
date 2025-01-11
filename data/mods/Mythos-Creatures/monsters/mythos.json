@@ -368,7 +368,7 @@
     "melee_damage": [ { "damage_type": "cut", "amount": 6 }, { "damage_type": "acid", "amount": 20 } ],
     "harvest": "exempt",
     "path_settings": { "max_dist": 5 },
-    "special_attacks": [ [ "PARROT", 400 ], [ "ABSORB_ITEMS", 0 ], [ "SPLIT", 0 ] ],
+    "special_attacks": [ [ "ABSORB_ITEMS", 0 ], [ "SPLIT", 0 ] ],
     "death_function": { "corpse_type": "NO_CORPSE", "message": "The %s melts away." },
     "regenerates": 50,
     "regen_morale": true,

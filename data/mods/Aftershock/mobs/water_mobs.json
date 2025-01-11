@@ -27,7 +27,6 @@
     "path_settings": { "max_dist": 50, "avoid_traps": true, "avoid_sharp": true },
     "scents_ignored": [ "sc_fetid" ],
     "special_attacks": [
-      [ "PARROT", 0 ],
       { "id": "scratch", "damage_max_instance": [ { "damage_type": "cut", "amount": 19, "armor_multiplier": 0.8 } ] },
       { "id": "tentacle", "cooldown": 5 }
     ],
@@ -76,7 +75,6 @@
     "path_settings": { "max_dist": 50, "avoid_traps": true, "avoid_sharp": true },
     "scents_ignored": [ "sc_fetid" ],
     "special_attacks": [
-      [ "PARROT", 0 ],
       { "id": "scratch", "damage_max_instance": [ { "damage_type": "cut", "amount": 16, "armor_multiplier": 0.8 } ] },
       { "id": "tentacle", "cooldown": 5 },
       { "type": "spell", "spell_data": { "id": "mi-go_slaver_beam", "min_level": 1 }, "cooldown": 400 }

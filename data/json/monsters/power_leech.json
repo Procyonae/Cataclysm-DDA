@@ -31,8 +31,7 @@
         "description": "Lightning arcs from the leech blossom!"
       },
       [ "LEECH_SPAWNER", 75 ],
-      [ "MON_LEECH_EVOLUTION", 40 ],
-      [ "PARROT", 40 ]
+      [ "MON_LEECH_EVOLUTION", 40 ]
     ],
     "special_when_hit": [ "ZAPBACK", 100 ],
     "weakpoint_sets": [ "wps_power_leech" ],

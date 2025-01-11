@@ -2368,7 +2368,6 @@
     "harvest": "incubator_mammal_deer",
     "dissect": "dissect_medical_sample_single",
     "special_attacks": [
-      [ "PARROT", 6 ],
       {
         "type": "spell",
         "spell_data": { "id": "dermatik_emergence" },

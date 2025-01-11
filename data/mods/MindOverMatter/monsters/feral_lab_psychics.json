@@ -14,7 +14,6 @@
     "zombify_into": "mon_zombie_scientist",
     "extend": {
       "special_attacks": [
-        [ "PARROT_AT_DANGER", 15 ],
         {
           "id": "psi_drbrain_flashbang",
           "type": "spell",
@@ -113,7 +112,6 @@
     "zombify_into": "mon_zombie_survivor",
     "extend": {
       "special_attacks": [
-        [ "PARROT_AT_DANGER", 15 ],
         {
           "id": "smash",
           "attack_upper": true,

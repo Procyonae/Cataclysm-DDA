@@ -104,8 +104,7 @@
         "allow_no_target": true,
         "cooldown": 1
       },
-      { "id": "grab", "cooldown": 7 },
-      [ "PARROT_AT_DANGER", 30 ]
+      { "id": "grab", "cooldown": 7 }
     ],
     "death_drops": "sevenoclock_death_drops",
     "flags": [ "SEES", "HEARS", "SMELLS", "HAS_MIND", "GRABS", "WARM", "BASHES", "PUSH_MON" ],

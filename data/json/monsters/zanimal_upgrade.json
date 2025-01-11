@@ -82,7 +82,7 @@
     "speed": 85,
     "color": "magenta",
     "upgrades": false,
-    "extend": { "special_attacks": [ [ "PARROT_AT_DANGER", 2 ], [ "SHRIEK", 2 ] ] }
+    "extend": { "special_attacks": [ [ "SHRIEK", 2 ] ] }
   },
   {
     "id": "mon_dog_scorched",
