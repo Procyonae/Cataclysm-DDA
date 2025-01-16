@@ -574,6 +574,23 @@ struct map_data_common_t {
             return flags.count( flag ) > 0;
         }
 
+        bool has_any_flag( const std::set<std::string> &valid_flags ) const {
+            if( valid_flags.size() < flags.size() ) {
+                for( const std::string &valid_flag : valid_flags ) {
+                    if( flags.count( valid_flag ) != 0 ) {
+                        return true;
+                    }
+                }
+            } else {
+                for( const std::string &flag : flags ) {
+                    if( valid_flags.count( flag ) != 0 ) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
         bool has_flag( const ter_furn_flag flag ) const {
             return bitflags[flag];
         }

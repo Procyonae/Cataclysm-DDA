@@ -3819,6 +3819,68 @@ class jmapgen_nested : public jmapgen_piece
                     return allowed_predecessors.empty();
                 }
         };
+        class terrain_check
+        {
+            private:
+                std::map<const tripoint_rel_ms, std::set<ter_str_id>> valid_ter_map;
+                std::map<const tripoint_rel_ms, std::set<std::string>> valid_flag_map;
+            public:
+                explicit terrain_check( const std::optional<JsonValue> &jv ) {
+                    auto load_object = [&]( const JsonObject & jo ) {
+                        tripoint_rel_ms p;
+                        std::set<ter_str_id> terrain;
+                        std::set<std::string> flags;
+                        mandatory( jo, false, "x", p.x() );
+                        mandatory( jo, false, "y", p.y() );
+                        optional( jo, false, "z", p.z(), 0 );
+                        optional( jo, false, "terrain", terrain );
+                        optional( jo, false, "flags", flags );
+                        if( !terrain.empty() ) {
+                            valid_ter_map.insert( { p, terrain } );
+                        }
+                        if( !flags.empty() ) {
+                            valid_flag_map.insert( { p, flags } );
+                        }
+                    };
+                    if( jv ) {
+                        if( jv->test_object() ) {
+                            load_object( static_cast<JsonObject>( *jv ) );
+                        } else if( jv->test_array() ) {
+                            for( JsonObject jo : static_cast<JsonArray>( *jv ) ) {
+                                load_object( jo );
+                            }
+                        } else {
+                            jv->throw_error( "Nest conditional \"terrain\" must be an object or array of objects" );
+                        }
+                    }
+                }
+                bool test( const mapgendata &dat ) const {
+                    const map &m = dat.m;
+                    std::set<tripoint_rel_ms> invalid_points;
+                    for( const std::pair<const tripoint_rel_ms, std::set<ter_str_id>> &valid_ters :
+                         valid_ter_map ) {
+                        const int z = valid_ters.first.z() + m.get_abs_sub().z();
+                        const ter_str_id &actual_ter = m.ter( tripoint_bub_ms( valid_ters.first.x(), valid_ters.first.y(),
+                                                              z ) ).id();
+                        if( valid_ters.second.count( actual_ter ) == 0 ) {
+                            //Could still be fine if it matches a valid flag at the same point
+                            invalid_points.insert( valid_ters.first );
+                        }
+                    }
+                    for( const std::pair<const tripoint_rel_ms, std::set<std::string>> &valid_flags :
+                         valid_flag_map ) {
+                        const int z = valid_flags.first.z() + m.get_abs_sub().z();
+                        const ter_str_id &actual_ter = m.ter( tripoint_bub_ms( valid_flags.first.x(), valid_flags.first.y(),
+                                                              z ) ).id();
+                        if( actual_ter->has_any_flag( valid_flags.second ) ) {
+                            return false;
+                        } else if( auto it = invalid_points.find( valid_flags.first ); it != invalid_points.end() ) {
+                            invalid_points.erase( it );
+                        }
+                    }
+                    return invalid_points.empty();
+                }
+        };
         class correct_z_level_check
         {
             private:
@@ -3842,6 +3904,7 @@ class jmapgen_nested : public jmapgen_piece
         neighbor_flag_check neighbor_flags;
         neighbor_flag_any_check neighbor_flags_any;
         predecessor_oter_check predecessors;
+        terrain_check terrain;
         correct_z_level_check correct_z_level;
         jmapgen_nested( const JsonObject &jsi, const std::string_view/*context*/ )
             : neighbor_oters( jsi.get_object( "neighbors" ) )
@@ -3849,6 +3912,7 @@ class jmapgen_nested : public jmapgen_piece
             , neighbor_flags( jsi.get_object( "flags" ) )
             , neighbor_flags_any( jsi.get_object( "flags_any" ) )
             , predecessors( jsi.get_array( "predecessors" ) )
+            , terrain( jsi.get_member_opt( "terrain" ) )
             , correct_z_level( jsi.get_array( "check_z" ) ) {
             if( jsi.has_member( "chunks" ) ) {
                 load_weighted_list( jsi.get_member( "chunks" ), entries, 100 );
@@ -3888,7 +3952,8 @@ class jmapgen_nested : public jmapgen_piece
         const weighted_int_list<mapgen_value<nested_mapgen_id>> &get_entries(
         const mapgendata &dat ) const {
             if( neighbor_oters.test( dat ) && neighbor_joins.test( dat ) && neighbor_flags.test( dat ) &&
-                neighbor_flags_any.test( dat ) && predecessors.test( dat ) && correct_z_level.test( dat ) ) {
+                neighbor_flags_any.test( dat ) && predecessors.test( dat ) && terrain.test( dat ) &&
+                correct_z_level.test( dat ) ) {
                 return entries;
             } else {
                 return else_entries;
