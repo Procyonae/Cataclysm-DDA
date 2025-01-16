@@ -257,8 +257,8 @@ void start_location::prepare_map( tinymap &m ) const
     }
 }
 
-std::pair<tripoint_abs_omt, std::unordered_map<std::string, std::string>>
-        start_location::find_player_initial_location( const point_abs_om &origin ) const
+std::pair<tripoint_abs_omt, omt_types_parameters>
+start_location::find_player_initial_location( const point_abs_om &origin, bool boost_priorities )
 {
     // Spiral out from the world origin scanning for a compatible starting location,
     // creating overmaps as necessary.
@@ -272,14 +272,51 @@ std::pair<tripoint_abs_omt, std::unordered_map<std::string, std::string>>
             return std::make_pair( project_combine( omp, omtstart ), chosen_target.parameters );
         }
     }
-    // Should never happen, if it does we messed up.
     popup( _( "Unable to generate a valid starting location %s [%s] in a radius of %d overmaps, please report this failure." ),
            name(), id.str(), radius );
+
     return std::make_pair( tripoint_abs_omt::invalid, chosen_target.parameters );
 }
 
-std::pair<tripoint_abs_omt, std::unordered_map<std::string, std::string>>
-        start_location::find_player_initial_location( const city &origin ) const
+std::pair<tripoint_abs_omt, omt_types_parameters>
+start_location::find_player_initial_location( const point_abs_om &origin,
+        const omt_types_parameters &chosen_target )
+{
+    // Spiral out from the world origin scanning for a compatible starting location,
+    // creating overmaps as necessary.
+    const int radius = 3;
+    // This is ugly and expensive so we only do it if we found nothing the first time
+    for( const overmap_special_placement &osp : overmap_specials::get_default_batch(
+             point_abs_om::zero ) ) {
+        // Purposefully delayed/already boosted specials should be ignored
+        if( osp.special_details->get_priority() != 0 ) {
+            continue;
+        }
+        for( const overmap_special_terrain &ost : osp.special_details->preview_terrains() ) {
+            if( is_ot_match( chosen_target.omt, ost.terrain, chosen_target.omt_type ) ) {
+                _specials_to_boost_priority.insert( osp.special_details->id );
+                break;
+            }
+        }
+    }
+    for( const point_abs_om &omp : closest_points_first( origin, radius ) ) {
+        overmap &omap = overmap_buffer.get( omp );
+        const tripoint_om_omt omtstart = omap.find_random_omt( std::make_pair( chosen_target.omt,
+                                         chosen_target.omt_type ) );
+        if( omtstart.raw() != tripoint::min ) {
+            _specials_to_boost_priority.clear();
+            return std::make_pair( project_combine( omp, omtstart ), chosen_target.parameters );
+        }
+    }
+    popup( _( "Unable to generate a valid starting location %s [%s] in a radius of %d overmaps, please report this failure." ),
+           name(), id.str(), radius );
+
+    _specials_to_boost_priority.clear();
+    return std::make_pair( tripoint_abs_omt::invalid, chosen_target.parameters );
+}
+
+std::pair<tripoint_abs_omt, omt_types_parameters>
+start_location::find_player_initial_location( const city &origin ) const
 {
     overmap &omap = overmap_buffer.get( origin.pos_om );
     std::vector<std::pair<tripoint_om_omt, omt_types_parameters>> valid;

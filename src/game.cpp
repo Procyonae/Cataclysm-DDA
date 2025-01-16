@@ -896,6 +896,11 @@ void game::legacy_migrate_npctalk_var_prefix( std::unordered_map<std::string, st
     }
 }
 
+const std::set<overmap_special_id> *game::get_boosted_specials() const
+{
+    return boosted_specials_start_loc ? boosted_specials_start_loc->get_boosted_specials() : nullptr;
+}
+
 // Set up all default values for a new game
 bool game::start_game()
 {
@@ -927,27 +932,31 @@ bool game::start_game()
     // Move items from the raw inventory to item_location s. See header TODO.
     u.migrate_items_to_storage( true );
 
-    const start_location &start_loc = u.random_start_location ? scen->random_start_location().obj() :
-                                      u.start_location.obj();
+    const start_location_id &start_loc = u.random_start_location ? scen->random_start_location() :
+                                         u.start_location;
     tripoint_abs_omt omtstart = tripoint_abs_omt::invalid;
     std::unordered_map<std::string, std::string> associated_parameters;
     const bool select_starting_city = get_option<bool>( "SELECT_STARTING_CITY" );
+    bool boost_priorities = false;
     do {
         if( select_starting_city ) {
             if( !u.starting_city.has_value() ) {
                 u.starting_city = random_entry( city::get_all() );
                 u.world_origin = u.starting_city->pos_om;
             }
-            auto ret = start_loc.find_player_initial_location( u.starting_city.value() );
+            auto ret = start_loc->find_player_initial_location( u.starting_city.value() );
             omtstart = ret.first;
             associated_parameters = ret.second;
         } else {
-            auto ret = start_loc.find_player_initial_location( u.world_origin.value_or( point_abs_om() ) );
+            boosted_specials_start_loc = start_loc;
+            auto ret = start_loc->find_player_initial_location( u.world_origin.value_or( point_abs_om() ),
+                       boost_priorities );
+            boosted_specials_start_loc = start_location_id::NULL_ID();
             omtstart = ret.first;
             associated_parameters = ret.second;
         }
         if( omtstart.is_invalid() ) {
-
+            boost_priorities = true;
             MAPBUFFER.clear();
             overmap_buffer.clear();
 
@@ -959,14 +968,14 @@ bool game::start_game()
     } while( omtstart.is_invalid() );
 
     // Set parameter(s) if specified in chosen start_loc
-    start_loc.set_parameters( omtstart, associated_parameters );
+    start_loc->set_parameters( omtstart, associated_parameters );
 
-    start_loc.prepare_map( omtstart );
+    start_loc->prepare_map( omtstart );
 
     if( scen->has_map_extra() ) {
         // Map extras can add monster spawn points and similar and should be done before the main
         // map is loaded.
-        start_loc.add_map_extra( omtstart, scen->get_map_extra() );
+        start_loc->add_map_extra( omtstart, scen->get_map_extra() );
     }
 
     tripoint_abs_sm lev = project_to<coords::sm>( omtstart );
@@ -974,7 +983,7 @@ bool game::start_game()
     lev -= point( HALF_MAPSIZE, HALF_MAPSIZE );
     load_map( lev, /*pump_events=*/true );
 
-    start_loc.place_player( u, omtstart );
+    start_loc->place_player( u, omtstart );
     int level = m.get_abs_sub().z();
     // Rebuild map cache because we want visibility cache to avoid spawning monsters in sight
     m.invalidate_map_cache( level );
@@ -1026,7 +1035,7 @@ bool game::start_game()
     const bool spawn_near = surrounded_start_options || surrounded_start_scenario;
     if( spawn_near ) {
         for( const std::pair<mongroup_id, float> &sg : surround_groups ) {
-            start_loc.surround_with_monsters( omtstart, sg.first, sg.second );
+            start_loc->surround_with_monsters( omtstart, sg.first, sg.second );
         }
     }
 
@@ -1048,10 +1057,10 @@ bool game::start_game()
     //Calculate mutation drench protection stats
     u.drench_mut_calc();
     if( scen->has_flag( "FIRE_START" ) ) {
-        start_loc.burn( omtstart, 3, 3 );
+        start_loc->burn( omtstart, 3, 3 );
     }
     if( scen->has_flag( "HELI_CRASH" ) ) {
-        start_loc.handle_heli_crash( u );
+        start_loc->handle_heli_crash( u );
         bool success = false;
         for( wrapped_vehicle v : m.get_vehicles() ) {
             std::string name = v.v->type.str();

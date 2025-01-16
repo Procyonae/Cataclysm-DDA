@@ -57,7 +57,7 @@ class start_location
          * in the world.
          */
         std::pair<tripoint_abs_omt, std::unordered_map<std::string, std::string>>
-                find_player_initial_location( const point_abs_om &origin ) const;
+                find_player_initial_location( const point_abs_om &origin );
         /**
          * Find a suitable start location on the overmap in specific city.
          * @return Global, absolute overmap terrain coordinates where the player should spawn.
@@ -108,10 +108,14 @@ class start_location
         bool requires_city() const;
         /** @returns whether the start location at specified tripoint can belong to the specified city. */
         bool can_belong_to_city( const tripoint_om_omt &p, const city &cit ) const;
+        const std::set<overmap_special_id> *get_boosted_specials() const {
+            return &_specials_to_boost_priority;
+        }
     private:
         translation _name;
         std::vector<omt_types_parameters> _locations;
         std::set<std::string> _flags;
+        std::set<overmap_special_id> _specials_to_boost_priority;
         start_location_placement_constraints constraints_;
 
         void prepare_map( tinymap &m ) const;

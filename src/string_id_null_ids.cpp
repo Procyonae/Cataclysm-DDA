@@ -54,6 +54,7 @@ MAKE_NULL_ID( move_mode, "null" )
 MAKE_NULL_ID( fault, "null" )
 MAKE_NULL_ID( fault_fix, "null" )
 MAKE_NULL_ID( spell_type, "null" )
+MAKE_NULL_ID( start_location, "sloc_null" )
 
 #define MAKE_NULL_ID2( type, ... ) \
     struct type; \

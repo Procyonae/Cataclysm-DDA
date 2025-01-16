@@ -857,6 +857,10 @@ class game
         void load_shortcuts( const cata_path &path );
 #endif
         bool start_game(); // Starts a new game in the active world
+        start_location_id boosted_specials_start_loc = start_location_id::NULL_ID();
+    public:
+        const std::set<overmap_special_id> *get_boosted_specials() const;
+    private:
 
         //private save functions.
         // returns false if saving failed for whatever reason

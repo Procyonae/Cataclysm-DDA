@@ -7090,13 +7090,20 @@ bool overmap::place_special_attempt(
 
     std::shuffle( enabled_specials.begin(), enabled_specials.end(), rng_get_engine() );
     std::set<int> priorities;
+    const std::set<overmap_special_id> *boosted_specials = g->get_boosted_specials();
     for( const overmap_special_placement &os : enabled_specials ) {
         priorities.emplace( os.special_details->get_priority() );
+    }
+    if( boosted_specials && !boosted_specials->empty() ) {
+        priorities.emplace( 1 );
     }
     for( auto pri_iter = priorities.rbegin(); pri_iter != priorities.rend(); ++pri_iter ) {
         for( auto iter = enabled_specials.begin(); iter != enabled_specials.end(); ++iter ) {
             const overmap_special &special = *iter->special_details;
-            if( *pri_iter != special.get_priority() ) {
+            const bool is_boosted_special = boosted_specials &&
+                                            boosted_specials->find( special.id ) != boosted_specials->end();
+            if( is_boosted_special ? *pri_iter != 1 : *pri_iter !=
+                special.get_priority() ) {  // Possibly where it wants overriding
                 continue;
             }
             const overmap_special_placement_constraints &constraints = special.get_constraints();
