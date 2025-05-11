@@ -3220,7 +3220,7 @@ std::string *overmap::join_used_at( const om_pos_dir &p )
     return &it->second;
 }
 
-std::vector<oter_id> overmap::predecessors( const tripoint_om_omt &p )
+std::vector<oter_id> overmap::predecessors( const tripoint_om_omt &p ) const
 {
     auto it = predecessors_.find( p );
     if( it == predecessors_.end() ) {
@@ -5924,7 +5924,8 @@ void overmap::build_city_street(
         return;
     }
 
-    const pf::directed_path<point_om_omt> street_path = lay_out_street( connection, p, dir, cs + 1 );
+    const pf::directed_path<point_om_omt> street_path = lay_out_street( town, connection, p, dir,
+            cs + 1 );
 
     if( street_path.nodes.size() <= 1 ) {
         return; // Don't bother.
@@ -6324,38 +6325,20 @@ static pf::directed_path<point_om_omt> straight_path( const point_om_omt &source
     return res;
 }
 
-pf::directed_path<point_om_omt> overmap::lay_out_street( const overmap_connection &connection,
+pf::directed_path<point_om_omt> overmap::lay_out_street( const city &c,
+        const overmap_connection &connection,
         const point_om_omt &source, om_direction::type dir, size_t len ) const
 {
-    const tripoint_om_omt from( source, 0 );
-    // See if we need to make another one "step" further.
-    const tripoint_om_omt en_pos = from + om_direction::displace( dir, len + 1 );
-    if( inbounds( en_pos, 1 ) && connection.has( ter( en_pos ) ) ) {
-        ++len;
-    }
-
-    size_t actual_len = 0;
-
-    while( actual_len < len ) {
-        const tripoint_om_omt pos = from + om_direction::displace( dir, actual_len );
-
+    auto valid_placement = [&]( const tripoint_om_omt pos ) {
         if( !inbounds( pos, 1 ) ) {
-            break;  // Don't approach overmap bounds.
+            return false;  // Don't approach overmap bounds.
         }
-
         const oter_id &ter_id = ter( pos );
-
-        if( ter_id->is_river() || ter_id->is_ravine() || ter_id->is_ravine_edge() ||
-            !connection.pick_subtype_for( ter_id ) ) {
-            break;
+        if( ter_id->is_ravine() || ter_id->is_ravine_edge() || !connection.pick_subtype_for( ter_id ) ) {
+            return false;
         }
-
-        bool collided = false;
         int collisions = 0;
         for( int i = -1; i <= 1; i++ ) {
-            if( collided ) {
-                break;
-            }
             for( int j = -1; j <= 1; j++ ) {
                 const tripoint_om_omt checkp = pos + tripoint( i, j, 0 );
 
@@ -6363,28 +6346,83 @@ pf::directed_path<point_om_omt> overmap::lay_out_street( const overmap_connectio
                     checkp != pos + om_direction::displace( om_direction::opposite( dir ), 1 ) &&
                     checkp != pos ) {
                     if( ter( checkp )->get_type_id() == oter_type_road ) {
+                        //Stop roads from running right next to each other
+                        if( collisions >= 2 ) {
+                            return false;
+                        }
                         collisions++;
                     }
                 }
             }
-
-            //Stop roads from running right next to each other
-            if( collisions >= 3 ) {
-                collided = true;
-                break;
-            }
         }
-        if( collided ) {
+        return true;
+    };
+
+    const int bridge_min_city_size = settings->city_spec.bridge_min_city_size;
+    // TODO: Scale according to city size?
+    const int bridge_one_in_chance = settings->city_spec.bridge_one_in_chance;
+    const int bridge_max_length = settings->city_spec.bridge_max_length;
+
+    const tripoint_om_omt from( source, 0 );
+    // See if we need to make another one "step" further.
+    const tripoint_om_omt en_pos = from + om_direction::displace( dir, len + 1 );
+    if( inbounds( en_pos, 1 ) && connection.has( ter( en_pos ) ) ) {
+        ++len;
+    }
+    size_t actual_len = 0;
+    bool checked_river = false;
+
+    while( actual_len < len ) {
+        const tripoint_om_omt pos = from + om_direction::displace( dir, actual_len );
+        if( !valid_placement( pos ) ) {
             break;
         }
-
+        const oter_id &ter_id = ter( pos );
+        if( ter_id->is_river() ) {
+            // Check once whether we want to cross the river completely or whether to just bail
+            if( !checked_river ) {
+                if( !one_in( bridge_one_in_chance ) || c.size < bridge_min_city_size ) {
+                    break;
+                }
+                tripoint_om_omt pos_after_river = pos;
+                int bridge_length = 0;
+                bool invalid_bridge = false;
+                while( ter( pos_after_river )->is_river() ) {
+                    pos_after_river = pos_after_river + om_direction::displace( dir, 1 );
+                    bridge_length++;
+                    // Existing bridges count for is_river() and we don't want intersecting bridges
+                    if( bridge_length > bridge_max_length ||
+                        ter( pos_after_river )->get_type_id() == oter_type_bridge ) {
+                        invalid_bridge = true;
+                        break;
+                    }
+                }
+                if( invalid_bridge || !valid_placement( pos_after_river ) ) { // TODO: Check whether pos_after_river is actually within the city_size bounds (maybe instead of bridge_min_city_size) 
+                    break;
+                }
+                /*bool innappropriate_endpoint = false;
+                for( const oter_id &predecessor : predecessors( pos_after_river ) ) {
+                    if( predecessor->is_river() ) {
+                        innappropriate_endpoint = true;
+                        break;
+                    }
+                }
+                if( innappropriate_endpoint ) {
+                    break;
+                }*/
+                checked_river = true;
+            }
+            // Prevent stopping over river
+            if( actual_len == len - 1 ) {
+                ++len;
+            }
+        }
         ++actual_len;
-
+        // If we hit existing road stop
         if( actual_len > 1 && connection.has( ter_id ) ) {
-            break;  // Stop here.
+            break;
         }
     }
-
     return straight_path( source, dir, actual_len );
 }
 

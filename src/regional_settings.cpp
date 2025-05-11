@@ -569,6 +569,9 @@ void load_region_settings( const JsonObject &jo )
         if( !cjo.read( "park_sigma", new_region.city_spec.park_sigma ) && strict ) {
             jo.throw_error( "city: park_sigma required for default" );
         }
+        cjo.read( "bridge_min_city_size", new_region.city_spec.bridge_min_city_size );
+        cjo.read( "bridge_one_in_chance", new_region.city_spec.bridge_one_in_chance );
+        cjo.read( "bridge_max_length", new_region.city_spec.bridge_max_length );
         const auto load_building_types = [&jo, &cjo, strict]( const std::string & type,
         building_bin & dest ) {
             if( !cjo.has_object( type ) && strict ) {

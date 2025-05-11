@@ -48,6 +48,10 @@ struct city_settings {
     // We'll spread this out to the rest of the town.
     int park_sigma = 100 - park_radius;
 
+    int bridge_min_city_size = 10;
+    int bridge_one_in_chance = 2;
+    int bridge_max_length = 7;
+
     building_bin houses;
     building_bin shops;
     building_bin parks;

@@ -753,6 +753,9 @@
       "shop_sigma": 50,
       "park_radius": 20,
       "park_sigma": 80,
+      "bridge_min_city_size": 0,
+      "bridge_one_in_chance": 2,
+      "bridge_max_length": 7,
       "houses": {
         "2storyModern01": 5,
         "2storyModern02": 50,
