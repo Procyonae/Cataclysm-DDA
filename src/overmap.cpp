@@ -690,24 +690,6 @@ bool is_ot_match( const std::string &name, const oter_id &oter,
     }
 }
 
-/*
- * load mapgen functions from an overmap_terrain json entry
- * suffix is for roads/subways/etc which have "_straight", "_curved", "_tee", "_four_way" function mappings
- */
-static void load_overmap_terrain_mapgens( const JsonObject &jo, const std::string &id_base,
-        const std::string &suffix = "" )
-{
-    const std::string fmapkey( id_base + suffix );
-    const std::string jsonkey( "mapgen" + suffix );
-    register_mapgen_function( fmapkey );
-    if( jo.has_array( jsonkey ) ) {
-        for( JsonObject jio : jo.get_array( jsonkey ) ) {
-            // NOLINTNEXTLINE(cata-use-named-point-constants)
-            load_and_add_mapgen_function( jio, fmapkey, point_rel_omt::zero, point_rel_omt( 1, 1 ) );
-        }
-    }
-}
-
 namespace io
 {
 template<>
@@ -926,7 +908,7 @@ void oter_type_t::load( const JsonObject &jo, const std::string &src )
         }
 
         for( const auto &elem : om_lines::mapgen_suffixes ) {
-            load_overmap_terrain_mapgens( jo, id.str(), elem );
+            register_mapgen_function( id.str() + elem );
         }
 
         if( symbol == NULL_UNICODE ) {
@@ -945,7 +927,7 @@ void oter_type_t::load( const JsonObject &jo, const std::string &src )
             debugmsg( "sym is defined as number instead of string for overmap_terrain %s (%s)", id.c_str(),
                       name );
         }
-        load_overmap_terrain_mapgens( jo, id.str() );
+        register_mapgen_function( id.str() );
     }
 }
 

@@ -1236,10 +1236,8 @@ static void set_mapgen_defer( const JsonObject &jsi, const std::string &member,
 /*
  * load a single mapgen json structure; this can be inside an overmap_terrain, or on it's own.
  */
-std::shared_ptr<mapgen_function>
-load_mapgen_function( const JsonObject &jio, const std::string &id_base,
-                      const point_rel_omt &offset,
-                      const point_rel_omt &total )
+std::shared_ptr<mapgen_function> load_mapgen_function( JsonObject &&jio, const std::string &id_base,
+        const point_rel_omt &offset, const point_rel_omt &total )
 {
     dbl_or_var weight = get_dbl_or_var( jio, "weight", false,  1000 );
     if( weight.min.is_constant() && ( weight.min.constant() < 0 ||
@@ -1256,48 +1254,18 @@ load_mapgen_function( const JsonObject &jio, const std::string &id_base,
         } else {
             jio.throw_error_at( "builtin", "function does not exist" );
         }
-    } else if( !jio.has_object( "object" ) ) {
-        jio.throw_error( R"(mapgen must define key "object" or "builtin")" );
     }
-    JsonObject jo = jio.get_object( "object" );
-    return std::make_shared<mapgen_function_json>( std::move( jo ), std::move( weight ),
-            "mapgen " + id_base, offset,
-            total );
+    return std::make_shared<mapgen_function_json>( std::move( jio ), std::move( weight ),
+            "mapgen " + id_base, offset, total );
 }
 
-void load_and_add_mapgen_function( const JsonObject &jio, const std::string &id_base,
+void load_and_add_mapgen_function( JsonObject &&jio, const std::string &id_base,
                                    const point_rel_omt &offset, const point_rel_omt &total )
 {
-    std::shared_ptr<mapgen_function> f = load_mapgen_function( jio, id_base, offset, total );
+    std::shared_ptr<mapgen_function> f = load_mapgen_function(
+            std::move( jio ), id_base, offset, total );
     if( f ) {
         oter_mapgen.add( id_base, f );
-    }
-}
-
-static void load_nested_mapgen( JsonObject &&jio, const nested_mapgen_id &id_base )
-{
-    if( jio.has_object( "object" ) ) {
-        int weight = jio.get_int( "weight", 1000 );
-        JsonObject jo = jio.get_object( "object" );
-        nested_mapgens[id_base].add(
-            std::make_shared<mapgen_function_json_nested>(
-                std::move( jo ), "nested mapgen " + id_base.str() ),
-            weight );
-    } else {
-        debugmsg( "Nested mapgen: Invalid mapgen function (missing \"object\" object)", id_base.c_str() );
-    }
-}
-
-static void load_update_mapgen( JsonObject &&jio, const update_mapgen_id &id_base )
-{
-    if( jio.has_object( "object" ) ) {
-        JsonObject jo = jio.get_object( "object" );
-        update_mapgens[id_base].add(
-            std::make_unique<update_mapgen_function_json>(
-                std::move( jo ), "update mapgen " + id_base.str() ) );
-    } else {
-        debugmsg( "Update mapgen: Invalid mapgen function (missing \"object\" object)",
-                  id_base.c_str() );
     }
 }
 
@@ -1308,7 +1276,14 @@ void load_mapgen( const JsonObject &jo )
 {
     // NOLINTNEXTLINE(cata-use-named-point-constants)
     static constexpr point_rel_omt point_one( 1, 1 );
-
+    if( jo.has_object( "object" ) ) {
+        jo.throw_error_at( "object",
+                           "\"object\" field has been obsoleted see #XXXXX for script to automate removal." );
+    }
+    if( jo.has_string( "method" ) ) {
+        jo.throw_error_at( "method",
+                           "\"method\" field has been obsoleted see #80993 for script to automate removal." );
+    }
     if( jo.has_array( "om_terrain" ) ) {
         JsonArray ja = jo.get_array( "om_terrain" );
         if( ja.test_array() ) {
@@ -1316,7 +1291,10 @@ void load_mapgen( const JsonObject &jo )
             point_rel_omt total( ja.get_array( 0 ).size(), ja.size() );
             for( JsonArray row_items : ja ) {
                 for( const std::string mapgenid : row_items ) {
-                    load_and_add_mapgen_function( jo, mapgenid, offset, total );
+                    JsonObject jo_copy = jo;
+                    jo_copy.copy_visited_members( jo );
+                    jo.allow_omitted_members();
+                    load_and_add_mapgen_function( std::move( jo_copy ), mapgenid, offset, total );
                     offset.x()++;
                 }
                 offset.y()++;
@@ -1329,7 +1307,11 @@ void load_mapgen( const JsonObject &jo )
             }
             if( !mapgenid_list.empty() ) {
                 const std::string mapgenid = mapgenid_list[0];
-                const auto mgfunc = load_mapgen_function( jo, mapgenid, point_rel_omt::zero, point_one );
+                JsonObject jo_copy = jo;
+                jo_copy.copy_visited_members( jo );
+                jo.allow_omitted_members();
+                const auto mgfunc = load_mapgen_function(
+                                        std::move( jo_copy ), mapgenid, point_rel_omt::zero, point_one );
                 if( mgfunc ) {
                     for( auto &i : mapgenid_list ) {
                         oter_mapgen.add( i, mgfunc );
@@ -1338,19 +1320,27 @@ void load_mapgen( const JsonObject &jo )
             }
         }
     } else if( jo.has_string( "om_terrain" ) ) {
-        load_and_add_mapgen_function( jo, jo.get_string( "om_terrain" ), point_rel_omt::zero, point_one );
+        const std::string id_base = jo.get_string( "om_terrain" );
+        JsonObject jo_copy = jo;
+        jo_copy.copy_visited_members( jo );
+        jo.allow_omitted_members();
+        load_and_add_mapgen_function( std::move( jo_copy ), id_base, point_rel_omt::zero, point_one );
     } else if( jo.has_string( "nested_mapgen_id" ) ) {
-        std::string id_base = jo.get_string( "nested_mapgen_id" );
+        const nested_mapgen_id id( jo.get_string( "nested_mapgen_id" ) );
+        int weight = jo.get_int( "weight", 1000 );
         JsonObject jo_copy = jo;
         jo_copy.copy_visited_members( jo );
         jo.allow_omitted_members();
-        load_nested_mapgen( std::move( jo_copy ), nested_mapgen_id( id_base ) );
+        nested_mapgens[id].add( std::make_shared<mapgen_function_json_nested>(
+                                    std::move( jo_copy ), "nested mapgen " + id.str() ), weight );
     } else if( jo.has_string( "update_mapgen_id" ) ) {
-        std::string id_base = jo.get_string( "update_mapgen_id" );
+        const update_mapgen_id id( jo.get_string( "update_mapgen_id" ) );
         JsonObject jo_copy = jo;
         jo_copy.copy_visited_members( jo );
         jo.allow_omitted_members();
-        load_update_mapgen( std::move( jo_copy ), update_mapgen_id( id_base ) );
+        update_mapgens[id].add(
+            std::make_unique<update_mapgen_function_json>(
+                std::move( jo_copy ), "update mapgen " + id.str() ) );
     } else {
         debugmsg( "mapgen entry requires \"om_terrain\" or \"nested_mapgen_id\"(string, array of strings, or array of array of strings)\n%s\n",
                   jo.str() );

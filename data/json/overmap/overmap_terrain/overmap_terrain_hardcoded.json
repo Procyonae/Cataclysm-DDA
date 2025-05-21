@@ -48,7 +48,6 @@
     "see_cost": "spaced_high",
     "extras": "forest_thick",
     "spawns": { "group": "GROUP_FOREST", "population": [ 0, 6 ], "chance": 15 },
-    "mapgen": [ { "builtin": "forest" } ],
     "flags": [ "NO_ROTATE", "SOURCE_FORAGE" ]
   },
   {
@@ -62,9 +61,13 @@
     "see_cost": "spaced_high",
     "extras": "forest_water",
     "spawns": { "group": "GROUP_SWAMP", "population": [ 2, 6 ], "chance": 50 },
-    "mapgen": [ { "builtin": "forest" } ],
     "travel_cost_type": "swamp",
     "flags": [ "NO_ROTATE", "SOURCE_FORAGE", "RISK_HIGH" ]
+  },
+  {
+    "type": "mapgen",
+    "om_terrain": [ "forest", "forest_thick", "forest_water" ],
+    "builtin": "forest"
   },
   {
     "type": "overmap_terrain",

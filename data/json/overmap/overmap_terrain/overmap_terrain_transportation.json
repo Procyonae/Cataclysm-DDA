@@ -188,11 +188,6 @@
     "color": "dark_gray",
     "see_cost": "full_high",
     "extras": "subway",
-    "mapgen_straight": [ { "builtin": "subway_straight" } ],
-    "mapgen_curved": [ { "builtin": "subway_curved" } ],
-    "mapgen_end": [ { "builtin": "subway_end" } ],
-    "mapgen_tee": [ { "builtin": "subway_tee" } ],
-    "mapgen_four_way": [ { "builtin": "subway_four_way" } ],
     "spawns": { "group": "GROUP_SUBWAY", "population": [ 1, 3 ], "chance": 66 },
     "travel_cost_type": "dirt_road",
     "flags": [ "LINEAR" ]
@@ -205,14 +200,34 @@
     "color": "dark_gray",
     "see_cost": "full_high",
     "extras": "lab_subway",
-    "mapgen_straight": [ { "builtin": "subway_straight" } ],
-    "mapgen_curved": [ { "builtin": "subway_curved" } ],
-    "mapgen_end": [ { "builtin": "subway_end" } ],
-    "mapgen_tee": [ { "builtin": "subway_tee" } ],
-    "mapgen_four_way": [ { "builtin": "subway_four_way" } ],
     "spawns": { "group": "GROUP_SUBWAY_LAB", "population": [ 1, 3 ], "chance": 50 },
     "travel_cost_type": "dirt_road",
     "flags": [ "LINEAR" ]
+  },
+  {
+    "type": "mapgen",
+    "om_terrain": [ "subway_straight", "lab_subway_straight" ],
+    "builtin": "subway_straight"
+  },
+  {
+    "type": "mapgen",
+    "om_terrain": [ "subway_curved", "lab_subway_curved" ],
+    "builtin": "subway_curved"
+  },
+  {
+    "type": "mapgen",
+    "om_terrain": [ "subway_end", "lab_subway_end" ],
+    "builtin": "subway_end"
+  },
+  {
+    "type": "mapgen",
+    "om_terrain": [ "subway_tee", "lab_subway_tee" ],
+    "builtin": "subway_tee"
+  },
+  {
+    "type": "mapgen",
+    "om_terrain": [ "subway_four_way", "lab_subway_four_way" ],
+    "builtin": "subway_four_way"
   },
   {
     "type": "overmap_terrain",
