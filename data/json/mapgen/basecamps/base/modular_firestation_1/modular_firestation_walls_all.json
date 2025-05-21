@@ -50,48 +50,46 @@
   {
     "type": "mapgen",
     "nested_mapgen_id": "fbmc_firestation1_living_quarters",
-    "object": {
-      "parameters": {
-        "fbmc_construction_palette": {
-          "type": "palette_id",
-          "scope": "omt",
-          "default": {
-            "distribution": [
-              "fbmc_firestation1_palette_white_wall",
-              "fbmc_firestation1_palette_log",
-              "fbmc_firestation1_palette_metal",
-              "fbmc_firestation1_palette_migo",
-              "fbmc_firestation1_palette_rammed_earth",
-              "fbmc_firestation1_palette_rock",
-              "fbmc_firestation1_palette_wad",
-              "fbmc_firestation1_palette_wood"
-            ]
-          }
+    "parameters": {
+      "fbmc_construction_palette": {
+        "type": "palette_id",
+        "scope": "omt",
+        "default": {
+          "distribution": [
+            "fbmc_firestation1_palette_white_wall",
+            "fbmc_firestation1_palette_log",
+            "fbmc_firestation1_palette_metal",
+            "fbmc_firestation1_palette_migo",
+            "fbmc_firestation1_palette_rammed_earth",
+            "fbmc_firestation1_palette_rock",
+            "fbmc_firestation1_palette_wad",
+            "fbmc_firestation1_palette_wood"
+          ]
         }
-      },
-      "mapgensize": [ 13, 13 ],
-      "rows": [
-        "    |        ",
-        "    |        ",
-        "    |        ",
-        "    d        ",
-        "    |        ",
-        "   ||||| ||||",
-        "   |   | |   ",
-        "   |   d d   ",
-        "   |   | |   ",
-        "   ||||| ||||",
-        "   |   | |   ",
-        "   |   d d   ",
-        "   |   | |   "
-      ],
-      "flags": [ "ALLOW_TERRAIN_UNDER_OTHER_DATA" ],
-      "palettes": [ { "param": "fbmc_construction_palette" } ]
-    }
+      }
+    },
+    "mapgensize": [ 13, 13 ],
+    "rows": [
+      "    |        ",
+      "    |        ",
+      "    |        ",
+      "    d        ",
+      "    |        ",
+      "   ||||| ||||",
+      "   |   | |   ",
+      "   |   d d   ",
+      "   |   | |   ",
+      "   ||||| ||||",
+      "   |   | |   ",
+      "   |   d d   ",
+      "   |   | |   "
+    ],
+    "flags": [ "ALLOW_TERRAIN_UNDER_OTHER_DATA" ],
+    "palettes": [ { "param": "fbmc_construction_palette" } ]
   },
   {
     "type": "mapgen",
     "update_mapgen_id": "fbmc_firestation1_living_area",
-    "object": { "place_nested": [ { "chunks": [ "fbmc_firestation1_living_quarters" ], "x": 10, "y": 9 } ] }
+    "place_nested": [ { "chunks": [ "fbmc_firestation1_living_quarters" ], "x": 10, "y": 9 } ]
   }
 ]

@@ -2,6 +2,6 @@
   {
     "type": "mapgen",
     "om_terrain": "rock_border",
-    "object": { "fill_ter": "t_rock" }
+    "fill_ter": "t_rock"
   }
 ]

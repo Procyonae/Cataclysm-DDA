@@ -15,7 +15,7 @@
   {
     "type": "mapgen",
     "update_mapgen_id": "concrete_wall_o_lab_res_8_NW",
-    "object": { "place_terrain": [ { "ter": "t_thconc_r", "x": 11, "y": 15 }, { "ter": "t_thconc_r", "x": 11, "y": 16 } ] }
+    "place_terrain": [ { "ter": "t_thconc_r", "x": 11, "y": 15 }, { "ter": "t_thconc_r", "x": 11, "y": 16 } ]
   },
   {
     "type": "trap",
@@ -33,7 +33,7 @@
   {
     "type": "mapgen",
     "update_mapgen_id": "concrete_wall_o_lab_res_8_NE",
-    "object": { "place_terrain": [ { "ter": "t_thconc_r", "x": 12, "y": 15 }, { "ter": "t_thconc_r", "x": 12, "y": 16 } ] }
+    "place_terrain": [ { "ter": "t_thconc_r", "x": 12, "y": 15 }, { "ter": "t_thconc_r", "x": 12, "y": 16 } ]
   },
   {
     "type": "trap",
@@ -51,13 +51,11 @@
   {
     "type": "mapgen",
     "update_mapgen_id": "light_on_res_8_NW",
-    "object": {
-      "place_terrain": [
-        { "ter": "t_thconc_floor_olight", "x": 9, "y": 3 },
-        { "ter": "t_thconc_floor_olight", "x": 9, "y": 11 },
-        { "ter": "t_thconc_floor_olight", "x": 9, "y": 19 }
-      ]
-    }
+    "place_terrain": [
+      { "ter": "t_thconc_floor_olight", "x": 9, "y": 3 },
+      { "ter": "t_thconc_floor_olight", "x": 9, "y": 11 },
+      { "ter": "t_thconc_floor_olight", "x": 9, "y": 19 }
+    ]
   },
   {
     "type": "trap",
@@ -75,13 +73,11 @@
   {
     "type": "mapgen",
     "update_mapgen_id": "light_on_res_8_NE",
-    "object": {
-      "place_terrain": [
-        { "ter": "t_thconc_floor_olight", "x": 14, "y": 3 },
-        { "ter": "t_thconc_floor_olight", "x": 14, "y": 11 },
-        { "ter": "t_thconc_floor_olight", "x": 14, "y": 19 }
-      ]
-    }
+    "place_terrain": [
+      { "ter": "t_thconc_floor_olight", "x": 14, "y": 3 },
+      { "ter": "t_thconc_floor_olight", "x": 14, "y": 11 },
+      { "ter": "t_thconc_floor_olight", "x": 14, "y": 19 }
+    ]
   },
   {
     "type": "trap",
@@ -99,13 +95,11 @@
   {
     "type": "mapgen",
     "update_mapgen_id": "light_on_res_8_SW",
-    "object": {
-      "place_terrain": [
-        { "ter": "t_thconc_floor_olight", "x": 9, "y": 3 },
-        { "ter": "t_thconc_floor_olight", "x": 9, "y": 11 },
-        { "ter": "t_thconc_floor_olight", "x": 20, "y": 11 }
-      ]
-    }
+    "place_terrain": [
+      { "ter": "t_thconc_floor_olight", "x": 9, "y": 3 },
+      { "ter": "t_thconc_floor_olight", "x": 9, "y": 11 },
+      { "ter": "t_thconc_floor_olight", "x": 20, "y": 11 }
+    ]
   },
   {
     "type": "trap",
@@ -123,13 +117,11 @@
   {
     "type": "mapgen",
     "update_mapgen_id": "light_on_res_8_SE",
-    "object": {
-      "place_terrain": [
-        { "ter": "t_thconc_floor_olight", "x": 14, "y": 3 },
-        { "ter": "t_thconc_floor_olight", "x": 14, "y": 11 },
-        { "ter": "t_thconc_floor_olight", "x": 3, "y": 11 }
-      ]
-    }
+    "place_terrain": [
+      { "ter": "t_thconc_floor_olight", "x": 14, "y": 3 },
+      { "ter": "t_thconc_floor_olight", "x": 14, "y": 11 },
+      { "ter": "t_thconc_floor_olight", "x": 3, "y": 11 }
+    ]
   },
   {
     "type": "trap",
@@ -147,13 +139,11 @@
   {
     "type": "mapgen",
     "update_mapgen_id": "light_on_lab_security_z0N_A",
-    "object": {
-      "place_terrain": [
-        { "ter": "t_thconc_floor_olight", "x": 4, "y": 3 },
-        { "ter": "t_thconc_floor_olight", "x": 11, "y": 15 },
-        { "ter": "t_thconc_floor_olight", "x": 18, "y": 3 }
-      ]
-    }
+    "place_terrain": [
+      { "ter": "t_thconc_floor_olight", "x": 4, "y": 3 },
+      { "ter": "t_thconc_floor_olight", "x": 11, "y": 15 },
+      { "ter": "t_thconc_floor_olight", "x": 18, "y": 3 }
+    ]
   },
   {
     "type": "trap",
@@ -171,13 +161,11 @@
   {
     "type": "mapgen",
     "update_mapgen_id": "light_on_lab_security_z0N_B",
-    "object": {
-      "place_terrain": [
-        { "ter": "t_thconc_floor_olight", "x": 4, "y": 15 },
-        { "ter": "t_thconc_floor_olight", "x": 11, "y": 3 },
-        { "ter": "t_thconc_floor_olight", "x": 18, "y": 15 }
-      ]
-    }
+    "place_terrain": [
+      { "ter": "t_thconc_floor_olight", "x": 4, "y": 15 },
+      { "ter": "t_thconc_floor_olight", "x": 11, "y": 3 },
+      { "ter": "t_thconc_floor_olight", "x": 18, "y": 15 }
+    ]
   },
   {
     "type": "trap",
@@ -195,13 +183,11 @@
   {
     "type": "mapgen",
     "update_mapgen_id": "light_on_lab_security_z0S_A",
-    "object": {
-      "place_terrain": [
-        { "ter": "t_thconc_floor_olight", "x": 4, "y": 8 },
-        { "ter": "t_thconc_floor_olight", "x": 11, "y": 20 },
-        { "ter": "t_thconc_floor_olight", "x": 18, "y": 8 }
-      ]
-    }
+    "place_terrain": [
+      { "ter": "t_thconc_floor_olight", "x": 4, "y": 8 },
+      { "ter": "t_thconc_floor_olight", "x": 11, "y": 20 },
+      { "ter": "t_thconc_floor_olight", "x": 18, "y": 8 }
+    ]
   },
   {
     "type": "trap",
@@ -219,12 +205,10 @@
   {
     "type": "mapgen",
     "update_mapgen_id": "light_on_lab_security_z0S_B",
-    "object": {
-      "place_terrain": [
-        { "ter": "t_thconc_floor_olight", "x": 4, "y": 20 },
-        { "ter": "t_thconc_floor_olight", "x": 11, "y": 8 },
-        { "ter": "t_thconc_floor_olight", "x": 18, "y": 20 }
-      ]
-    }
+    "place_terrain": [
+      { "ter": "t_thconc_floor_olight", "x": 4, "y": 20 },
+      { "ter": "t_thconc_floor_olight", "x": 11, "y": 8 },
+      { "ter": "t_thconc_floor_olight", "x": 18, "y": 20 }
+    ]
   }
 ]

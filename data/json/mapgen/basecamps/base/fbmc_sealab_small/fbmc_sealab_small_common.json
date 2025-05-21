@@ -2,6 +2,6 @@
   {
     "type": "mapgen",
     "update_mapgen_id": "fbmc_sealab_small_0",
-    "object": { "set": [ { "point": "furniture", "id": "f_bulletin", "x": 10, "y": 12 } ] }
+    "set": [ { "point": "furniture", "id": "f_bulletin", "x": 10, "y": 12 } ]
   }
 ]
