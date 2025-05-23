@@ -660,6 +660,17 @@ void monster::recheck_fed_status()
     }
 }
 
+bool monster::can_make_sound() const
+{
+    //TODO: Add stuff that should temporarily prevent the monster making sound?
+    return type->sounds.is_valid();
+}
+
+const creature_sound *monster::get_sound() const
+{
+    return type->sounds.pick();
+}
+
 void monster::set_amount_eaten( int new_amount )
 {
     amount_eaten = new_amount;

@@ -1068,6 +1068,26 @@ void mtype::load( const JsonObject &jo, const std::string &src )
         }
     }
 
+    //BEFOREMERGE: Allow extending sounds + deleting the entire parrot
+    if( jo.has_member( "parrot" ) ) {
+        JsonObject jobj = jo.get_member( "parrot" );
+        //BEFOREMERGE: Potentially change field name depending on how it ends up functioning
+        mandatory( jobj, was_loaded, "frequency", sound_cooldown );
+        if( jobj.has_array( "sounds" ) ) {
+            sounds.clear();
+            for( const JsonObject soundobj : jobj.get_array( "sounds" ) ) {
+                creature_sound sound;
+                int weight;
+                mandatory( soundobj, false, "volume", sound.volume );
+                mandatory( soundobj, false, "sound", sound.text );
+                optional( soundobj, false, "weight", weight, 1 );
+                sounds.add( sound, weight );
+            }
+        } else if( !sounds.is_valid() ) {
+            jo.throw_error_at( "parrot", "Must specify sounds, see BEFOREMERGE: link docs" );
+        }
+    }
+
     if( jo.has_member( "death_drops" ) ) {
         death_drops =
             item_group::load_item_group( jo.get_member( "death_drops" ), "distribution",

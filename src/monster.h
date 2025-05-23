@@ -34,6 +34,7 @@ class effect;
 class effect_source;
 class item;
 struct monster_plan;
+struct creature_sound;
 namespace catacurses
 {
 class window;
@@ -549,6 +550,8 @@ class monster : public Creature
         int amount_eaten = 0;
         void recheck_fed_status();
     public:
+        bool can_make_sound() const;
+        const creature_sound *get_sound() const;
         void set_amount_eaten( int new_amount );
         void mod_amount_eaten( int amount_to_add );
         int get_amount_eaten() const;

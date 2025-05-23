@@ -2470,6 +2470,7 @@
     "melee_dice": 1,
     "melee_dice_sides": 6,
     "melee_damage": [ { "damage_type": "cut", "amount": 2 } ],
+    "parrot": { "frequency": 1, "sounds": [ { "sound": "Baa!", "volume": 15, "weight": 20 } ] },
     "dodge": 2,
     "stomach_size": 550,
     "starting_ammo": { "milk_raw": 5 },

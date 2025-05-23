@@ -74,6 +74,12 @@ struct mon_flag {
     static const std::vector<mon_flag> &get_all();
 };
 
+//BEFOREMERGE: Might make more sense as a using creature_sound = std::pair<translation, int> (or just using pairs) bc I don't think any of the behaviour stuff will want to be contained here, it'll want to be seperate weighted int lists or flags for the whole parrot or something
+struct creature_sound {
+    translation text;
+    int volume;
+};
+
 // Fast access to monster flags used in game logic.
 //
 // These are only safe to use after set_mon_flag_ids is called during game load.
@@ -410,6 +416,10 @@ struct mtype {
     private:
         ::weakpoints weakpoints_deferred_inline;
     public:
+        // These might want to be private and dupe monster functions accessing sounds instead
+        int sound_cooldown;
+        weighted_int_list<creature_sound> sounds;
+
         int mat_portion_total = 0;
         units::volume volume;
         creature_size size;

@@ -305,6 +305,17 @@ void monmove()
             critter.try_reproduce();
             critter.digest_food();
         }
+
+        //BEFOREMERGE: Change so the cooldown uses time units
+        // TODO: Treat the defined cooldown as a normal mean? (or let it be defined as a range/normal distribution and pick randomly using that)
+        if( critter.can_make_sound() && calendar::once_every( 1_turns * critter.type->sound_cooldown ) ) {
+            //BEFOREMERGE: Might make more sense as a mtype::make_sound( p )
+            const creature_sound *chosen_sound = critter.get_sound();
+            //TODO: Use sounds::sound_t::electronic_speech if critter is a member of the ROBOT species?
+            sounds::sound( critter.pos_bub(), chosen_sound->volume, sounds::sound_t::speech,
+                           chosen_sound->text );
+        }
+
         while( critter.get_moves() > 0 && !critter.is_dead() && !critter.has_effect( effect_ridden ) ) {
             critter.made_footstep = false;
             // Controlled critters don't make their own plans
