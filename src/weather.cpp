@@ -469,6 +469,78 @@ void handle_weather_effects( const weather_type_id &w )
     get_weather().lightning_active = false;
 }
 
+
+
+/**
+ * Morale.
+ * Causes the player to feel a morale effect.
+ */
+void weather_effect::morale( int intensity, int bonus, int bonus_max, time_duration duration,
+                             time_duration decay_start,
+                             const std::string &morale_id_str,
+                             const std::string &morale_msg, int morale_msg_frequency, game_message_type message_type )
+{
+    if( !( calendar::once_every( time_duration::from_seconds( intensity ) ) && is_player_outside() ) ) {
+        return;
+    }
+
+    static const morale_type morale_id( morale_id_str );
+    if( !morale_id.is_valid() ) {
+        debugmsg( "Invalid morale ID: %s", morale_id_str.c_str() );
+        return;
+    }
+
+    get_avatar().add_morale( morale_id, bonus, bonus_max, duration, decay_start,
+                             true );
+    if( one_in( morale_msg_frequency ) ) {
+        add_msg( message_type, _( morale_msg ) );
+    }
+}
+
+/**
+ * Effect.
+ * Causes the player to feel a status effect.
+ */
+void weather_effect::effect( int intensity, time_duration duration,
+                             bodypart_str_id bp_id, int effect_intensity,
+                             const std::string &effect_id_str,
+                             const std::string &effect_msg, int effect_msg_frequency, game_message_type message_type,
+                             std::string precipitation_name, bool ignore_armor, int clothing_protection,
+                             int umbrella_protection )
+{
+    if( !( calendar::once_every( time_duration::from_seconds( intensity ) ) && is_player_outside() ) ) {
+        return;
+    }
+
+    if( !ignore_armor ) {
+        auto &you = get_avatar();
+        bool has_helmet = false;
+        if( one_in( umbrella_protection ) && you.primary_weapon().has_flag( json_flag_RAIN_PROTECT ) ) {
+            return add_msg( _( "Your umbrella protects you from the %s." ), precipitation_name );
+        } else if( one_in( umbrella_protection ) && you.worn_with_flag( json_flag_RAINPROOF ) ) {
+            return add_msg( _( "Your rainproof clothing protects you from the %s." ), precipitation_name );
+        } else if( one_in( clothing_protection ) ) {
+            return add_msg( _( "Your clothing protects you from the %s." ), precipitation_name );
+        } else if( you.is_wearing_power_armor( &has_helmet ) && ( has_helmet ||
+                   !one_in( clothing_protection ) ) ) {
+            return add_msg( _( "Your power armor protects you from the %s." ), precipitation_name );
+        }
+    }
+
+    const efftype_id effect_id( effect_id_str );
+    if( !effect_id.is_valid() ) {
+        debugmsg( "Invalid effect ID: %s", effect_id_str.c_str() );
+        return;
+    }
+
+    get_avatar().add_effect( effect_id, duration, bp_id, effect_intensity,
+                             false, false );
+
+    if( one_in( effect_msg_frequency ) ) {
+        add_msg( message_type, _( effect_msg ) );
+    }
+}
+
 static std::string to_string( const weekdays &d )
 {
     static const std::array<std::string, 7> weekday_names = {{

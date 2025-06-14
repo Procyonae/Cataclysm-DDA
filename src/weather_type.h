@@ -16,6 +16,8 @@
 #include "translation.h"
 #include "type_id.h"
 
+using weather_effect_fn = std::function<void( int )>;
+
 class JsonObject;
 struct const_dialogue;
 template <typename E> struct enum_traits;
