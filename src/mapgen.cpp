@@ -40,6 +40,7 @@
 #include "debug.h"
 #include "dialogue.h"
 #include "drawing_primitives.h"
+#include "effect_on_condition.h"
 #include "enum_conversions.h"
 #include "enums.h"
 #include "field_type.h"
@@ -2469,6 +2470,32 @@ class jmapgen_field : public jmapgen_piece
                     const jmapgen_int &/*x*/, const jmapgen_int &/*y*/, const jmapgen_int &/*z*/
                   ) const override {
             ftype.check( oter_name, parameters );
+        }
+};
+class jmapgen_eoc : public jmapgen_piece
+{
+    public:
+        mapgen_value<effect_on_condition_id> eoctype;
+        jmapgen_eoc( const JsonObject &jsi,
+                     std::string_view/*context*/ ) : eoctype( jsi.get_member( "eoc" ) ) { }
+        void apply( const mapgendata &dat, const jmapgen_int &/*x*/, const jmapgen_int &/*y*/,
+                    const jmapgen_int &/*z*/, const std::string &/*context*/ ) const override {
+            effect_on_condition_id chosen_id = eoctype.get( dat );
+            if( chosen_id.is_null() ) {
+                return;
+            }
+            dialogue d( get_talker_for( get_avatar() ), nullptr );
+            // Only accurate to corner of omt for rn
+            //tripoint_bub_ms( x.get(), y.get(), dat.zlevel() + z.get() )
+            const tripoint_abs_ms p_omt_mid = midpoint( project_bounds<coords::ms>( dat.pos() ) );
+            write_var_value( var_type::context, "omt_location", &d, p_omt_mid );
+            chosen_id->activate( d );
+        }
+
+        void check( const std::string &oter_name, const mapgen_parameters &parameters,
+                    const jmapgen_int &/*x*/, const jmapgen_int &/*y*/, const jmapgen_int &/*z*/
+                  ) const override {
+            eoctype.check( oter_name, parameters );
         }
 };
 /**
@@ -5299,6 +5326,7 @@ bool mapgen_function_json_base::setup_common( const JsonObject &jo )
     objects.load_objects<jmapgen_variable>( jo, "place_variables", context_ );
     // Needs to be last as it affects other placed items
     objects.load_objects<jmapgen_faction>( jo, "faction_owner", context_ );
+    objects.load_objects<jmapgen_eoc>( jo, "run_eocs_at", context_ );
 
     objects.finalize();
 
