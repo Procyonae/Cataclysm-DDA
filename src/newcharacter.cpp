@@ -1855,6 +1855,7 @@ void set_traits( tab_manager &tabs, avatar &u, pool_type pool )
     tabs.set_up_tab_navigation( ctxt );
     details.set_up_navigation( ctxt, scrolling_key_scheme::angle_bracket_scroll );
     for( scrollbar &sb : trait_sbs ) {
+        asdasdaasad
         sb.set_draggable( ctxt );
     }
     ctxt.register_navigate_ui_list();
