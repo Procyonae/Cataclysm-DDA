@@ -1866,6 +1866,7 @@ void set_traits( tab_manager &tabs, avatar &u, pool_type pool )
     ctxt.register_action( "RESET_FILTER" );
     ctxt.register_action( "SORT" );
     ctxt.register_action( "RANDOMIZE" );
+    asdasdasd
 
     ui.on_redraw( [&]( ui_adaptor & ui ) {
         werase( w );
