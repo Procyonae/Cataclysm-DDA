@@ -2478,17 +2478,15 @@ class jmapgen_eoc : public jmapgen_piece
         mapgen_value<effect_on_condition_id> eoctype;
         jmapgen_eoc( const JsonObject &jsi,
                      std::string_view/*context*/ ) : eoctype( jsi.get_member( "eoc" ) ) { }
-        void apply( const mapgendata &dat, const jmapgen_int &/*x*/, const jmapgen_int &/*y*/,
-                    const jmapgen_int &/*z*/, const std::string &/*context*/ ) const override {
+        void apply( const mapgendata &dat, const jmapgen_int &x, const jmapgen_int &y,
+                    const jmapgen_int &z, const std::string &/*context*/ ) const override {
             effect_on_condition_id chosen_id = eoctype.get( dat );
             if( chosen_id.is_null() ) {
                 return;
             }
             dialogue d( get_talker_for( get_avatar() ), nullptr );
-            // Only accurate to corner of omt for rn
-            //tripoint_bub_ms( x.get(), y.get(), dat.zlevel() + z.get() )
-            const tripoint_abs_ms p_omt_mid = midpoint( project_bounds<coords::ms>( dat.pos() ) );
-            write_var_value( var_type::context, "omt_location", &d, p_omt_mid );
+            const tripoint_bub_ms p_bub( x.get(), y.get(), dat.zlevel() + z.get() );
+            write_var_value( var_type::context, "omt_location", &d, dat.m.get_abs( p_bub ) );
             chosen_id->activate( d );
         }
 
