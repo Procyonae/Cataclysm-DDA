@@ -81,6 +81,16 @@ int talker_vehicle_const::get_weight() const
     return units::to_milligram( me_veh_const->total_mass( get_map() ) );
 }
 
+int talker_vehicle_const::get_velocity() const
+{
+    return me_veh_const->velocity;
+}
+
+void talker_vehicle::set_velocity( int value )
+{
+    me_veh->velocity += value;
+}
+
 int talker_vehicle_const::get_unloaded_weight() const
 {
     return units::to_milligram( me_veh_const->unloaded_mass() );

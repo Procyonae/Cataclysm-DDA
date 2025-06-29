@@ -1532,6 +1532,25 @@ double weight_eval( const_dialogue const &d, char scope,
     throw math::runtime_error( "For weight(), talker is not character nor item" );
 }
 
+double velocity_eval( const_dialogue const &d, char scope,
+                      std::vector<diag_value> const & /* params */, diag_kwargs const & /* kwargs */ )
+{
+    if( d.const_actor( is_beta( scope ) )->get_const_vehicle() ) {
+        return static_cast<double>( d.const_actor( is_beta( scope ) )->get_velocity() );
+    }
+    throw math::runtime_error( "For velocity(), talker is not vehicle" );
+}
+
+void velocity_ass( double val, dialogue &d, char scope,
+                   std::vector<diag_value> const & /* params */, diag_kwargs const & /* kwargs */ )
+{
+    if( d.actor( is_beta( scope ) )->get_vehicle() ) {
+        int current_velocity = d.actor( is_beta( scope ) )->get_velocity();
+        int difference = static_cast<int>( val - current_velocity );
+        d.actor( is_beta( scope ) )->set_velocity( difference );
+    }
+}
+
 double quality_eval( const_dialogue const &d, char scope,
                      std::vector<diag_value> const &params /* params */,
                      diag_kwargs const &kwargs /* kwargs */ )
@@ -1728,6 +1747,7 @@ std::map<std::string_view, dialogue_func> const dialogue_funcs{
     { "vitamin", { "un", 1, vitamin_eval, vitamin_ass } },
     { "calories", { "un", 0, calories_eval, calories_ass, { "format", "dont_affect_weariness" } } },
     { "weight", { "un", 0, weight_eval } },
+    { "velocity", { "un", 0, velocity_eval, velocity_ass } },
     { "volume", { "un", 0, volume_eval } },
     { "warmth", { "un", 1, warmth_eval } },
     { "weather", { "g", 1, weather_eval, weather_ass } },

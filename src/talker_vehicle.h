@@ -44,6 +44,7 @@ class talker_vehicle_const: public const_talker_cloner<talker_vehicle_const>
         bool will_talk_to_u( const Character &you, bool force ) const override;
 
         int get_weight() const override;
+        int get_velocity() const override;
         int get_unloaded_weight() const override;
         bool is_driven() const override;
         int get_vehicle_facing() const override;
@@ -80,6 +81,8 @@ class talker_vehicle: public talker_vehicle_const, public talker_cloner<talker_v
         vehicle *get_vehicle() override {
             return me_veh;
         }
+
+        void set_velocity( int value ) override;
 
         void set_value( const std::string &var_name, diag_value const &value ) override;
         void remove_value( const std::string & ) override;

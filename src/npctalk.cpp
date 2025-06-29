@@ -6216,7 +6216,17 @@ std::unique_ptr<talker> get_talker( dialogue const &d, std::optional<str_or_var>
         }
 
     } else if( loc ) {
-        crit = get_creature_tracker().creature_at( read_var_value( *loc, d ).tripoint() );
+        const tripoint_abs_ms p = read_var_value( *loc, d ).tripoint();
+        crit = get_creature_tracker().creature_at( p );
+        if( !crit ) {
+            map &here = get_map();
+            vehicle *veh = veh_pointer_or_null( here.veh_at( p ) );
+            if( !!veh ) {
+                return get_talker_for( *veh );
+            } else {
+                debugmsg( "That's not right" );
+            }
+        }
     }
 
     if( crit != nullptr ) {

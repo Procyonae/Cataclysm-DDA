@@ -36,16 +36,7 @@
           "mx_bandits_outpost": 2
         }
       },
-      "field": {
-        "extras": {
-          "mx_crater": 150,
-          "mx_supplydrop": 40,
-          "mx_bandits_ambush": 10,
-          "mx_bandits_campsite": 10,
-          "mx_bandits_grave": 10,
-          "mx_bandits_outpost": 10
-        }
-      },
+      "field": { "chance": 1, "extras": { "mx_bandits_ambush": 100000 } },
       "road": {
         "extras": {
           "mx_helicopter": 10,

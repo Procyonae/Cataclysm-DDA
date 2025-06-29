@@ -599,6 +599,9 @@ class const_talker
         virtual int get_weight() const {
             return 0;
         }
+        virtual int get_velocity() const {
+            return 0;
+        }
         virtual int get_npc_trust() const {
             return 0;
         }
@@ -831,6 +834,7 @@ class talker: virtual public const_talker
         virtual void set_addiction_turns( const addiction_id &, int ) {}
         virtual void mod_stored_kcal( int, bool ) {}
         virtual void set_stored_kcal( int ) {}
+        virtual void set_velocity( int ) {}
         virtual void set_stim( int ) {}
         virtual void set_thirst( int ) {}
         virtual void say( const std::string & ) {}

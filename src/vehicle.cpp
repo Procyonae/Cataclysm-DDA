@@ -336,7 +336,7 @@ void vehicle::init_state( map &placed_on, int init_veh_fuel, int init_veh_status
     // More realistically it should be -5 days old
     last_update = calendar::turn_zero;
 
-    if( get_option<bool>( "OVERRIDE_VEHICLE_INIT_STATE" ) ) {
+    if( get_option<bool>( "OVERRIDE_VEHICLE_INIT_STATE" ) && init_veh_status != 2 ) {
         if( !force_status ) {
             init_veh_status = get_option<int>( "VEHICLE_STATUS_AT_SPAWN" );
         }
