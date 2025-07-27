@@ -8,7 +8,7 @@
     "symbol": ".",
     "color": "cyan",
     "move_cost": 2,
-    "flags": [ "TRANSPARENT", "SUPPORTS_ROOF", "INDOORS", "FLAT", "ROAD" ],
+    "flags": [ "TRANSPARENT", "SUPPORTS_ROOF", "FLAT", "ROAD" ],
     "emissions": [ "afs_emit_geovent" ],
     "connect_groups": [ "INDOORFLOOR", "CONCRETE" ],
     "connects_to": "CONCRETE",
@@ -37,7 +37,7 @@
     "connects_to": "METALFLOOR",
     "move_cost": 2,
     "roof": "t_metal_roof",
-    "flags": [ "TRANSPARENT", "INDOORS", "SUPPORTS_ROOF", "FLAT", "ROAD" ],
+    "flags": [ "TRANSPARENT", "SUPPORTS_ROOF", "FLAT", "ROAD" ],
     "emissions": [ "afs_emit_geovent" ],
     "bash": {
       "sound": "thump",
@@ -83,7 +83,7 @@
     "connects_to": "METALFLOOR",
     "move_cost": 2,
     "roof": "t_metal_roof",
-    "flags": [ "TRANSPARENT", "INDOORS", "FLAT", "ROAD" ],
+    "flags": [ "TRANSPARENT", "FLAT", "ROAD" ],
     "bash": {
       "str_min": 4,
       "str_max": 12,
@@ -108,7 +108,7 @@
     "connects_to": "LINOLEUM",
     "move_cost": 2,
     "roof": "t_flat_roof",
-    "flags": [ "TRANSPARENT", "SUPPORTS_ROOF", "COLLAPSES", "INDOORS", "FLAT", "ROAD" ],
+    "flags": [ "TRANSPARENT", "SUPPORTS_ROOF", "COLLAPSES", "FLAT", "ROAD" ],
     "bash": {
       "str_min": 4,
       "str_max": 12,
@@ -130,7 +130,7 @@
     "color": "white",
     "move_cost": 2,
     "roof": "t_concrete_roof",
-    "flags": [ "TRANSPARENT", "SUPPORTS_ROOF", "INDOORS", "FLAT", "ROAD" ],
+    "flags": [ "TRANSPARENT", "SUPPORTS_ROOF", "FLAT", "ROAD" ],
     "connect_groups": [ "CONCRETE", "INDOORFLOOR" ],
     "connects_to": "CONCRETE",
     "bash": {
@@ -155,7 +155,7 @@
     "color": "white",
     "move_cost": 2,
     "roof": "t_concrete_roof",
-    "flags": [ "TRANSPARENT", "SUPPORTS_ROOF", "INDOORS", "FLAT", "ROAD" ],
+    "flags": [ "TRANSPARENT", "SUPPORTS_ROOF", "FLAT", "ROAD" ],
     "connect_groups": [ "CONCRETE", "INDOORFLOOR" ],
     "connects_to": "CONCRETE",
     "bash": {
@@ -182,7 +182,7 @@
     "move_cost": 2,
     "roof": "t_metal_flat_roof",
     "connect_groups": "INDOORFLOOR",
-    "flags": [ "TRANSPARENT", "SUPPORTS_ROOF", "COLLAPSES", "INDOORS", "FLAT", "ROAD" ],
+    "flags": [ "TRANSPARENT", "SUPPORTS_ROOF", "COLLAPSES", "FLAT", "ROAD" ],
     "bash": {
       "str_min": 50,
       "str_max": 400,
@@ -204,7 +204,7 @@
     "move_cost": 2,
     "roof": "t_metal_flat_roof",
     "connect_groups": "INDOORFLOOR",
-    "flags": [ "TRANSPARENT", "SUPPORTS_ROOF", "COLLAPSES", "INDOORS", "FLAT", "ROAD" ],
+    "flags": [ "TRANSPARENT", "SUPPORTS_ROOF", "COLLAPSES", "FLAT", "ROAD" ],
     "bash": {
       "str_min": 50,
       "str_max": 400,

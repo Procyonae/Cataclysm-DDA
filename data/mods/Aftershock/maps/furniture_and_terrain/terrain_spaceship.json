@@ -259,7 +259,7 @@
     "connects_to": "METALFLOOR",
     "move_cost": 2,
     "roof": "t_metal_roof",
-    "flags": [ "TRANSPARENT", "INDOORS", "FLAT", "ROAD" ],
+    "flags": [ "TRANSPARENT", "FLAT", "ROAD" ],
     "bash": {
       "sound": "thump",
       "ter_set": "t_null",
@@ -845,7 +845,7 @@
     "coverage": 50,
     "roof": "t_flat_roof",
     "connect_groups": "INDOORFLOOR",
-    "flags": [ "NOITEM", "INDOORS" ],
+    "flags": [ "NOITEM" ],
     "examine_action": { "type": "effect_on_condition", "effect_on_conditions": [ "EOC_AFS_AUGUSTMOON_SHUTTLE_TP" ] }
   },
   {

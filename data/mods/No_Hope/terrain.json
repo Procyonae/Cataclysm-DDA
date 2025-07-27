@@ -25,7 +25,7 @@
     "roof": "t_flat_roof",
     "connect_groups": [ "RAIL", "INDOORFLOOR" ],
     "connects_to": "RAIL",
-    "flags": [ "TRANSPARENT", "FLAMMABLE_HARD", "SUPPORTS_ROOF", "COLLAPSES", "INDOORS", "FLAT", "RUG" ],
+    "flags": [ "TRANSPARENT", "FLAMMABLE_HARD", "SUPPORTS_ROOF", "COLLAPSES", "FLAT", "RUG" ],
     "bash": {
       "str_min": 4,
       "str_max": 12,
@@ -57,7 +57,7 @@
     "connect_groups": [ "RAIL", "INDOORFLOOR" ],
     "connects_to": "RAIL",
     "roof": "t_flat_roof",
-    "flags": [ "TRANSPARENT", "INDOORS", "COLLAPSES", "SUPPORTS_ROOF", "FLAT", "ROAD" ],
+    "flags": [ "TRANSPARENT", "COLLAPSES", "SUPPORTS_ROOF", "FLAT", "ROAD" ],
     "bash": {
       "str_min": 4,
       "str_max": 12,

@@ -162,7 +162,7 @@
     "looks_like": "t_glass_roof",
     "color": "cyan",
     "move_cost": 2,
-    "flags": [ "TRANSPARENT", "TRANSPARENT_FLOOR", "SUPPORTS_ROOF", "INDOORS", "FLAT" ]
+    "flags": [ "TRANSPARENT", "TRANSPARENT_FLOOR", "SUPPORTS_ROOF", "FLAT" ]
   },
   {
     "type": "terrain",
@@ -195,7 +195,7 @@
     "move_cost": 2,
     "roof": "t_flat_roof",
     "connect_groups": "INDOORFLOOR",
-    "flags": [ "TRANSPARENT", "GOES_DOWN", "INDOORS", "PLACE_ITEM", "SUPPORTS_ROOF" ]
+    "flags": [ "TRANSPARENT", "GOES_DOWN", "PLACE_ITEM", "SUPPORTS_ROOF" ]
   },
   {
     "type": "terrain",
@@ -208,7 +208,7 @@
     "move_cost": 2,
     "roof": "t_flat_roof",
     "connect_groups": "INDOORFLOOR",
-    "flags": [ "TRANSPARENT", "INDOORS", "SUPPORTS_ROOF", "FLAT", "ROAD" ]
+    "flags": [ "TRANSPARENT", "SUPPORTS_ROOF", "FLAT", "ROAD" ]
   },
   {
     "type": "terrain",
@@ -220,7 +220,7 @@
     "color": "yellow",
     "move_cost": 2,
     "connect_groups": "INDOORFLOOR",
-    "flags": [ "SUPPORTS_ROOF", "TRANSPARENT", "GOES_UP", "INDOORS", "PLACE_ITEM" ]
+    "flags": [ "SUPPORTS_ROOF", "TRANSPARENT", "GOES_UP", "PLACE_ITEM" ]
   },
   {
     "type": "terrain",
@@ -415,7 +415,7 @@
     "connects_to": "METALFLOOR",
     "move_cost": 2,
     "roof": "t_metal_roof",
-    "flags": [ "TRANSPARENT", "INDOORS", "FLAT", "ROAD" ],
+    "flags": [ "TRANSPARENT", "FLAT", "ROAD" ],
     "bash": {
       "sound": "thump",
       "ter_set": "t_null",
@@ -501,7 +501,7 @@
     "color": "light_cyan",
     "move_cost": 2,
     "roof": "t_metal_roof",
-    "flags": [ "TRANSPARENT", "INDOORS", "SUPPORTS_ROOF", "FLAT", "ROAD" ],
+    "flags": [ "TRANSPARENT", "SUPPORTS_ROOF", "FLAT", "ROAD" ],
     "emissions": [ "afs_emit_AC" ]
   },
   {
@@ -514,7 +514,7 @@
     "color": "light_cyan",
     "move_cost": 2,
     "roof": "t_metal_roof",
-    "flags": [ "TRANSPARENT", "INDOORS", "SUPPORTS_ROOF", "FLAT", "ROAD" ],
+    "flags": [ "TRANSPARENT", "SUPPORTS_ROOF", "FLAT", "ROAD" ],
     "emissions": [ "afs_emit_AC" ]
   },
   {
@@ -1073,7 +1073,7 @@
     "coverage": 50,
     "roof": "t_flat_roof",
     "connect_groups": "INDOORFLOOR",
-    "flags": [ "NOITEM", "INDOORS" ],
+    "flags": [ "NOITEM" ],
     "examine_action": { "type": "effect_on_condition", "effect_on_conditions": [ "EOC_AFS_AUGUSTMOON_SHUTTLE_TP" ] }
   },
   {

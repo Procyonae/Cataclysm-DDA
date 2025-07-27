@@ -22,7 +22,7 @@
     "color": "magenta_white",
     "move_cost": 1,
     "connect_groups": "INDOORFLOOR",
-    "flags": [ "TRANSPARENT", "SUPPORTS_ROOF", "INDOORS", "FLAT" ],
+    "flags": [ "TRANSPARENT", "SUPPORTS_ROOF", "FLAT" ],
     "looks_like": "t_nm_floor_flesh"
   },
   {
