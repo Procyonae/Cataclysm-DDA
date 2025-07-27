@@ -348,7 +348,7 @@
     "looks_like": "t_metal_floor",
     "move_cost": 2,
     "roof": "t_nl_roof",
-    "flags": [ "TRANSPARENT", "INDOORS", "FLAT", "ROAD" ],
+    "flags": [ "TRANSPARENT", "FLAT", "ROAD" ],
     "bash": {
       "sound": "thump",
       "ter_set": "t_nl_broken_metal_floor",
@@ -367,7 +367,7 @@
     "color": "light_cyan",
     "move_cost": 2,
     "roof": "t_nl_roof",
-    "flags": [ "TRANSPARENT", "INDOORS" ],
+    "flags": [ "TRANSPARENT" ],
     "looks_like": "t_broken_metal_floor",
     "bash": {
       "sound": "thump",
@@ -392,7 +392,7 @@
     "move_cost": 2,
     "roof": "t_nl_roof",
     "looks_like": "t_scrap_floor",
-    "flags": [ "TRANSPARENT", "SUPPORTS_ROOF", "COLLAPSES", "INDOORS", "FLAT", "ROAD" ],
+    "flags": [ "TRANSPARENT", "SUPPORTS_ROOF", "COLLAPSES", "FLAT", "ROAD" ],
     "bash": {
       "str_min": 50,
       "str_max": 400,
@@ -411,7 +411,7 @@
     "color": "dark_gray",
     "move_cost": 2,
     "roof": "t_nl_roof",
-    "flags": [ "TRANSPARENT", "INDOORS" ],
+    "flags": [ "TRANSPARENT" ],
     "looks_like": "t_metal_floor",
     "bash": {
       "sound": "thump",

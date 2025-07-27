@@ -434,7 +434,7 @@
     "move_cost_mod": 0,
     "required_str": -1,
     "connect_groups": "INDOORFLOOR",
-    "flags": [ "TRANSPARENT", "INDOORS", "NOCOLLIDE", "SUN_ROOF_ABOVE" ],
+    "flags": [ "TRANSPARENT", "NOCOLLIDE", "SUN_ROOF_ABOVE" ],
     "bash": {
       "str_min": 1,
       "str_max": 8,
@@ -456,7 +456,7 @@
     "move_cost_mod": 0,
     "required_str": -1,
     "connect_groups": "INDOORFLOOR",
-    "flags": [ "TRANSPARENT", "INDOORS", "NOCOLLIDE", "SUN_ROOF_ABOVE" ],
+    "flags": [ "TRANSPARENT", "NOCOLLIDE", "SUN_ROOF_ABOVE" ],
     "examine_action": "portable_structure",
     "deployed_item": "large_shelter_kit",
     "bash": {
@@ -621,7 +621,7 @@
     "move_cost_mod": 0,
     "required_str": -1,
     "connect_groups": "INDOORFLOOR",
-    "flags": [ "TRANSPARENT", "INDOORS", "NOCOLLIDE", "SUN_ROOF_ABOVE" ],
+    "flags": [ "TRANSPARENT", "NOCOLLIDE", "SUN_ROOF_ABOVE" ],
     "examine_action": "portable_structure",
     "deployed_item": "tent_kit",
     "bash": {
@@ -644,7 +644,7 @@
     "move_cost_mod": 0,
     "required_str": -1,
     "connect_groups": "INDOORFLOOR",
-    "flags": [ "TRANSPARENT", "INDOORS", "NOCOLLIDE", "SUN_ROOF_ABOVE" ],
+    "flags": [ "TRANSPARENT", "NOCOLLIDE", "SUN_ROOF_ABOVE" ],
     "bash": {
       "str_min": 1,
       "str_max": 8,
@@ -665,7 +665,7 @@
     "move_cost_mod": 0,
     "required_str": -1,
     "connect_groups": "INDOORFLOOR",
-    "flags": [ "TRANSPARENT", "INDOORS", "NOCOLLIDE", "SUN_ROOF_ABOVE" ],
+    "flags": [ "TRANSPARENT", "NOCOLLIDE", "SUN_ROOF_ABOVE" ],
     "examine_action": "portable_structure",
     "deployed_item": "large_tent_kit",
     "bash": {
@@ -689,7 +689,7 @@
     "move_cost_mod": 0,
     "required_str": -1,
     "connect_groups": "INDOORFLOOR",
-    "flags": [ "TRANSPARENT", "INDOORS", "ORGANIC", "NOCOLLIDE", "SUN_ROOF_ABOVE" ],
+    "flags": [ "TRANSPARENT", "ORGANIC", "NOCOLLIDE", "SUN_ROOF_ABOVE" ],
     "bash": {
       "str_min": 1,
       "str_max": 8,
@@ -776,7 +776,7 @@
     "move_cost_mod": 0,
     "required_str": -1,
     "connect_groups": "INDOORFLOOR",
-    "flags": [ "TRANSPARENT", "INDOORS", "NOCOLLIDE", "SUN_ROOF_ABOVE" ],
+    "flags": [ "TRANSPARENT", "NOCOLLIDE", "SUN_ROOF_ABOVE" ],
     "examine_action": "portable_structure",
     "deployed_item": "shelter_kit",
     "bash": {

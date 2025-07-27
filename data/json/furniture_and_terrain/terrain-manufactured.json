@@ -722,7 +722,7 @@
     "coverage": 50,
     "roof": "t_flat_roof",
     "connect_groups": "INDOORFLOOR",
-    "flags": [ "NOITEM", "INDOORS" ],
+    "flags": [ "NOITEM" ],
     "examine_action": { "type": "effect_on_condition", "effect_on_conditions": [ "slot_machine_examine" ] },
     "bash": {
       "str_min": 8,
@@ -1260,7 +1260,7 @@
     "color": "brown",
     "move_cost": 6,
     "connect_groups": "INDOORFLOOR",
-    "flags": [ "TRANSPARENT", "PLACE_ITEM", "INDOORS" ],
+    "flags": [ "TRANSPARENT", "PLACE_ITEM" ],
     "coverage": 30,
     "deconstruct": {
       "ter_set": "t_rock_floor",
@@ -1369,7 +1369,7 @@
     "looks_like": "t_pit",
     "move_cost": 0,
     "connect_groups": "INDOORFLOOR",
-    "flags": [ "TRANSPARENT", "PERMEABLE", "CONTAINER", "PLACE_ITEM", "INDOORS" ],
+    "flags": [ "TRANSPARENT", "PERMEABLE", "CONTAINER", "PLACE_ITEM" ],
     "deconstruct": { "ter_set": "t_pit", "items": [ { "item": "rock", "count": 40 }, { "item": "stick", "count": [ 16, 16 ] } ] },
     "bash": {
       "str_min": 18,
@@ -1469,16 +1469,7 @@
     "floor_bedding_warmth": 1000,
     "comfort": 3,
     "connect_groups": "INDOORFLOOR",
-    "flags": [
-      "TRANSPARENT",
-      "CONTAINER",
-      "THIN_OBSTACLE",
-      "REDUCE_SCENT",
-      "INDOORS",
-      "MOUNTABLE",
-      "HIDE_PLACE",
-      "EASY_DECONSTRUCT"
-    ],
+    "flags": [ "TRANSPARENT", "CONTAINER", "THIN_OBSTACLE", "REDUCE_SCENT", "MOUNTABLE", "HIDE_PLACE", "EASY_DECONSTRUCT" ],
     "deconstruct": { "ter_set": "t_pit_shallow", "items": [ { "item": "stick", "count": 12 }, { "item": "pine_bough", "count": 24 } ] },
     "bash": {
       "str_min": 4,
@@ -1508,7 +1499,6 @@
       "FLAMMABLE_ASH",
       "THIN_OBSTACLE",
       "REDUCE_SCENT",
-      "INDOORS",
       "MOUNTABLE",
       "HIDE_PLACE",
       "EASY_DECONSTRUCT"
@@ -1553,7 +1543,7 @@
       "destroyed_field": [ "fd_splinters", 1 ]
     },
     "connect_groups": "INDOORFLOOR",
-    "flags": [ "TRANSPARENT", "CONTAINER", "FLAMMABLE_ASH", "THIN_OBSTACLE", "REDUCE_SCENT", "INDOORS", "MOUNTABLE" ]
+    "flags": [ "TRANSPARENT", "CONTAINER", "FLAMMABLE_ASH", "THIN_OBSTACLE", "REDUCE_SCENT", "MOUNTABLE" ]
   },
   {
     "id": "t_tarptent",
@@ -1583,7 +1573,7 @@
       "items": [ { "item": "pointy_stick", "count": 4 }, { "item": "string_6", "count": 4 }, { "item": "tarp", "count": 1 } ]
     },
     "connect_groups": "INDOORFLOOR",
-    "flags": [ "TRANSPARENT", "FLAMMABLE", "THIN_OBSTACLE", "INDOORS", "MOUNTABLE", "EASY_DECONSTRUCT" ]
+    "flags": [ "TRANSPARENT", "FLAMMABLE", "THIN_OBSTACLE", "MOUNTABLE", "EASY_DECONSTRUCT" ]
   },
   {
     "type": "terrain",

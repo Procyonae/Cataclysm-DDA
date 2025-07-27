@@ -125,7 +125,7 @@
     "move_cost": 2,
     "roof": "t_flat_roof",
     "connect_groups": "INDOORFLOOR",
-    "flags": [ "TRANSPARENT", "GOES_DOWN", "INDOORS", "PLACE_ITEM", "SUPPORTS_ROOF" ]
+    "flags": [ "TRANSPARENT", "GOES_DOWN", "PLACE_ITEM", "SUPPORTS_ROOF" ]
   },
   {
     "type": "terrain",
@@ -147,7 +147,7 @@
     "color": "yellow",
     "move_cost": 2,
     "connect_groups": "INDOORFLOOR",
-    "flags": [ "SUPPORTS_ROOF", "TRANSPARENT", "GOES_UP", "INDOORS", "PLACE_ITEM" ]
+    "flags": [ "SUPPORTS_ROOF", "TRANSPARENT", "GOES_UP", "PLACE_ITEM" ]
   },
   {
     "type": "terrain",

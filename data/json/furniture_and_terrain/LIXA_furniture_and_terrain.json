@@ -10,7 +10,7 @@
     "light_emitted": 120,
     "looks_like": "t_carpet_green",
     "connect_groups": "INDOORFLOOR",
-    "flags": [ "TRANSPARENT", "FLAMMABLE_HARD", "SUPPORTS_ROOF", "COLLAPSES", "INDOORS", "FLAT", "RUG" ],
+    "flags": [ "TRANSPARENT", "FLAMMABLE_HARD", "SUPPORTS_ROOF", "COLLAPSES", "FLAT", "RUG" ],
     "bash": {
       "str_min": 4,
       "str_max": 12,
@@ -81,7 +81,7 @@
     "coverage": 50,
     "connect_groups": [ "INDOORFLOOR", "LIXATUBE" ],
     "connects_to": "LIXATUBE",
-    "flags": [ "TRANSPARENT", "MOUNTABLE", "PERMEABLE", "THIN_OBSTACLE", "MINEABLE", "UNSTABLE", "INDOORS" ],
+    "flags": [ "TRANSPARENT", "MOUNTABLE", "PERMEABLE", "THIN_OBSTACLE", "MINEABLE", "UNSTABLE" ],
     "bash": {
       "str_min": 30,
       "str_max": 210,
@@ -104,7 +104,7 @@
     "coverage": 50,
     "connect_groups": [ "WALL", "INDOORFLOOR" ],
     "connects_to": "WALL",
-    "flags": [ "TRANSPARENT", "NOITEM", "WALL", "INDOORS", "PERMEABLE" ],
+    "flags": [ "TRANSPARENT", "NOITEM", "WALL", "PERMEABLE" ],
     "bash": {
       "str_min": 20,
       "str_max": 150,
@@ -139,7 +139,7 @@
     "coverage": 50,
     "connect_groups": [ "WALL", "INDOORFLOOR" ],
     "connects_to": "WALL",
-    "flags": [ "TRANSPARENT", "NOITEM", "WALL", "INDOORS", "PERMEABLE" ],
+    "flags": [ "TRANSPARENT", "NOITEM", "WALL", "PERMEABLE" ],
     "bash": { "str_min": 5, "str_max": 15, "explosive": 10, "ter_set": "t_LIXA_thconc_floor", "sound_fail": "clang!" },
     "shoot": { "chance_to_hit": 100, "reduce_damage": [ 0, 0 ], "reduce_damage_laser": [ 0, 0 ], "destroy_damage": [ 20, 30 ] }
   },
@@ -155,7 +155,7 @@
     "coverage": 50,
     "connect_groups": [ "INDOORFLOOR", "LIXATUBE" ],
     "connects_to": "LIXATUBE",
-    "flags": [ "TRANSPARENT", "MOUNTABLE", "PERMEABLE", "INDOORS", "THIN_OBSTACLE", "UNSTABLE", "MINEABLE" ],
+    "flags": [ "TRANSPARENT", "MOUNTABLE", "PERMEABLE", "THIN_OBSTACLE", "UNSTABLE", "MINEABLE" ],
     "bash": {
       "str_min": 7,
       "str_max": 17,
@@ -178,7 +178,7 @@
     "coverage": 50,
     "connect_groups": [ "INDOORFLOOR", "LIXATUBE" ],
     "connects_to": "LIXATUBE",
-    "flags": [ "TRANSPARENT", "MOUNTABLE", "PERMEABLE", "INDOORS", "THIN_OBSTACLE", "UNSTABLE", "MINEABLE" ],
+    "flags": [ "TRANSPARENT", "MOUNTABLE", "PERMEABLE", "THIN_OBSTACLE", "UNSTABLE", "MINEABLE" ],
     "emissions": [ "emit_congealed_light" ]
   },
   {
@@ -191,7 +191,7 @@
     "color": "cyan",
     "move_cost": 2,
     "roof": "t_concrete_roof",
-    "flags": [ "TRANSPARENT", "SUPPORTS_ROOF", "INDOORS", "FLAT", "ROAD" ],
+    "flags": [ "TRANSPARENT", "SUPPORTS_ROOF", "FLAT", "ROAD" ],
     "connect_groups": [ "CONCRETE", "INDOORFLOOR" ],
     "connects_to": "CONCRETE"
   },
@@ -223,7 +223,7 @@
     "roof": "t_metal_roof",
     "connect_groups": [ "INDOORFLOOR", "WALL" ],
     "connects_to": "WALL",
-    "flags": [ "NOITEM", "INDOORS" ],
+    "flags": [ "NOITEM" ],
     "examine_action": {
       "type": "cardreader",
       "flags": [ "LIXA_SCIENCE_CARD" ],
@@ -256,7 +256,7 @@
     "roof": "t_metal_roof",
     "connect_groups": [ "INDOORFLOOR", "WALL" ],
     "connects_to": "WALL",
-    "flags": [ "NOITEM", "INDOORS" ],
+    "flags": [ "NOITEM" ],
     "examine_action": {
       "type": "cardreader",
       "flags": [ "LIXA_SCIENCE_CARD_2" ],
@@ -289,7 +289,7 @@
     "roof": "t_metal_roof",
     "connect_groups": [ "INDOORFLOOR", "WALL" ],
     "connects_to": "WALL",
-    "flags": [ "NOITEM", "INDOORS" ],
+    "flags": [ "NOITEM" ],
     "examine_action": {
       "type": "cardreader",
       "flags": [ "LIXA_SCIENCE_CARD_3" ],
@@ -322,7 +322,7 @@
     "roof": "t_metal_roof",
     "connect_groups": [ "INDOORFLOOR", "WALL" ],
     "connects_to": "WALL",
-    "flags": [ "NOITEM", "INDOORS" ],
+    "flags": [ "NOITEM" ],
     "examine_action": {
       "type": "cardreader",
       "flags": [ "LIXA_MILITARY_CARD" ],

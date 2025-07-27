@@ -8,7 +8,7 @@
     "color": "magenta_white",
     "move_cost": 1,
     "connect_groups": "INDOORFLOOR",
-    "flags": [ "TRANSPARENT", "SUPPORTS_ROOF", "INDOORS", "FLAT" ]
+    "flags": [ "TRANSPARENT", "SUPPORTS_ROOF", "FLAT" ]
   },
   {
     "type": "terrain",
@@ -50,7 +50,7 @@
     "color": "magenta_white",
     "move_cost": 1,
     "connect_groups": "INDOORFLOOR",
-    "flags": [ "TRANSPARENT", "SUPPORTS_ROOF", "COLLAPSES", "INDOORS", "FLAT" ],
+    "flags": [ "TRANSPARENT", "SUPPORTS_ROOF", "COLLAPSES", "FLAT" ],
     "looks_like": "t_thconc_floor_flesh"
   },
   {
@@ -138,7 +138,7 @@
     "move_cost": 0,
     "roof": "t_nm_floor_flesh",
     "connect_groups": "INDOORFLOOR",
-    "flags": [ "TRANSPARENT", "SUPPORTS_ROOF", "COLLAPSES", "INDOORS", "FLAT", "BLOCK_WIND", "NOITEM" ],
+    "flags": [ "TRANSPARENT", "SUPPORTS_ROOF", "COLLAPSES", "FLAT", "BLOCK_WIND", "NOITEM" ],
     "looks_like": "fd_web",
     "bash": { "sound": "Riiiiip!", "ter_set": "t_nm_floor_flesh", "str_min": 5, "str_max": 10 }
   },
