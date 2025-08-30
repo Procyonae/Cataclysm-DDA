@@ -19,11 +19,26 @@ public class CataclysmDDA_Helpers {
     public static String getEnabledAccessibilityServiceNames(Context context) {
         List<AccessibilityServiceInfo> enabledServicesInfo = getEnabledAccessibilityServiceInfo( context );
         String service_names = "";
+        Set<String> false_positives = context.getSharedPreferences().getStringSet("accessibility_service_info_false_positives", new HashSet<String>());
         for (AccessibilityServiceInfo enabledService : enabledServicesInfo) {
             ServiceInfo enabledServiceInfo = enabledService.getResolveInfo().serviceInfo;
             String service_name = enabledServiceInfo.name;
-            service_names = service_names + "\n" + service_name;
+            if( !false_positives.contains( service_name ) ) {
+                service_names = service_names + "\n" + service_name;
+            }
         }
         return service_names;
+    }
+    
+    public static void saveAccessibilityServiceInfoFalsePositives(Context context) {
+        List<AccessibilityServiceInfo> enabledServicesInfo = getEnabledAccessibilityServiceInfo( context );
+        Set<String> false_positives = context.getSharedPreferences().getStringSet("accessibility_service_info_false_positives", new HashSet<String>());
+        for (AccessibilityServiceInfo enabledService : enabledServicesInfo) {
+            ServiceInfo enabledServiceInfo = enabledService.getResolveInfo().serviceInfo;
+            false_positives.add( enabledServiceInfo.name );
+        }
+        SharedPreferences.Editor editor = context.getSharedPreferences().Editor;
+        editor.putStringSet("accessibility_service_info_false_positives", false_positives);
+        editor.commit();        
     }
 }
