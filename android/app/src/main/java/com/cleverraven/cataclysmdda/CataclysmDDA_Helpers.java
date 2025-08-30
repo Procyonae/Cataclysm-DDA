@@ -1,5 +1,6 @@
 package com.cleverraven.cataclysmdda;
 
+import java.util.HashSet;
 import java.util.List;
 
 import android.content.Context;
@@ -19,11 +20,27 @@ public class CataclysmDDA_Helpers {
     public static String getEnabledAccessibilityServiceNames(Context context) {
         List<AccessibilityServiceInfo> enabledServicesInfo = getEnabledAccessibilityServiceInfo( context );
         String service_names = "";
+        Set<String> false_positives = context.getSharedPreferences("accessibility_service_info", Context.MODE_PRIVATE).getStringSet("accessibility_service_info_false_positives", new HashSet<String>());
         for (AccessibilityServiceInfo enabledService : enabledServicesInfo) {
             ServiceInfo enabledServiceInfo = enabledService.getResolveInfo().serviceInfo;
             String service_name = enabledServiceInfo.name;
-            service_names = service_names + "\n" + service_name;
+            if( !false_positives.contains( service_name ) ) {
+                service_names = service_names + "\n" + service_name;
+            }
         }
         return service_names;
+    }
+    
+    public static void saveAccessibilityServiceInfoFalsePositives(Context context) {
+        List<AccessibilityServiceInfo> enabledServicesInfo = getEnabledAccessibilityServiceInfo( context );
+        SharedPreferences preferences = context.getSharedPreferences("accessibility_service_info", Context.MODE_PRIVATE);
+        Set<String> false_positives = preferences.getStringSet("accessibility_service_info_false_positives", new HashSet<String>());
+        for (AccessibilityServiceInfo enabledService : enabledServicesInfo) {
+            ServiceInfo enabledServiceInfo = enabledService.getResolveInfo().serviceInfo;
+            false_positives.add( enabledServiceInfo.name );
+        }
+        SharedPreferences.Editor editor = preferences.Editor;
+        editor.putStringSet("accessibility_service_info_false_positives", false_positives);
+        editor.commit();        
     }
 }
