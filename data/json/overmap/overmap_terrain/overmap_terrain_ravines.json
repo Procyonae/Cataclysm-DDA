@@ -21,8 +21,7 @@
     "sym": "v",
     "name": "cliffside",
     "color": "light_gray",
-    "flags": [ "NO_ROTATE", "RAVINE_EDGE" ],
-    "mapgen": [ { "builtin": "ravine_edge" } ]
+    "flags": [ "NO_ROTATE", "RAVINE_EDGE" ]
   },
   {
     "type": "overmap_terrain",
@@ -31,8 +30,12 @@
     "sym": "^",
     "name": "cliffside",
     "color": "light_gray",
-    "flags": [ "NO_ROTATE", "RAVINE_EDGE" ],
-    "mapgen": [ { "builtin": "ravine_edge" } ]
+    "flags": [ "NO_ROTATE", "RAVINE_EDGE" ]
+  },
+  {
+    "type": "mapgen",
+    "om_terrain": [ "ravine_edge", "ravine_floor_edge" ],
+    "builtin": "ravine_edge"
   },
   {
     "type": "overmap_terrain",
