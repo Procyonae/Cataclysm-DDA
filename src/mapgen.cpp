@@ -1392,45 +1392,9 @@ static void set_mapgen_defer( const JsonObject &jsi, const std::string &member,
 }
 
 /*
- * load a single mapgen json structure; this can be inside an overmap_terrain, or on it's own.
- */
-std::shared_ptr<mapgen_function> load_mapgen_function( JsonObject &&jio, const std::string &id_base,
-        const point_rel_omt &offset, const point_rel_omt &total )
-{
-    dbl_or_var weight = get_dbl_or_var( jio, "weight", false,  1000 );
-    if( weight.min.is_constant() && ( weight.min.constant() < 0 ||
-                                      weight.min.constant() >= INT_MAX ) ) {
-        jio.throw_error_at( "weight", "min value out of bounds (0 - max int)" );
-    }
-    if( weight.max && weight.max->is_constant() && ( weight.max->constant() < 0 ||
-            weight.max->constant() >= INT_MAX ) ) {
-        jio.throw_error_at( "weight", "max value out of bounds (0 - max int)" );
-    }
-    if( jio.has_string( "builtin" ) ) {
-        if( const building_gen_pointer ptr = get_mapgen_cfunction( jio.get_string( "builtin" ) ) ) {
-            return std::make_shared<mapgen_function_builtin>( ptr, std::move( weight ) );
-        } else {
-            jio.throw_error_at( "builtin", "function does not exist" );
-        }
-    }
-    return std::make_shared<mapgen_function_json>( std::move( jio ), std::move( weight ),
-            "mapgen " + id_base, offset, total );
-}
-
-void load_and_add_mapgen_function( JsonObject &&jio, const std::string &id_base,
-                                   const point_rel_omt &offset, const point_rel_omt &total )
-{
-    std::shared_ptr<mapgen_function> f = load_mapgen_function(
-            std::move( jio ), id_base, offset, total );
-    if( f ) {
-        oter_mapgen.add( id_base, f );
-    }
-}
-
-/*
  * feed bits `o json from standalone file to load_mapgen_function. (standalone json "type": "mapgen")
  */
-void load_mapgen( const JsonObject &jo )
+void load_mapgen( JsonObject &&jo )
 {
     // NOLINTNEXTLINE(cata-use-named-point-constants)
     static constexpr point_rel_omt point_one( 1, 1 );
@@ -1449,10 +1413,26 @@ void load_mapgen( const JsonObject &jo )
             point_rel_omt total( ja.get_array( 0 ).size(), ja.size() );
             for( JsonArray row_items : ja ) {
                 for( const std::string mapgenid : row_items ) {
-                    JsonObject jo_copy = jo;
-                    jo_copy.copy_visited_members( jo );
-                    jo.allow_omitted_members();
-                    load_and_add_mapgen_function( std::move( jo_copy ), mapgenid, offset, total );
+                    //BEFOREMERGE: Removed nullptr check
+                    dbl_or_var weight = get_dbl_or_var( std::move( jo ), "weight", false,  1000 );
+                    if( weight.min.is_constant() && ( weight.min.constant() < 0 ||
+                                                      weight.min.constant() >= INT_MAX ) ) {
+                        jo.throw_error_at( "weight", "min value out of bounds (0 - max int)" );
+                    }
+                    if( weight.max && weight.max->is_constant() && ( weight.max->constant() < 0 ||
+                            weight.max->constant() >= INT_MAX ) ) {
+                        jo.throw_error_at( "weight", "max value out of bounds (0 - max int)" );
+                    }
+                    if( jo.has_string( "builtin" ) ) {
+                        if( const building_gen_pointer ptr = get_mapgen_cfunction( jo.get_string( "builtin" ) ) ) {
+                            oter_mapgen.add( mapgenid, std::make_shared<mapgen_function_builtin>( ptr, std::move( weight ) ) );
+                        } else {
+                            jo.throw_error_at( "builtin", "function does not exist" );
+                        }
+                    }
+                    oter_mapgen.add( mapgenid,
+                                     std::make_shared<mapgen_function_json>( std::move( jo ), std::move( weight ), "mapgen " + mapgenid,
+                                             offset, total ) );
                     offset.x()++;
                 }
                 offset.y()++;
@@ -1465,24 +1445,55 @@ void load_mapgen( const JsonObject &jo )
             }
             if( !mapgenid_list.empty() ) {
                 const std::string mapgenid = mapgenid_list[0];
-                JsonObject jo_copy = jo;
-                jo_copy.copy_visited_members( jo );
-                jo.allow_omitted_members();
-                const auto mgfunc = load_mapgen_function(
-                                        std::move( jo_copy ), mapgenid, point_rel_omt::zero, point_one );
-                if( mgfunc ) {
-                    for( auto &i : mapgenid_list ) {
-                        oter_mapgen.add( i, mgfunc );
+                //BEFOREMERGE: Removed nullptr check
+                dbl_or_var weight = get_dbl_or_var( std::move( jo ), "weight", false,  1000 );
+                if( weight.min.is_constant() && ( weight.min.constant() < 0 ||
+                                                  weight.min.constant() >= INT_MAX ) ) {
+                    jo.throw_error_at( "weight", "min value out of bounds (0 - max int)" );
+                }
+                if( weight.max && weight.max->is_constant() && ( weight.max->constant() < 0 ||
+                        weight.max->constant() >= INT_MAX ) ) {
+                    jo.throw_error_at( "weight", "max value out of bounds (0 - max int)" );
+                }
+                if( jo.has_string( "builtin" ) ) {
+                    if( const building_gen_pointer ptr = get_mapgen_cfunction( jo.get_string( "builtin" ) ) ) {
+
+                        for( auto &i : mapgenid_list ) {
+                            oter_mapgen.add( i, std::make_shared<mapgen_function_builtin>( ptr, std::move( weight ) ) );
+                        }
+                    } else {
+                        jo.throw_error_at( "builtin", "function does not exist" );
                     }
+                }
+                for( auto &i : mapgenid_list ) {
+                    oter_mapgen.add( i,
+                                     std::make_shared<mapgen_function_json>( std::move( jo ), std::move( weight ), "mapgen " + mapgenid,
+                                             point_rel_omt::zero, point_one ) );
                 }
             }
         }
     } else if( jo.has_string( "om_terrain" ) ) {
         const std::string id_base = jo.get_string( "om_terrain" );
-        JsonObject jo_copy = jo;
-        jo_copy.copy_visited_members( jo );
-        jo.allow_omitted_members();
-        load_and_add_mapgen_function( std::move( jo_copy ), id_base, point_rel_omt::zero, point_one );
+        //BEFOREMERGE: Removed nullptr check
+        dbl_or_var weight = get_dbl_or_var( std::move( jo ), "weight", false,  1000 );
+        if( weight.min.is_constant() && ( weight.min.constant() < 0 ||
+                                          weight.min.constant() >= INT_MAX ) ) {
+            jo.throw_error_at( "weight", "min value out of bounds (0 - max int)" );
+        }
+        if( weight.max && weight.max->is_constant() && ( weight.max->constant() < 0 ||
+                weight.max->constant() >= INT_MAX ) ) {
+            jo.throw_error_at( "weight", "max value out of bounds (0 - max int)" );
+        }
+        if( jo.has_string( "builtin" ) ) {
+            if( const building_gen_pointer ptr = get_mapgen_cfunction( jo.get_string( "builtin" ) ) ) {
+                oter_mapgen.add( id_base, std::make_shared<mapgen_function_builtin>( ptr, std::move( weight ) ) );
+            } else {
+                jo.throw_error_at( "builtin", "function does not exist" );
+            }
+        }
+        oter_mapgen.add( id_base,
+                         std::make_shared<mapgen_function_json>( std::move( jo ), std::move( weight ), "mapgen " + id_base,
+                                 point_rel_omt::zero, point_one ) );
     } else if( jo.has_string( "nested_mapgen_id" ) ) {
         const nested_mapgen_id id( jo.get_string( "nested_mapgen_id" ) );
         int weight = jo.get_int( "weight", 1000 );

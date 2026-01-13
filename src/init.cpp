@@ -401,7 +401,12 @@ void DynamicDataLoader::initialize()
     add( "construction_category", &construction_categories::load );
     add( "construction_group", &construction_groups::load );
     add( "construction", &load_construction );
-    add( "mapgen", &load_mapgen );
+    add( "mapgen", []( const JsonObject & jo ) {
+        JsonObject jo_copy = jo;
+        jo_copy.copy_visited_members( jo );
+        jo.allow_omitted_members();
+        load_mapgen( std::move( jo_copy ) );
+    } );
     add( "overmap_land_use_code", &overmap_land_use_codes::load );
     add( "overmap_connection", &overmap_connections::load );
     add( "overmap_location", &overmap_locations::load );
