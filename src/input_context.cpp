@@ -162,8 +162,12 @@ input_context *input_context_stack_impl::reap()
     while( !stack.empty() ) {
         std::shared_ptr<input_context_handle> handle = stack.back().lock();
         if( handle ) {
-            ret = handle->cxtx;
-            break;
+            if( handle->cxtx ) {
+                ret = handle->cxtx;
+                break;
+            } else {
+                debugmsg( "Oh no where'd me context go" );
+            }
         }
         stack.pop_back();
     }

@@ -2820,6 +2820,7 @@ static void CheckMessages()
 
     // Copy the current input context
     input_context *new_input_context = input_context::input_context_stack.back();
+    debugmsg( "I survived assignment operator 2026 and all I got was this lousy debugmsg" );
     if( new_input_context && *new_input_context != touch_input_context ) {
 
         // If we were in an allow_text_entry input context, and text input is still active, and we're auto-managing keyboard, hide it.
@@ -2831,6 +2832,9 @@ static void CheckMessages()
             StopTextInput();
         }
 
+        if( !new_input_context ) {
+            debugmsg( "Somehow, we have invalidated lifetime of new_input_context! World-class programmers puzzled; Akrieger hailed as C++ genius. (Also we're about to crash?)" );
+        }
         touch_input_context = *new_input_context;
         needupdate = true;
         ui_manager::redraw_invalidated();
